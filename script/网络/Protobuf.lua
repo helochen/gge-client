@@ -20,6 +20,7 @@ function protobuf:初始化()
     self._define[1000] = 'GGEGaming.LoginRequest'
     self._define[1001] = 'GGEGaming.LoginResponse'
     self._define[1004] = 'GGEGaming.RegisterRequest'
+    self._define[1005] = 'GGEGaming.AccountRequest'
     self._define[1006] = 'GGEGaming.ActorJoinRequest'
 end
 

@@ -1431,15 +1431,21 @@ function 回调:系统处理PB(cmd, pb_entity)
 end
 
 function 回调:基础系统逻辑处理(cmd, pb_entity)
-    if cmd == 101 and pb_entity ~= nil and pb_entity.ok == 1 then
-        if pb_entity.action == 2 then
-            tp.进程 = 2
-        elseif pb_entity.action == 3 then
-            tp.进程 = 3
-        elseif pb_entity.action == 4 then
-            -- TODO 重新获取任务信息发送请求
-
+    if cmd == 101 and pb_entity ~= nil then
+        if pb_entity.ok == 1 then
+            if pb_entity.action == 2 then
+                tp.进程 = 2
+            elseif pb_entity.action == 3 then
+                tp.进程 = 3
+            elseif pb_entity.action == 4 then
+                -- TODO 重新获取任务信息发送请求
+            elseif pb_entity.action == 7 then
+                tp.进程 = 1
+            end
         end
+            if gbk.len(pb_entity.msg) then
+                tp.提示:写入(gbk.fromutf8(pb_entity.msg))
+            end
     end
 end
 

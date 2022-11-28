@@ -1,8 +1,8 @@
 
-∞
+ç
 login.proto	GGEGaming"X
 LoginRequest
-version (	Rversion
+version (Rversion
 user (	Ruser
 password (	Rpassword"=
 LoginResponse,
@@ -34,5 +34,15 @@ WeaponDesc
 colorB (RcolorB
 colorF (RcolorF
 	childType (R	childType
-typeNo	 (RtypeNoB'
+typeNo	 (RtypeNo"S
+RegisterRequest
+actor (	Ractor
+name (	Rname
+colorG (RcolorG"b
+AccountRequest
+username (	Rusername
+password (	Rpassword
+version (Rversion""
+ActorJoinRequest
+id (RidB'
 daisy.game.proto.defineBGGELoginInfobproto3

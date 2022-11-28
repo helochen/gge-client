@@ -474,7 +474,15 @@ function 选择角色:显示(dt, x, y)
         end
         if self.创建:事件判断() then
             tp.创建:刷新位置()
-            客户端:发送数据(2)
+            if 开发调试 then
+                local pb_data = {
+                    version = 版本,
+                    action = 3 -- 创建角色页面请求
+                }
+                客户端:发送PB数据(100, pb_data)
+            else
+                客户端:发送数据(2)
+            end
             tp.创建.种族选中 = '人'
             tp.创建.选中人物 = 1
         elseif self.上一步:事件判断() then
@@ -493,7 +501,7 @@ function 选择角色:显示(dt, x, y)
                 系统参数.选中玩家id = self.角色信息[self.角色选中号码].id
                 if 开发调试 then
                     local pb_data = {
-                        id = self.角色信息[self.角色选中号码].id
+                        id = 系统参数.选中玩家id
                     }
                     客户端:发送PB数据(1006, pb_data)
                 else

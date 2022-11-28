@@ -98,7 +98,12 @@ function 场景类_注册:显示(dt, x, y)
             系统参数.账号 = self.账号输入框:取文本()
             系统参数.密码 = self.密码输入框:取文本()
             if 开发调试 then
-                print('....')
+                local pb_data = {
+                    version = 版本,
+                    username = 系统参数.账号,
+                    password = 系统参数.密码
+                }
+                客户端:发送PB数据(1005, pb_data)
             else
                 客户端:发送数据(34, 版本 .. fgc .. 系统参数.账号 .. fgc .. 系统参数.密码 .. fgc .. f函数.取硬盘序列号())
             end
