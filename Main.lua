@@ -29,7 +29,7 @@ require('script/数据中心/梦战召唤兽模型')
 --============================================
 gbk = require('gbk')
 -- utf = require('lua-utf8')
-开发调试 = true
+开发调试 = false
 devMode = 开发调试
 direct = true -- 不去加密数据
 if 开发调试 then
