@@ -1427,7 +1427,7 @@ function 回调:系统处理PB(cmd, pb_entity)
         self:基础系统逻辑处理(cmd, pb_entity)
     elseif cmd == 1001 then
         tp.读取:添加角色信息PB(pb_entity)
-    else if cmd == 2000 then
+    elseif cmd == 2000 then
         self:进入游戏PB逻辑(pb_entity)
     end
 end
@@ -1435,118 +1435,120 @@ end
 -- 创建NPC，人物、NPC、地图信息
 function 回调:进入游戏PB逻辑(pb_entity)
     全局游戏宽度 = 读配置('./配置.ini', 'mhxy', '宽度') + 0
-        全局游戏高度 = 读配置('./配置.ini', 'mhxy', '高度') + 0
-        引擎.置宽高(全局游戏宽度, 全局游戏高度)
-        引擎.置宽度(全局游戏宽度)
-        引擎.置高度(全局游戏高度)
-        tp.场景 = require('script/全局/主显').创建(tp)
-        tp.第二场景 = require('script/场景类/第二场景').创建(tp)
-        tp.提示误差 = 0
-        -- TODO PB处理
-        tp.队伍[1] = tp._队伍.创建()
-        tp.队伍[1]:重置属性(pb_entity)
-        tp.宠物 = pb_entity.宠物
-        
-        withs = 全局游戏宽度
-        hegts = 全局游戏高度
-        with = 全局游戏宽度 / 2
-        hegt = 全局游戏高度 / 2
+    全局游戏高度 = 读配置('./配置.ini', 'mhxy', '高度') + 0
+    引擎.置宽高(全局游戏宽度, 全局游戏高度)
+    引擎.置宽度(全局游戏宽度)
+    引擎.置高度(全局游戏高度)
+    tp.场景 = require('script/全局/主显').创建(tp)
+    tp.第二场景 = require('script/场景类/第二场景').创建(tp)
+    tp.提示误差 = 0
+    -- PB处理
+    tp.队伍[1] = tp._队伍.创建()
+    tp.队伍[1]:BP重置属性(pb_entity.map, pb_entity.role)
+    -- tp.宠物 = pb_entity.宠物
+    local pet = {等级 = 1, 最大等级 = 120, 模型 = '生肖猪', 耐力 = 5, 名称 = '生肖猪', 最大耐力 = 5, 领养次数 = 0, 最大经验 = 10, 经验 = 1}
+    tp.宠物 = pet
 
+    withs = 全局游戏宽度
+    hegts = 全局游戏高度
+    with = 全局游戏宽度 / 2
+    hegt = 全局游戏高度 / 2
+
+    tp.音乐:停止()
+    tp.场景:转移(pb_entity.map.mapId, pb_entity.map.x, pb_entity.map.y, pb_entity.npc, pb_entity.transfer)
+
+    tp.游戏进程 = 1
+    local 地图等级 = {}
+    地图等级[1], 地图等级[2] = 引擎.取场景等级(tp.当前地图)
+    if 地图等级[1] ~= nil then
+        tp.场景.场景最低等级 = 地图等级[1]
+        tp.场景.场景最高等级 = 地图等级[2]
+        tp.窗口.消息框:添加文本('#Y/本场景等级为' .. 地图等级[1] .. '-' .. 地图等级[2] .. '级', 'xt')
+    else
+        tp.场景.场景最低等级 = nil
+        tp.场景.场景最高等级 = nil
+    end
+    tp.缓冲 = nil
+    tp.标题 = nil
+    tp.注册 = nil
+    tp.分区 = nil
+    tp.登陆 = nil
+    tp.充值 = nil
+    tp.创建 = nil
+    tp.读取 = nil
+    tp.退出 = nil
+
+    local 音乐开启 = 读配置('./配置.ini', 'mhxy', '音乐播放')
+    tp.音量 = 读配置('./配置.ini', 'mhxy', '音量') + 0
+    tp.音乐:置音量(tp.音量)
+    if 音乐开启 == 'false' then
+        tp.音乐开启 = false
         tp.音乐:停止()
-        tp.场景:转移(pb_entity.map.mapId, pb_entity.map.x, pb_entity.map.y, pb_entity.npc, pb_entity.transfer)
+    else
+        tp.音乐开启 = true
+        tp.音乐:播放(true)
+    end
+    local 音效开启 = 读配置('./配置.ini', 'mhxy', '音效开启')
+    if 音效开启 == 'false' then
+        tp.音效开启 = false
+    else
+        tp.音效开启 = true
+    end
 
-        tp.游戏进程 = 1
-        local 地图等级 = {}
-        地图等级[1], 地图等级[2] = 引擎.取场景等级(tp.当前地图)
-        if 地图等级[1] ~= nil then
-            tp.场景.场景最低等级 = 地图等级[1]
-            tp.场景.场景最高等级 = 地图等级[2]
-            tp.窗口.消息框:添加文本('#Y/本场景等级为' .. 地图等级[1] .. '-' .. 地图等级[2] .. '级', 'xt')
-        else
-            tp.场景.场景最低等级 = nil
-            tp.场景.场景最高等级 = nil
-        end
-        tp.缓冲 = nil
-        tp.标题 = nil
-        tp.注册 = nil
-        tp.分区 = nil
-        tp.登陆 = nil
-        tp.充值 = nil
-        tp.创建 = nil
-        tp.读取 = nil
-        tp.退出 = nil
+    local fc = tp._自适应.创建()
+    if 界面风格 == 1 then
+        fc:加载(tp)
+    elseif 界面风格 == 2 then
+        fc:加载2(tp)
+    elseif 界面风格 == 3 then
+        fc:加载3(tp)
+    elseif 界面风格 == 4 then
+        fc:加载4(tp)
+    end
 
-        local 音乐开启 = 读配置('./配置.ini', 'mhxy', '音乐播放')
-        tp.音量 = 读配置('./配置.ini', 'mhxy', '音量') + 0
-        tp.音乐:置音量(tp.音量)
-        if 音乐开启 == 'false' then
-            tp.音乐开启 = false
-            tp.音乐:停止()
-        else
-            tp.音乐开启 = true
-            tp.音乐:播放(true)
-        end
-        local 音效开启 = 读配置('./配置.ini', 'mhxy', '音效开启')
-        if 音效开启 == 'false' then
-            tp.音效开启 = false
-        else
-            tp.音效开启 = true
-        end
+    -- TODO 数据加载
+    tp.窗口.底图框:加载()
+    tp.窗口.消息框:加载()
+    tp.窗口.时辰:加载()
+    tp.窗口.人物框:加载()
+    tp.窗口.道具行囊:加载资源()
 
-        local fc = tp._自适应.创建()
-        if 界面风格 == 1 then
-            fc:加载(tp)
-        elseif 界面风格 == 2 then
-            fc:加载2(tp)
-        elseif 界面风格 == 3 then
-            fc:加载3(tp)
-        elseif 界面风格 == 4 then
-            fc:加载4(tp)
-        end
+    if 界面字体 == 1 then
+        tp.字体表.描边字体 = require('gge文字类')(nil, 16, false, true, false)
+        tp.字体表.描边字体:置描边颜色(-16777216)
+        tp.字体表.描边字体:置颜色(4294967295)
+    elseif 界面字体 == 2 then
+        tp.字体表.描边字体 = require('gge文字类')('wdf/font/hksnt.ttf', 16, false, true, false)
+        tp.字体表.描边字体:置描边颜色(-16777216)
+        tp.字体表.描边字体:置颜色(4294967295)
+    elseif 界面字体 == 3 then
+        tp.字体表.描边字体 = require('gge文字类')('wdf/font/hkyt.ttf', 16, false, true, false)
+        tp.字体表.描边字体:置描边颜色(-16777216)
+        tp.字体表.描边字体:置颜色(4294967295)
+    elseif 界面字体 == 4 then
+        tp.字体表.描边字体 = require('gge文字类')('wdf/font/hyb1gjm.ttf', 16, false, true, false)
+        tp.字体表.描边字体:置描边颜色(-16777216)
+        tp.字体表.描边字体:置颜色(4294967295)
+    elseif 界面字体 == 5 then
+        tp.字体表.描边字体 = require('gge文字类')('wdf/font/hyh1gjm.ttf', 16, false, true, false)
+        tp.字体表.描边字体:置描边颜色(-16777216)
+        tp.字体表.描边字体:置颜色(4294967295)
+    elseif 界面字体 == 6 then
+        tp.字体表.描边字体 = require('gge文字类')('wdf/font/hyj4gjm.ttf', 16, false, true, false)
+        tp.字体表.描边字体:置描边颜色(-16777216)
+        tp.字体表.描边字体:置颜色(4294967295)
+    elseif 界面字体 == 7 then
+        tp.字体表.描边字体 = require('gge文字类')('wdf/font/ygyxsziti2.0.ttf', 16, false, true, false)
+        tp.字体表.描边字体:置描边颜色(-16777216)
+        tp.字体表.描边字体:置颜色(4294967295)
+    elseif 界面字体 == 8 then
+        tp.字体表.描边字体 = require('gge文字类')('wdf/font/方正琥珀简体.ttf', 16, false, true, false)
+        tp.字体表.描边字体:置描边颜色(-16777216)
+        tp.字体表.描边字体:置颜色(4294967295)
+    end
+    引擎.置标题(全局游戏标题 .. '-[ ' .. tp.队伍[1].数字id .. ' ]')
 
-        -- TODO 数据加载
-        tp.窗口.底图框:加载()
-        tp.窗口.消息框:加载()
-        tp.窗口.时辰:加载()
-        tp.窗口.人物框:加载()
-        tp.窗口.道具行囊:加载资源()
-
-        if 界面字体 == 1 then
-            tp.字体表.描边字体 = require('gge文字类')(nil, 16, false, true, false)
-            tp.字体表.描边字体:置描边颜色(-16777216)
-            tp.字体表.描边字体:置颜色(4294967295)
-        elseif 界面字体 == 2 then
-            tp.字体表.描边字体 = require('gge文字类')('wdf/font/hksnt.ttf', 16, false, true, false)
-            tp.字体表.描边字体:置描边颜色(-16777216)
-            tp.字体表.描边字体:置颜色(4294967295)
-        elseif 界面字体 == 3 then
-            tp.字体表.描边字体 = require('gge文字类')('wdf/font/hkyt.ttf', 16, false, true, false)
-            tp.字体表.描边字体:置描边颜色(-16777216)
-            tp.字体表.描边字体:置颜色(4294967295)
-        elseif 界面字体 == 4 then
-            tp.字体表.描边字体 = require('gge文字类')('wdf/font/hyb1gjm.ttf', 16, false, true, false)
-            tp.字体表.描边字体:置描边颜色(-16777216)
-            tp.字体表.描边字体:置颜色(4294967295)
-        elseif 界面字体 == 5 then
-            tp.字体表.描边字体 = require('gge文字类')('wdf/font/hyh1gjm.ttf', 16, false, true, false)
-            tp.字体表.描边字体:置描边颜色(-16777216)
-            tp.字体表.描边字体:置颜色(4294967295)
-        elseif 界面字体 == 6 then
-            tp.字体表.描边字体 = require('gge文字类')('wdf/font/hyj4gjm.ttf', 16, false, true, false)
-            tp.字体表.描边字体:置描边颜色(-16777216)
-            tp.字体表.描边字体:置颜色(4294967295)
-        elseif 界面字体 == 7 then
-            tp.字体表.描边字体 = require('gge文字类')('wdf/font/ygyxsziti2.0.ttf', 16, false, true, false)
-            tp.字体表.描边字体:置描边颜色(-16777216)
-            tp.字体表.描边字体:置颜色(4294967295)
-        elseif 界面字体 == 8 then
-            tp.字体表.描边字体 = require('gge文字类')('wdf/font/方正琥珀简体.ttf', 16, false, true, false)
-            tp.字体表.描边字体:置描边颜色(-16777216)
-            tp.字体表.描边字体:置颜色(4294967295)
-        end
-        引擎.置标题(全局游戏标题 .. '-[ ' .. tp.队伍[1].数字id .. ' ]')
-
-        collectgarbage('collect')
+    collectgarbage('collect')
 end
 
 function 回调:基础系统逻辑处理(cmd, pb_entity)

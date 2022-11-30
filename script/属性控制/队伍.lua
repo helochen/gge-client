@@ -270,6 +270,262 @@ function 内存类_队伍:取包含技能(名称)
     return 技能[名称]
 end
 
+function 内存类_队伍:BP人物属性(role)
+    self.数字id = role.id
+    local attr = role.attribute
+    self.等级 = attr.lv
+    self.名称 = gbk.fromutf8(attr.name)
+    self.性别 = attr.sex
+    self.模型 = gbk.fromutf8(attr.model)
+    self.种族 = gbk.fromutf8(attr.race)
+    self.称谓 = gbk.fromutf8(attr.title)
+    self.当前称谓 = gbk.fromutf8(attr.title)
+    self.帮派 = '无帮派'
+    if gbk.len(gbk.fromutf8(attr.org)) then
+        self.帮派 = gbk.fromutf8(attr.org)
+    end
+    self.门派 = '无门派'
+    if gbk.len(gbk.fromutf8(attr.sect)) then
+        self.门派 = gbk.fromutf8(attr.sect)
+    end
+    self.人气 = attr.popular
+    self.门贡 = attr.sectContribute
+    self.帮贡 = attr.orgContribute
+    self.气血 = attr.blood[1]
+    self.魔法 = attr.magic[1]
+    self.愤怒 = attr.angry
+    self.活力 = attr.vitality[1]
+    self.体力 = attr.power[1]
+    self.命中 = attr.baseInfo[1]
+    self.伤害 = attr.baseInfo[2]
+    self.防御 = attr.baseInfo[3]
+    self.速度 = attr.baseInfo[4]
+    self.躲避 = attr.baseInfo[5]
+    self.灵力 = attr.baseInfo[6]
+    self.法伤 = attr.baseInfo[7]
+    self.法防 = attr.baseInfo[8]
+    self.体质 = attr.base[1]
+    self.魔力 = attr.base[2]
+    self.力量 = attr.base[3]
+    self.耐力 = attr.base[4]
+    self.敏捷 = attr.base[5]
+    self.潜力 = attr.potential
+
+    -- // 装备属性
+    self.装备属性 = {
+        命中 = 0,
+        伤害 = 0,
+        防御 = 0,
+        速度 = 0,
+        躲避 = 0,
+        灵力 = 0,
+        法伤 = 0,
+        法防 = 0,
+        体质 = 0,
+        魔力 = 0,
+        力量 = 0,
+        耐力 = 0,
+        敏捷 = 0
+    }
+    -- 技能属性
+    self.技能属性 = {
+        命中 = 0,
+        伤害 = 0,
+        防御 = 0,
+        速度 = 0,
+        躲避 = 0,
+        灵力 = 0,
+        法伤 = 0,
+        法防 = 0
+    }
+    -- // 灵饰属性
+end
+
+function 内存类_队伍:BP重置属性(map, 属性)
+    -- 地图属性赋值
+    self.地图数据.x = map.x
+    self.地图数据.y = map.y
+    self.地图数据.地图编号 = map.mapId
+    -- 赋值人物属性
+    self:BP人物属性(属性)
+    -- 师门技能
+
+    local 临时技能 = 0
+    local sectSkills = 属性.sectSkills
+
+    for n = 1, #sectSkills do
+        临时技能 = require('script/显示类/技能')()
+        sectSkills[n].name = gbk.fromutf8(sectSkills[n].name)
+        临时技能:置对象(sectSkills[n].name)
+        临时技能.包含技能 = {}
+        临时技能.学会 = sectSkills[n].ok
+        临时技能.等级 = sectSkills[n].lv
+        -- 技能影响属性
+        -- local skillAttr = sectSkills[n].baseInfo
+        -- for sa = 1, #skillAttr do
+        --     if self.技能属性.命中 ~= nil then
+        --         self.技能属性.命中 = skillAttr[sa]
+        --     else
+        --         self.技能属性.命中 = skillAttr[sa]
+        --     end
+        -- end
+        local w = sectSkills[n].children
+        for s = 1, #w do
+            w[s].name = gbk.fromutf8(w[s].name)
+            临时技能.包含技能[s] = require('script/显示类/技能')()
+            临时技能.包含技能[s]:置对象(w[s].name)
+            临时技能.包含技能[s].学会 = w[s].ok
+            临时技能.包含技能[s].等级 = w[s].lv
+        end
+        self.师门技能[n] = 临时技能
+    end
+    self.角色坐标 = {x = self.地图数据.x, y = self.地图数据.y}
+
+    if
+        tp.当前称谓 ~= nil and tp.当前称谓 ~= '' and gbk.len(self.当前称谓) > 0 and tp.当前称谓 ~= self.当前称谓 and tp.场景 ~= nil and
+            tp.场景.人物 ~= nil
+     then
+        if tp.当前称谓 == '至尊财神' then
+            tp.场景.人物.至尊财神 = nil
+        elseif tp.当前称谓 == '狂暴之力' then
+            tp.场景.人物.狂暴之力 = nil
+        elseif tp.当前称谓 == '武林圣者' then
+            tp.场景.人物.武林圣者 = nil
+        elseif tp.当前称谓 == '超凡入圣' then
+            tp.场景.人物.超凡入圣 = nil
+        elseif tp.当前称谓 == '洞察先机' then
+            tp.场景.人物.洞察先机 = nil
+        elseif tp.当前称谓 == '独步青云' then
+            tp.场景.人物.独步青云 = nil
+        elseif tp.当前称谓 == '风华绝代' then
+            tp.场景.人物.风华绝代 = nil
+        elseif tp.当前称谓 == '风云再起' then
+            tp.场景.人物.风云再起 = nil
+        elseif tp.当前称谓 == '盖世无双' then
+            tp.场景.人物.盖世无双 = nil
+        elseif tp.当前称谓 == '盖世英豪' then
+            tp.场景.人物.盖世英豪 = nil
+        elseif tp.当前称谓 == '九五之尊' then
+            tp.场景.人物.九五之尊 = nil
+        elseif tp.当前称谓 == '龙皇' then
+            tp.场景.人物.龙皇 = nil
+        elseif tp.当前称谓 == '神豪' then
+            tp.场景.人物.神豪 = nil
+        elseif tp.当前称谓 == '战神' then
+            tp.场景.人物.战神 = nil
+        elseif tp.当前称谓 == '纵横三界王者风云' then
+            tp.场景.人物.纵横三界王者风云 = nil
+        elseif tp.当前称谓 == '武神坛甲组冠军' then
+            tp.场景.人物.甲组冠军 = nil
+        elseif tp.当前称谓 == '武神坛甲组亚军' then
+            tp.场景.人物.甲组亚军 = nil
+        elseif tp.当前称谓 == '武神坛甲组季军' then
+            tp.场景.人物.甲组季军 = nil
+        elseif tp.当前称谓 == '武神坛明星冠军' then
+            tp.场景.人物.明星冠军 = nil
+        elseif tp.当前称谓 == '武神坛明星亚军' then
+            tp.场景.人物.明星亚军 = nil
+        elseif tp.当前称谓 == '武神坛明星季军' then
+            tp.场景.人物.明星季军 = nil
+        elseif tp.当前称谓 == '九天揽月' then
+            tp.场景.人物.九天揽月 = nil
+        elseif tp.当前称谓 == '剑指苍穹' then
+            tp.场景.人物.剑指苍穹 = nil
+        elseif tp.当前称谓 == '势不可挡' then
+            tp.场景.人物.势不可挡 = nil
+        elseif tp.当前称谓 == '王者风范' then
+            tp.场景.人物.王者风范 = nil
+        elseif tp.当前称谓 == '绝世豪侠' then
+            tp.场景.人物.绝世豪侠框 = nil
+        elseif tp.当前称谓 == '江湖豪侠' then
+            tp.场景.人物.江湖豪侠框 = nil
+        elseif tp.当前称谓 == '威震四方' then
+            tp.场景.人物.梦幻大亨框 = nil
+        elseif tp.当前称谓 == '只手遮天' then
+            tp.场景.人物.黄称谓边框 = nil
+        elseif tp.当前称谓 == '降龙伏虎' then
+            tp.场景.人物.黄称谓边框 = nil
+        elseif tp.当前称谓 == '富可敌国' then
+            tp.场景.人物.富可敌国框 = nil
+        elseif tp.当前称谓 == '幕神梦幻' then
+            tp.场景.人物.幕神梦幻框 = nil
+        elseif tp.当前称谓 == '窈窕淑女' then
+            tp.场景.人物.窈窕淑女框 = nil
+        end
+    end
+    tp.当前称谓 = self.当前称谓
+    if tp.当前称谓 ~= nil and gbk.len(tp.当前称谓) > 0 and tp.当前称谓 ~= '' and tp.场景 ~= nil and tp.场景.人物 ~= nil then
+        if tp.当前称谓 == '至尊财神' then
+            tp.场景.人物.至尊财神 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000051)
+        elseif tp.当前称谓 == '狂暴之力' then
+            tp.场景.人物.狂暴之力 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000074)
+        elseif tp.当前称谓 == '武林圣者' then
+            tp.场景.人物.武林圣者 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000076)
+        elseif tp.当前称谓 == '超凡入圣' then
+            tp.场景.人物.超凡入圣 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000087)
+        elseif tp.当前称谓 == '洞察先机' then
+            tp.场景.人物.洞察先机 = pwd('39')
+        elseif tp.当前称谓 == '独步青云' then
+            tp.场景.人物.独步青云 = pwd('40')
+        elseif tp.当前称谓 == '风华绝代' then
+            tp.场景.人物.风华绝代 = pwd('41')
+        elseif tp.当前称谓 == '风云再起' then
+            tp.场景.人物.风云再起 = pwd('42')
+        elseif tp.当前称谓 == '盖世无双' then
+            tp.场景.人物.盖世无双 = pwd('43')
+        elseif tp.当前称谓 == '盖世英豪' then
+            tp.场景.人物.盖世英豪 = pwd('44')
+        elseif tp.当前称谓 == '九五之尊' then
+            tp.场景.人物.九五之尊 = pwd('45')
+        elseif tp.当前称谓 == '龙皇' then
+            tp.场景.人物.龙皇 = pwd('46')
+        elseif tp.当前称谓 == '神豪' then
+            tp.场景.人物.神豪 = pwd('47')
+        elseif tp.当前称谓 == '战神' then
+            tp.场景.人物.战神 = pwd('48')
+        elseif tp.当前称谓 == '纵横三界王者风云' then
+            tp.场景.人物.纵横三界王者风云 = pwd('49')
+        elseif tp.当前称谓 == '武神坛甲组冠军' then
+            tp.场景.人物.甲组冠军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xC4A082C0)
+        elseif tp.当前称谓 == '武神坛甲组亚军' then
+            tp.场景.人物.甲组亚军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xE7706EE2)
+        elseif tp.当前称谓 == '武神坛甲组季军' then
+            tp.场景.人物.甲组季军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x6336F8B3)
+        elseif tp.当前称谓 == '武神坛明星冠军' then
+            tp.场景.人物.明星冠军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xEB07CCCD)
+        elseif tp.当前称谓 == '武神坛明星亚军' then
+            tp.场景.人物.明星亚军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x550B771D)
+        elseif tp.当前称谓 == '武神坛明星季军' then
+            tp.场景.人物.明星季军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x69E88E4D)
+        elseif tp.当前称谓 == '九天揽月' then
+            tp.场景.人物.九天揽月 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xAAFEC211)
+        elseif tp.当前称谓 == '剑指苍穹' then
+            tp.场景.人物.剑指苍穹 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xFFAE13EE)
+        elseif tp.当前称谓 == '势不可挡' then
+            tp.场景.人物.势不可挡 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xBEBEAE78)
+        elseif tp.当前称谓 == '王者风范' then
+            tp.场景.人物.王者风范 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xCEAA7B7A)
+        elseif tp.当前称谓 == '绝世豪侠' then
+            tp.场景.人物.绝世豪侠框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xF15069E9)
+        elseif tp.当前称谓 == '江湖豪侠' then
+            tp.场景.人物.江湖豪侠框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xF15069E9)
+        elseif tp.当前称谓 == '威震四方' then
+            tp.场景.人物.梦幻大亨框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x0975DF49)
+        elseif tp.当前称谓 == '只手遮天' then
+            tp.场景.人物.黄称谓边框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xD7EA9DC8)
+        elseif tp.当前称谓 == '降龙伏虎' then
+            tp.场景.人物.黄称谓边框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xD7EA9DC8)
+        elseif tp.当前称谓 == '富可敌国' then
+            tp.场景.人物.富可敌国框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x21F08540)
+        elseif tp.当前称谓 == '幕神梦幻' then
+            tp.场景.人物.幕神梦幻框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x21F08540)
+        elseif tp.当前称谓 == '窈窕淑女' then
+            tp.场景.人物.窈窕淑女框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x800F661C)
+        end
+        tp.场景.人物.称谓偏移 = 生成XY(tp.字体表.人物字体:取宽度(tp.当前称谓) / 2, -15)
+    end
+end
+
 function 内存类_队伍:重置属性(属性)
     for n, v in pairs(属性) do
         if type(n) ~= 'function' and type(n) ~= '运行父函数' and n ~= '存档数据' and n ~= '宝宝列表' then
