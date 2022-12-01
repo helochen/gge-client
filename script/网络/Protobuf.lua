@@ -26,6 +26,8 @@ function protobuf:初始化()
     self._define[2000] = 'GGEGaming.ActorJoinResponse'
     -- 移动基础命令
     self._define[3000] = 'GGEGaming.MovingRequest'
+    -- 推送命令
+    self._define[2005] = 'GGEGaming.NpcInfoAutoPush'
 end
 
 -- 查询返回的内容数据

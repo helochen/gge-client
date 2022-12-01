@@ -223,31 +223,32 @@ function 场景类_地图:设置假人(内容)
     self.传送 = {}
     self.假人 = {}
     collectgarbage('collect')
-    local v = 内容
-    if self.假人[tp.当前地图] == nil then
+
+    if 开发调试 then
         self.假人[tp.当前地图] = {}
-        if #v > 0 then
-            -- for n=1,#v do
-            -- 	if v[n]~=nil then
-            -- 		v[n].编号 = n
-            -- 	    insert(self.假人[tp.当前地图],jr(v[n]))
-            -- 	end
-            -- end
-            for i, n in pairs(v) do
+        local v = 内容.npc
+        if v ~= nil and #v > 0 then
+            for i = 1, #v do
                 if v[i] ~= nil then
-                    v[i].编号 = i
+                    v[i].idx = i
                     insert(self.假人[tp.当前地图], jr(v[i]))
                 end
             end
         end
+    else
+        local v = 内容
+        if self.假人[tp.当前地图] == nil then
+            self.假人[tp.当前地图] = {}
+            if #v > 0 then
+                for i, n in pairs(v) do
+                    if v[i] ~= nil then
+                        v[i].编号 = i
+                        insert(self.假人[tp.当前地图], jr(v[i]))
+                    end
+                end
+            end
+        end
     end
-    -- b=nil
-    -- if b ~= nil then
-    -- 	local 假人表 = tp.假人库:生成临时假人(tp.当前地图,b,nil,20,"明雷怪")
-    -- 	for n=1,#假人表 do
-    -- 	    self.假人[n] = jr(假人表[n])
-    -- 	end
-    -- end
     if tp.当前地图 >= 1340 and tp.当前地图 <= 1342 then
         local res = tonumber(string.sub(tp.当前地图, -1))
         if res == 1 then

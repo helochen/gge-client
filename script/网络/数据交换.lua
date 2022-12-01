@@ -1441,6 +1441,8 @@ function 回调:系统处理PB(cmd, pb_entity)
         tp.读取:添加角色信息PB(pb_entity)
     elseif cmd == 2000 then
         self:进入游戏PB逻辑(pb_entity)
+    elseif cmd == 2005 then
+        tp.场景:设置假人(pb_entity)
     end
 end
 

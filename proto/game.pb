@@ -1,5 +1,5 @@
 
-ì
+¨
 
 game.proto	GGEGaming"Â
 ActorJoinResponse$
@@ -83,7 +83,9 @@ MapNpcInfo
 
 touchEvent (R
 touchEvent(
-weaponChildType (RweaponChildType"9
+weaponChildType (RweaponChildType":
+NpcInfoAutoPush'
+npc (2.GGEGaming.MapNpcInfoRnpc"9
 MapTransfer
 x (Rx
 y (Ry

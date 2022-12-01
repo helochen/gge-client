@@ -39,7 +39,7 @@ function 场景类_假人:PB初始化(假人)
         rwzt = tp.字体表.人物字体
     end
     local 资源 = qmxs(假人.model)
-    if gbk.len(假人.dress) then
+    if 假人.dress ~= nil and 假人.dress ~= '' and gbk.len(假人.dress) > 0 then
         资源 = qmxs(假人.dress .. '_' .. 假人.model)
         self.假人 = {['静立'] = tp.资源:载入(资源[3], '网易假人动画', 资源[1]), ['行走'] = tp.资源:载入(资源[3], '网易假人动画', 资源[2])}
     else
