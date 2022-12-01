@@ -30,11 +30,7 @@ function 回调:发送数据(序号, 内容, 数组转换)
     end
     print('-====send :=========', 序号, 内容, '===========')
     self.组合数据 = 序号 .. fgf .. 内容
-    --if 数据记录==self.组合数据..时间 then return  end
-
     self:发送(jm(self.组合数据))
-    -- 数据记录=self.组合数据..时间
-    -- print(self.组合数据)
 end
 
 function 回调:数据到达(内容)
@@ -55,6 +51,22 @@ function 回调:数据到达(内容)
         if 数据 == nil or 数据.序号 == nil then
             return
         end
+        if type(数据) == 'table' then
+            for k, v in pairs(数据) do
+                if type(v) == 'table' then
+                    for m, n in pairs(v) do
+                        if type(n) == 'table' then
+                            print(k, ':', m, ':', table.tostring(n))
+                        else
+                            print(k, ':', m, ':', n)
+                        end
+                    end
+                else
+                    print(k, ':', v)
+                end
+            end
+        end
+
         数据.序号 = 数据.序号 + 0
         if 数据.序号 ~= 99 then
         --  print(table.loadstring)a
@@ -1506,7 +1518,7 @@ function 回调:进入游戏PB逻辑(pb_entity)
         fc:加载4(tp)
     end
 
-    -- TODO 数据加载
+    -- 数据加载
     tp.窗口.底图框:加载()
     tp.窗口.消息框:加载()
     tp.窗口.时辰:加载()

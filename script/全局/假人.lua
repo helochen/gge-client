@@ -59,11 +59,13 @@ function 场景类_假人:PB初始化(假人)
         假人.武器 = 假人.weapon
     end
     假人.Y = 假人.y + (random(1, 12) / 100) -- ????
+    print('////////////////////' .. 假人.x .. 假人.y)
     self.名称 = 假人.name
     self.标识 = 假人.id
     self.序列 = 假人.idx
     self.坐标 = xys(floor(假人.x * 20), floor(假人.y * 20) + 0.1)
     self.真实坐标 = xys(floor(假人.x * 20), floor(假人.y * 20) + 0.1)
+    print('////////////////////' .. table.tostring(xys(floor(假人.x * 20), floor(假人.y * 20) + 0.1)))
     self.编号 = 假人.idx
     self.行为 = '静立'
     self.类型 = '假人'
@@ -92,7 +94,7 @@ function 场景类_假人:PB初始化(假人)
     self.商业分类4 = 假人.business[4]
     self.行走开关 = 假人.walk
     self.触碰延时 = 时间
-    self.领取人id = 假人.targetIds
+    self.领取人id = {} -- 假人.targetIds
     self.名称偏移 = xys(tp.字体表.人物字体:取宽度(self.名称) / 2, -15)
     -- self.喊话 = require("script/显示类/喊话").创建(根)
     if gbk.len(假人.title) > 0 then
@@ -255,11 +257,13 @@ function 场景类_假人:初始化(假人)
             假人.武器 = 假人.武器
         end
         假人.Y = 假人.Y + (random(1, 12) / 100)
+        print('>>>>>>>>>>>>>>>>>>>>>', 假人.Y, 假人.X)
         self.名称 = 假人.名称
         self.标识 = 假人.id
         self.序列 = 假人.编号
         self.坐标 = xys(floor(假人.X * 20), floor(假人.Y * 20) + 0.1)
         self.真实坐标 = xys(floor(假人.X * 20), floor(假人.Y * 20) + 0.1)
+        print('////////////////////' .. table.tostring(xys(floor(假人.X * 20), floor(假人.Y * 20) + 0.1)))
         self.编号 = 假人.编号
         self.行为 = '静立'
         self.类型 = '假人'

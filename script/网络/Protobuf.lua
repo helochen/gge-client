@@ -22,6 +22,10 @@ function protobuf:初始化()
     self._define[1004] = 'GGEGaming.RegisterRequest'
     self._define[1005] = 'GGEGaming.AccountRequest'
     self._define[1006] = 'GGEGaming.ActorJoinRequest'
+    -- 角色进入游戏
+    self._define[2000] = 'GGEGaming.ActorJoinResponse'
+    -- 移动基础命令
+    self._define[3000] = 'GGEGaming.MovingRequest'
 end
 
 -- 查询返回的内容数据
@@ -51,57 +55,6 @@ function protobuf:decode(b_data)
         return cmd, pb_entity
     end
     return -1, {}
-end
-
-function protobuf:bufToInt32(num1, num2, num3, num4)
-    local num = 0
-    num = num + self:leftShift(num1, 24)
-    num = num + self:leftShift(num2, 16)
-    num = num + self:leftShift(num3, 8)
-    num = num + num4
-    return num
-end
-
--- int转二进制
-function protobuf:int32ToBufStr(num)
-    local str = ''
-    str = str .. self:numToAscii(self:rightShift(num, 24))
-    str = str .. self:numToAscii(self:rightShift(num, 16))
-    str = str .. self:numToAscii(self:rightShift(num, 8))
-    str = str .. self:numToAscii(num)
-    return str
-end
-
--- 二进制转shot
-function protobuf:bufToInt16(num1, num2)
-    local num = 0
-    num = num + self:leftShift(num1, 8)
-    num = num + num2
-    return num
-end
-
--- shot转二进制
-function protobuf:int16ToBufStr(num)
-    local str = ''
-    str = str .. self:numToAscii(self:rightShift(num, 8))
-    str = str .. self:numToAscii(num)
-    return str
-end
-
--- 左移
-function protobuf:leftShift(num, shift)
-    return math.floor(num * (2 ^ shift))
-end
-
--- 右移
-function protobuf:rightShift(num, shift)
-    return math.floor(num / (2 ^ shift))
-end
-
--- 转成Ascii
-function protobuf:numToAscii(num)
-    num = num % 256
-    return string.char(num)
 end
 
 return protobuf

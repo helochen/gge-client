@@ -101,7 +101,7 @@ function 场景类_地图:转移(地图, X, Y, 内容, 传送点)
             end
         end
         local c = 传送点
-        if #c > 0 then
+        if c ~= nil and #c > 0 then
             for n = 1, #c do
                 self.传送[n] = cs(c[n].x, c[n].y, c[n].id)
                 q = nil

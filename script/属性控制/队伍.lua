@@ -99,6 +99,9 @@ function 内存类_队伍:初始化()
     self.自动 = nil
     self.默认技能 = nil
     self.武魂 = {}
+    --
+    self.地图数据 = {}
+    self.数字id = 0
 end
 
 function 内存类_队伍:刷新宝宝技能(编号, 技能)
@@ -285,14 +288,17 @@ function 内存类_队伍:BP人物属性(role)
         self.帮派 = gbk.fromutf8(attr.org)
     end
     self.门派 = '无门派'
-    if gbk.len(gbk.fromutf8(attr.sect)) then
-        self.门派 = gbk.fromutf8(attr.sect)
+    attr.sect = gbk.fromutf8(attr.sect)
+    if gbk.len(attr.sect) then
+        self.门派 = attr.sect
     end
     self.人气 = attr.popular
     self.门贡 = attr.sectContribute
     self.帮贡 = attr.orgContribute
     self.气血 = attr.blood[1]
+    self.最大气血 = attr.blood[2]
     self.魔法 = attr.magic[1]
+    self.最大魔法 = attr.magic[2]
     self.愤怒 = attr.angry
     self.活力 = attr.vitality[1]
     self.体力 = attr.power[1]
@@ -311,32 +317,26 @@ function 内存类_队伍:BP人物属性(role)
     self.敏捷 = attr.base[5]
     self.潜力 = attr.potential
 
-    -- // 装备属性
-    self.装备属性 = {
+    -- 技能属性
+    self.技能属性 = {
+        气血 = 0,
+        魔法 = 0,
         命中 = 0,
         伤害 = 0,
         防御 = 0,
         速度 = 0,
         躲避 = 0,
         灵力 = 0,
-        法伤 = 0,
-        法防 = 0,
         体质 = 0,
         魔力 = 0,
         力量 = 0,
         耐力 = 0,
-        敏捷 = 0
-    }
-    -- 技能属性
-    self.技能属性 = {
-        命中 = 0,
-        伤害 = 0,
-        防御 = 0,
-        速度 = 0,
-        躲避 = 0,
-        灵力 = 0,
-        法伤 = 0,
-        法防 = 0
+        敏捷 = 0,
+        月饼 = 0,
+        乾元丹 = 0,
+        附加乾元丹 = 0,
+        剩余乾元丹 = 0,
+        可换乾元丹 = 0
     }
     -- // 灵饰属性
 end
@@ -352,32 +352,33 @@ function 内存类_队伍:BP重置属性(map, 属性)
 
     local 临时技能 = 0
     local sectSkills = 属性.sectSkills
-
-    for n = 1, #sectSkills do
-        临时技能 = require('script/显示类/技能')()
-        sectSkills[n].name = gbk.fromutf8(sectSkills[n].name)
-        临时技能:置对象(sectSkills[n].name)
-        临时技能.包含技能 = {}
-        临时技能.学会 = sectSkills[n].ok
-        临时技能.等级 = sectSkills[n].lv
-        -- 技能影响属性
-        -- local skillAttr = sectSkills[n].baseInfo
-        -- for sa = 1, #skillAttr do
-        --     if self.技能属性.命中 ~= nil then
-        --         self.技能属性.命中 = skillAttr[sa]
-        --     else
-        --         self.技能属性.命中 = skillAttr[sa]
-        --     end
-        -- end
-        local w = sectSkills[n].children
-        for s = 1, #w do
-            w[s].name = gbk.fromutf8(w[s].name)
-            临时技能.包含技能[s] = require('script/显示类/技能')()
-            临时技能.包含技能[s]:置对象(w[s].name)
-            临时技能.包含技能[s].学会 = w[s].ok
-            临时技能.包含技能[s].等级 = w[s].lv
+    if sectSkills ~= nil then
+        for n = 1, #sectSkills do
+            临时技能 = require('script/显示类/技能')()
+            sectSkills[n].name = gbk.fromutf8(sectSkills[n].name)
+            临时技能:置对象(sectSkills[n].name)
+            临时技能.包含技能 = {}
+            临时技能.学会 = sectSkills[n].ok
+            临时技能.等级 = sectSkills[n].lv
+            -- 技能影响属性
+            -- local skillAttr = sectSkills[n].baseInfo
+            -- for sa = 1, #skillAttr do
+            --     if self.技能属性.命中 ~= nil then
+            --         self.技能属性.命中 = skillAttr[sa]
+            --     else
+            --         self.技能属性.命中 = skillAttr[sa]
+            --     end
+            -- end
+            local w = sectSkills[n].children
+            for s = 1, #w do
+                w[s].name = gbk.fromutf8(w[s].name)
+                临时技能.包含技能[s] = require('script/显示类/技能')()
+                临时技能.包含技能[s]:置对象(w[s].name)
+                临时技能.包含技能[s].学会 = w[s].ok
+                临时技能.包含技能[s].等级 = w[s].lv
+            end
+            self.师门技能[n] = 临时技能
         end
-        self.师门技能[n] = 临时技能
     end
     self.角色坐标 = {x = self.地图数据.x, y = self.地图数据.y}
 
