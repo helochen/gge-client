@@ -83,7 +83,15 @@ function 场景类_宠物状态栏:显示(dt,x,y)
 		self:打开()
 		return false
 	elseif self.资源组[3]:事件判断() then
-		发送数据(5001)
+		if 开发调试 then
+			local pb_data = {
+				version = 版本,
+				action = 6 -- 宠物请求
+			}
+			客户端:发送PB数据(100, pb_data)
+		else
+			发送数据(5001)
+		end
 	elseif self.资源组[4]:事件判断() then
 		发送数据(5007)
 	elseif self.资源组[5]:事件判断() then

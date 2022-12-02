@@ -28,6 +28,8 @@ function protobuf:初始化()
     self._define[3000] = 'GGEGaming.MovingRequest'
     -- 推送命令
     self._define[2005] = 'GGEGaming.NpcInfoAutoPush'
+    -- 角色信息请求
+    self._define[2100] = 'GGEGaming.MapRoleInfo'
 end
 
 -- 查询返回的内容数据

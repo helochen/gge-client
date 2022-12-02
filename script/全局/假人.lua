@@ -59,13 +59,11 @@ function 场景类_假人:PB初始化(假人)
         假人.武器 = 假人.weapon
     end
     假人.Y = 假人.y + (random(1, 12) / 100) -- ????
-    print('////////////////////' .. 假人.x .. 假人.y)
     self.名称 = 假人.name
     self.标识 = 假人.id
     self.序列 = 假人.idx
     self.坐标 = xys(floor(假人.x * 20), floor(假人.y * 20) + 0.1)
     self.真实坐标 = xys(floor(假人.x * 20), floor(假人.y * 20) + 0.1)
-    print('////////////////////' .. table.tostring(xys(floor(假人.x * 20), floor(假人.y * 20) + 0.1)))
     self.编号 = 假人.idx
     self.行为 = '静立'
     self.类型 = '假人'

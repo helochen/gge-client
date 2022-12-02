@@ -14,9 +14,9 @@ game.proto	GGEGaming"Â
 MapRoleInfo
 id (Rid:
 	attribute (2.GGEGaming.RoleAttributeInfoR	attribute6
-improve (2.GGEGaming.DamageImproveInfoRimprove8
+improve (2.GGEGaming.DamageImproveInfoRimprove8
 
-sectSkills (2.GGEGaming.SectSkillInfoR
+sectSkills (2.GGEGaming.SectSkillInfoR
 sectSkills"ë
 RoleAttributeInfo
 lv (Rlv

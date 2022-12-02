@@ -96,7 +96,7 @@ function 场景类_地图:转移(地图, X, Y, 内容, 传送点)
             for n = 1, #v do
                 if v[n] ~= nil then
                     v[n].idx = n
-                    insert(self.假人, jr(v[n]))
+                    insert(self.假人[tp.当前地图], jr(v[n]))
                 end
             end
         end

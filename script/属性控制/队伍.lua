@@ -316,7 +316,8 @@ function 内存类_队伍:BP人物属性(role)
     self.耐力 = attr.base[4]
     self.敏捷 = attr.base[5]
     self.潜力 = attr.potential
-
+    -- TOOD 后续完成
+    self.剧情点 = 0 -- 初始化值
     -- 技能属性
     self.技能属性 = {
         气血 = 0,
@@ -339,17 +340,32 @@ function 内存类_队伍:BP人物属性(role)
         可换乾元丹 = 0
     }
     -- // 灵饰属性
+    self.剧情技能 = {}
+    -- // 辅助技能
+    self.辅助技能 = {}
+    self.修炼 = {
+        当前 = '攻击修炼',
+        防御修炼 = {[1] = 0, [2] = 0, [3] = 20},
+        抗法修炼 = {[1] = 0, [2] = 0, [3] = 20},
+        法术修炼 = {[1] = 0, [2] = 0, [3] = 20},
+        攻击修炼 = {[1] = 0, [2] = 0, [3] = 20},
+        猎术修炼 = {[1] = 0, [2] = 0, [3] = 20}
+    }
+    self.bb修炼 = {}
 end
 
-function 内存类_队伍:BP重置属性(map, 属性)
+function 内存类_队伍:BP设置地图信息(map)
     -- 地图属性赋值
     self.地图数据.x = map.x
     self.地图数据.y = map.y
     self.地图数据.地图编号 = map.mapId
+    self.角色坐标 = {x = self.地图数据.x, y = self.地图数据.y}
+end
+
+function 内存类_队伍:BP重置属性(属性)
     -- 赋值人物属性
     self:BP人物属性(属性)
     -- 师门技能
-
     local 临时技能 = 0
     local sectSkills = 属性.sectSkills
     if sectSkills ~= nil then
@@ -380,7 +396,6 @@ function 内存类_队伍:BP重置属性(map, 属性)
             self.师门技能[n] = 临时技能
         end
     end
-    self.角色坐标 = {x = self.地图数据.x, y = self.地图数据.y}
 
     if
         tp.当前称谓 ~= nil and tp.当前称谓 ~= '' and gbk.len(self.当前称谓) > 0 and tp.当前称谓 ~= self.当前称谓 and tp.场景 ~= nil and

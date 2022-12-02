@@ -795,7 +795,15 @@ function 回调:系统处理(序号, 内容, 数据)
         tp.场景.人物:加入动画('升级')
     elseif 序号 == 12 then
         if tp.窗口.人物状态栏.可视 then
-            发送数据(7)
+            if 开发调试 then
+                local pb_data = {
+                    version = 版本,
+                    action = 5 -- 个人信息请求
+                }
+                客户端:发送PB数据(100, pb_data)
+            else
+                发送数据(7)
+            end
         end
     elseif 序号 == 13 then
         tp.窗口.飞行符:打开()
@@ -1443,6 +1451,8 @@ function 回调:系统处理PB(cmd, pb_entity)
         self:进入游戏PB逻辑(pb_entity)
     elseif cmd == 2005 then
         tp.场景:设置假人(pb_entity)
+    elseif cmd == 2100 then
+        tp.队伍[1]:BP重置属性(pb_entity)
     end
 end
 
@@ -1458,7 +1468,8 @@ function 回调:进入游戏PB逻辑(pb_entity)
     tp.提示误差 = 0
     -- PB处理
     tp.队伍[1] = tp._队伍.创建()
-    tp.队伍[1]:BP重置属性(pb_entity.map, pb_entity.role)
+    tp.队伍[1]:BP设置地图信息(pb_entity.map)
+    tp.队伍[1]:BP重置属性(pb_entity.role)
     -- tp.宠物 = pb_entity.宠物
     local pet = {等级 = 1, 最大等级 = 120, 模型 = '生肖猪', 耐力 = 5, 名称 = '生肖猪', 最大耐力 = 5, 领养次数 = 0, 最大经验 = 10, 经验 = 1}
     tp.宠物 = pet
