@@ -1,5 +1,5 @@
 
-†
+Ö
 
 game.proto	GGEGaming"Â
 ActorJoinResponse$
@@ -57,7 +57,7 @@ sectSkills"ë
 lv (Rlv
 ok (Rok"?
 RoleAnimalInfo-
-animal (2.GGEGaming.AnimalInfoRanimal"¤
+animal (2.GGEGaming.AnimalInfoRanimal"ô
 
 AnimalInfo
 no (	Rno
@@ -85,7 +85,11 @@ AnimalInfo
 type (	Rtype
 evoAttr (RevoAttr
 	authSkill (	R	authSkill,
-dress (2.GGEGaming.AnimalDressRdress"K
+dress (2.GGEGaming.AnimalDressRdress
+join (Rjoin
+lv (Rlv
+manager (Rmanager
+exp (Rexp"K
 AnimalDress
 name (	Rname
 mana (Rmana
