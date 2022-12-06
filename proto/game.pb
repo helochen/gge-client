@@ -1,5 +1,5 @@
 
-¨
+†
 
 game.proto	GGEGaming"Â
 ActorJoinResponse$
@@ -55,7 +55,43 @@ sectSkills"ë
 SectChildSkillInfo
 name (	Rname
 lv (Rlv
-ok (Rok"
+ok (Rok"?
+RoleAnimalInfo-
+animal (2.GGEGaming.AnimalInfoRanimal"¤
+
+AnimalInfo
+no (	Rno
+	attribute (R	attribute
+blood (Rblood
+magic (Rmagic
+loyal (Rloyal
+growth (Rgrowth
+	potential (R	potential
+name (	Rname
+model	 (	Rmodel
+	maxExtend
+ (R	maxExtend0
+equip (2.GGEGaming.AnimalEquipInfoRequip"
+intelligence (Rintelligence
+idx (Ridx
+age (Rage"
+spirituality (Rspirituality
+ext (Rext
+extSkill (	RextSkill
+skill (	Rskill
+	evolution (R	evolution
+fightLv (RfightLv
+color (Rcolor
+type (	Rtype
+evoAttr (RevoAttr
+	authSkill (	R	authSkill,
+dress (2.GGEGaming.AnimalDressRdress"K
+AnimalDress
+name (	Rname
+mana (Rmana
+color (Rcolor"'
+AnimalEquipInfo
+model (	Rmodel"
 	MountInfo"š
 
 MapNpcInfo

@@ -30,6 +30,8 @@ function protobuf:初始化()
     self._define[2005] = 'GGEGaming.NpcInfoAutoPush'
     -- 角色信息请求
     self._define[2100] = 'GGEGaming.MapRoleInfo'
+    -- 宠物信息
+    self._define[2200] = 'GGEGaming.RoleAnimalInfo'
 end
 
 -- 查询返回的内容数据

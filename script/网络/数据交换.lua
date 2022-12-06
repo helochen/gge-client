@@ -1453,7 +1453,40 @@ function 回调:系统处理PB(cmd, pb_entity)
         tp.场景:设置假人(pb_entity)
     elseif cmd == 2100 then
         tp.队伍[1]:BP重置属性(pb_entity)
+    elseif cmd == 2200 then
+        -- 宠物信息
+        self:宠物PB信息刷新(pb_entity)
     end
+end
+
+function 回调:宠物PB信息刷新(pb_entity)
+    local animals = pb_entity.animal
+    if animals ~= nil and #animals > 0 then
+        for i = 1, #animals do
+            local an = animals[i]
+            an.name = gbk.fromutf8(an.name)
+            an.model = gbk.fromutf8(an.model)
+            an.extSkill = gbk.fromutf8(an.extSkill)
+            an.type = gbk.fromutf8(an.type)
+            an.authSkill = gbk.fromutf8(an.authSkill)
+            -- 技能名称格式化
+            local skills = an.skill
+            if skills ~= nil and #skills > 0 then
+                for j = 1, #skills do
+                    skills[j] = gbk.fromutf8(skills[j])
+                end
+            end
+            -- 饰品中文处理
+            local dress = an.dress
+            if dress ~= nill then
+                dress.name = gbk.fromutf8(dress.name)
+            end
+        end
+    end
+    tp.队伍[1].宝宝列表 = animals
+    tp.队伍[1]:PB刷新宝宝技能()
+    tp.队伍[1]:PB刷新宝宝认证技能()
+    tp.窗口.召唤兽属性栏:PB打开()
 end
 
 -- 创建NPC，人物、NPC、地图信息
@@ -1589,7 +1622,7 @@ function 回调:基础系统逻辑处理(cmd, pb_entity)
                 tp.进程 = 1
             end
         end
-        if gbk.len(pb_entity.msg) then
+        if gbk.len(pb_entity.msg) > 0 then
             tp.提示:写入(gbk.fromutf8(pb_entity.msg))
         end
     end
