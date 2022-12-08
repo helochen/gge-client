@@ -1469,6 +1469,8 @@ function 回调:宠物PB信息刷新(pb_entity)
             an.extSkill = gbk.fromutf8(an.extSkill)
             an.type = gbk.fromutf8(an.type)
             an.authSkill = gbk.fromutf8(an.authSkill)
+            -- 五行
+            an.element = gbk.fromutf8(an.element)
             -- 技能名称格式化
             local skills = an.skill
             if skills ~= nil and #skills > 0 then
@@ -1481,11 +1483,26 @@ function 回调:宠物PB信息刷新(pb_entity)
             if dress ~= nill then
                 dress.name = gbk.fromutf8(dress.name)
             end
+            -- 内丹信息
+            local innerBall = an.innerBall
+            if innerBall ~= nil and #innerBall > 0 then
+                for i = 1, #innerBall do
+                    innerBall[i].name = gbk.fromutf8(innerBall[i].name)
+                end
+            end
+            -- 装备信息
+            local equip = an.equip
+            if equip ~= nil and #equip > 0 then
+                for e = 1, #equip do
+                    equip[e].model = gbk.fromutf8(equip[e].model)
+                end
+            end
         end
     end
     tp.队伍[1].宝宝列表 = animals
     tp.队伍[1]:PB刷新宝宝技能()
     tp.队伍[1]:PB刷新宝宝认证技能()
+    tp.窗口.召唤兽属性栏:PB刷新宝宝第三方属性(animals)
     tp.窗口.召唤兽属性栏:PB打开()
 end
 

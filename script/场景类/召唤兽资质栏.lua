@@ -29,19 +29,47 @@ function 场景类_召唤兽资质栏:初始化(根)
     self.窗口时间 = 0
 end
 function 场景类_召唤兽资质栏:刷新数据(b)
+    if 开发调试 then
+        self:PB刷新数据(b)
+    else
+        bb = b
+        for i = 1, 3 do
+            self.物品[i]:置物品(bb.装备[i])
+        end
+        for i = 1, #bb.技能 do
+            self.技能[i]:置技能(bb.技能[i])
+        end
+        self.技能数量 = #bb.技能
+        self.技能页数 = 1
+        for i = 1, 6 do
+            if bb.内丹[i] ~= nil and bb.内丹[i].技能 ~= nil then
+                self.内丹[i] = bb.内丹[i]
+                item = self:取内丹数据(bb.内丹[i].技能, bb.内丹[i].等级)
+                self.内丹[i].说明 = item.说明
+                self.内丹[i].效果 = item.效果
+                self.内丹[i].模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
+                self.内丹[i].小模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
+            else
+                self.内丹[i] = nil
+            end
+        end
+    end
+end
+function 场景类_召唤兽资质栏:PB刷新数据(b)
     bb = b
     for i = 1, 3 do
-        self.物品[i]:置物品(bb.装备[i])
+        -- TODO 装备处理
+        -- self.物品[i]:置物品(bb.equip[i])
     end
-    for i = 1, #bb.技能 do
+    for i = 1, #bb.skill do
         self.技能[i]:置技能(bb.技能[i])
     end
-    self.技能数量 = #bb.技能
+    self.技能数量 = #bb.skill
     self.技能页数 = 1
     for i = 1, 6 do
-        if bb.内丹[i] ~= nil and bb.内丹[i].技能 ~= nil then
-            self.内丹[i] = bb.内丹[i]
-            item = self:取内丹数据(bb.内丹[i].技能, bb.内丹[i].等级)
+        if bb.内丹[i] ~= nil and bb.innerBall[i].name ~= nil then
+            self.内丹[i] = bb.innerBall[i]
+            item = self:取内丹数据(bb.innerBall[i].name, bb.innerBall[i].lv)
             self.内丹[i].说明 = item.说明
             self.内丹[i].效果 = item.效果
             self.内丹[i].模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
@@ -52,12 +80,13 @@ function 场景类_召唤兽资质栏:刷新数据(b)
     end
 end
 
+
 function 场景类_召唤兽资质栏:PB打开(b)
     if self.可视 then
         if b ~= nil and b ~= bb then
             bb = b
             for i = 1, 3 do
-                self.物品[i]:置物品(bb.装备[i])
+                -- self.物品[i]:置物品(bb.装备[i])
             end
             local 序号 = 0
             for i = 1, #bb.skillObjects do
@@ -73,10 +102,10 @@ function 场景类_召唤兽资质栏:PB打开(b)
             self.技能数量 = #bb.skillObjects
             self.技能页数 = 1
             for i = 1, 6 do
-				-- TODO 内丹配置
-                if bb.内丹[i] ~= nil and bb.内丹[i].技能 ~= nil then
-                    self.内丹[i] = bb.内丹[i]
-                    item = self:取内丹数据(bb.内丹[i].技能, bb.内丹[i].等级)
+                -- 内丹配置
+                if bb.innerBall[i] ~= nil and bb.innerBall[i].name ~= nil then
+                    self.内丹[i] = bb.innerBall[i]
+                    item = self:取内丹数据(bb.innerBall[i].name, bb.innerBall[i].lv)
                     self.内丹[i].说明 = item.说明
                     self.内丹[i].效果 = item.效果
                     self.内丹[i].模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
@@ -115,9 +144,9 @@ function 场景类_召唤兽资质栏:PB打开(b)
         end
         self.技能数量 = #bb.skillObjects
         for i = 1, 6 do
-            if bb.内丹[i] ~= nil and bb.内丹[i].技能 ~= nil then
-                self.内丹[i] = bb.内丹[i]
-                item = self:取内丹数据(bb.内丹[i].技能, bb.内丹[i].等级)
+            if bb.innerBall[i] ~= nil and bb.innerBall[i].name ~= nil then
+                self.内丹[i] = bb.innerBall[i]
+                item = self:取内丹数据(bb.innerBall[i].name, bb.innerBall[i].lv)
                 self.内丹[i].说明 = item.说明
                 self.内丹[i].效果 = item.效果
                 self.内丹[i].模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
@@ -134,8 +163,53 @@ function 场景类_召唤兽资质栏:PB打开(b)
 end
 
 function 场景类_召唤兽资质栏:打开(b)
-    if self.可视 then
-        if b ~= nil and b ~= bb then
+    if 开发调试 then
+        self:PB打开(b)
+    else
+        if self.可视 then
+            if b ~= nil and b ~= bb then
+                bb = b
+                for i = 1, 3 do
+                    self.物品[i]:置物品(bb.装备[i])
+                end
+                local 序号 = 0
+                for i = 1, #bb.技能 do
+                    if bb.技能[i].名称 == bb.法术认证 then
+                        self.认证格子:置技能(bb.技能[i])
+                    else
+                        序号 = 序号 + 1
+                        local 临时技能 = tp._技能.创建()
+                        临时技能:置对象(bb.技能[i], 2)
+                        self.技能[序号]:置技能(bb.技能[i])
+                    end
+                end
+                self.技能数量 = #bb.技能
+                self.技能页数 = 1
+                for i = 1, 6 do
+                    if bb.内丹[i] ~= nil and bb.内丹[i].技能 ~= nil then
+                        self.内丹[i] = bb.内丹[i]
+                        item = self:取内丹数据(bb.内丹[i].技能, bb.内丹[i].等级)
+                        self.内丹[i].说明 = item.说明
+                        self.内丹[i].效果 = item.效果
+                        self.内丹[i].模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
+                        self.内丹[i].小模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
+                    else
+                        self.内丹[i] = nil
+                    end
+                end
+                return
+            end
+            self.技能数量 = 0
+            self.技能页数 = 1
+            self.状态 = nil
+            self.可视 = false
+            self.资源组 = nil
+            self.进阶 = nil
+            self.物品 = nil
+            self.技能 = nil
+        else
+            insert(tp.窗口_, self)
+            self:加载资源()
             bb = b
             for i = 1, 3 do
                 self.物品[i]:置物品(bb.装备[i])
@@ -152,7 +226,6 @@ function 场景类_召唤兽资质栏:打开(b)
                 end
             end
             self.技能数量 = #bb.技能
-            self.技能页数 = 1
             for i = 1, 6 do
                 if bb.内丹[i] ~= nil and bb.内丹[i].技能 ~= nil then
                     self.内丹[i] = bb.内丹[i]
@@ -165,51 +238,11 @@ function 场景类_召唤兽资质栏:打开(b)
                     self.内丹[i] = nil
                 end
             end
-            return
+            self.状态 = 1
+            tp.运行时间 = tp.运行时间 + 1
+            self.窗口时间 = tp.运行时间
+            self.可视 = true
         end
-        self.技能数量 = 0
-        self.技能页数 = 1
-        self.状态 = nil
-        self.可视 = false
-        self.资源组 = nil
-        self.进阶 = nil
-        self.物品 = nil
-        self.技能 = nil
-    else
-        insert(tp.窗口_, self)
-        self:加载资源()
-        bb = b
-        for i = 1, 3 do
-            self.物品[i]:置物品(bb.装备[i])
-        end
-        local 序号 = 0
-        for i = 1, #bb.技能 do
-            if bb.技能[i].名称 == bb.法术认证 then
-                self.认证格子:置技能(bb.技能[i])
-            else
-                序号 = 序号 + 1
-                local 临时技能 = tp._技能.创建()
-                临时技能:置对象(bb.技能[i], 2)
-                self.技能[序号]:置技能(bb.技能[i])
-            end
-        end
-        self.技能数量 = #bb.技能
-        for i = 1, 6 do
-            if bb.内丹[i] ~= nil and bb.内丹[i].技能 ~= nil then
-                self.内丹[i] = bb.内丹[i]
-                item = self:取内丹数据(bb.内丹[i].技能, bb.内丹[i].等级)
-                self.内丹[i].说明 = item.说明
-                self.内丹[i].效果 = item.效果
-                self.内丹[i].模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
-                self.内丹[i].小模型 = 引擎.场景.资源:载入(item.资源, '网易WDF动画', item.模型)
-            else
-                self.内丹[i] = nil
-            end
-        end
-        self.状态 = 1
-        tp.运行时间 = tp.运行时间 + 1
-        self.窗口时间 = tp.运行时间
-        self.可视 = true
     end
 end
 
@@ -239,31 +272,31 @@ function 场景类_召唤兽资质栏:加载资源()
     }
     self.进阶 = {
         [16] = 资源:载入('wzife.wd3', '网易WDF动画', 0x1094AD16),
-         ----进阶界面
+        ----进阶界面
         [1] = 资源:载入('wzife.wd3', '网易WDF动画', 0x4536A03D),
-         --进阶1
+        --进阶1
         [2] = 资源:载入('wzife.wd3', '网易WDF动画', 0x714C3706),
-         --2
+        --2
         [3] = 资源:载入('wzife.wd3', '网易WDF动画', 0xD60014B8),
-         -----3
+        -----3
         [4] = 资源:载入('wzife.wd3', '网易WDF动画', 0xF7EBF987), ----4
         [5] = 资源:载入('wzife.wd3', '网易WDF动画', 0x11963488),
-         ----5
+        ----5
         [6] = 资源:载入('wzife.wd3', '网易WDF动画', 0x9A4F1961),
-         --6
+        --6
         [7] = 资源:载入('wzife.wd3', '网易WDF动画', 0x1E7ABB94), --7
         [8] = 资源:载入('wzife.wd3', '网易WDF动画', 0xA6C9A76A),
-         --8
+        --8
         [9] = 资源:载入('wzife.wd3', '网易WDF动画', 0x2982E3F7),
-         ---9
+        ---9
         [10] = 资源:载入('wzife.wd3', '网易WDF动画', 0x1D0717D7),
-         ---91
+        ---91
         [11] = 资源:载入('wzife.wd3', '网易WDF动画', 0xC44F0602),
-         --94
+        --94
         [12] = 资源:载入('wzife.wd3', '网易WDF动画', 0x9765D0B3),
-         --97
+        --97
         [13] = 资源:载入('wzife.wd3', '网易WDF动画', 0x36A2C1A6),
-         --100
+        --100
         [14] = 资源:载入('wzife.wd3', '网易WDF动画', 0xAFC2E161), --未完成内框
         [15] = 资源:载入('wzife.wd3', '网易WDF动画', 0x27E24CFA) --完成
     }
@@ -286,7 +319,7 @@ function 场景类_召唤兽资质栏:加载资源()
     self.认证格子 = jn(0, 0, i, '召唤兽资质技能')
 end
 
-function 场景类_召唤兽资质栏:显示(dt, x, y)
+function 场景类_召唤兽资质栏:BP显示(dt, x, y)
     self.焦点 = false
     self.资源组[2]:更新(x, y)
     self.资源组[3]:更新(x, y, self.状态 ~= 1)
@@ -297,7 +330,7 @@ function 场景类_召唤兽资质栏:显示(dt, x, y)
         self:打开()
         return false
     elseif self.资源组[3]:事件判断() then
-        self.状态 = 1
+        self.状态 = 1 -- 状态 1、2、3代表资质栏三个选项
     elseif self.资源组[4]:事件判断() then
         self.状态 = 2
     elseif self.资源组[5]:事件判断() then
@@ -345,7 +378,7 @@ function 场景类_召唤兽资质栏:显示(dt, x, y)
             end
         end
         self.b = 0
-        if self.技能数量 > 12 or (bb.法术认证 ~= nil and self.技能数量 > 12) then
+        if self.技能数量 > 12 or (bb.authSkill ~= nil and gbk.len(bb.authSkill) > 0 and self.技能数量 > 12) then
             self.显示数量 = 12
             if self.技能页数 == 1 then
                 self.资源组[17]:更新(x, y)
@@ -363,8 +396,8 @@ function 场景类_召唤兽资质栏:显示(dt, x, y)
         else
             self.显示数量 = self.技能数量
         end
-        if bb.法术认证 ~= nil then
-            if #bb.技能 > 12 and self.技能页数 == 2 then
+        if bb.authSkill ~= nil and gbk.len(bb.authSkill) > 0 then
+            if #bb.skill > 12 and self.技能页数 == 2 then
                 local xx = 3
                 local yy = 2
                 local jx = self.x + 20 + (xx * 41)
@@ -379,7 +412,7 @@ function 场景类_召唤兽资质栏:显示(dt, x, y)
                 if self.认证格子.焦点 and self.认证格子.技能 ~= nil then
                     tp.提示:技能(x, y, self.认证格子.技能)
                 end
-            elseif #bb.技能 <= 12 and self.技能页数 == 1 then
+            elseif #bb.skill <= 12 and self.技能页数 == 1 then
                 local xx = 3
                 local yy = 2
                 local jx = self.x + 20 + (xx * 41)
@@ -421,25 +454,25 @@ function 场景类_召唤兽资质栏:显示(dt, x, y)
                 tp.提示:技能(x, y, self.技能[self.显示序列].技能)
             end
             zts:置颜色(-16777216)
-            zts:显示(self.x + 131, self.y + 100, bb.攻击资质)
-            zts:显示(self.x + 131, self.y + 123, bb.防御资质)
-            zts:显示(self.x + 131, self.y + 146, bb.体力资质)
-            zts:显示(self.x + 131, self.y + 169, bb.法力资质)
-            zts:显示(self.x + 131, self.y + 192, bb.速度资质)
-            zts:显示(self.x + 131, self.y + 215, bb.躲闪资质)
-            if bb.种类 == '神兽' then
+            zts:显示(self.x + 131, self.y + 100, bb.intelligence[1])
+            zts:显示(self.x + 131, self.y + 123, bb.intelligence[2])
+            zts:显示(self.x + 131, self.y + 146, bb.intelligence[3])
+            zts:显示(self.x + 131, self.y + 169, bb.intelligence[4])
+            zts:显示(self.x + 131, self.y + 192, bb.intelligence[5])
+            zts:显示(self.x + 131, self.y + 215, bb.intelligence[6])
+            if bb.type == '神兽' then
                 zts:显示(self.x + 131, self.y + 238, '★永生★')
             else
-                zts:显示(self.x + 131, self.y + 238, bb.寿命)
+                zts:显示(self.x + 131, self.y + 238, bb.age)
             end
-            zts:显示(self.x + 131, self.y + 261, bb.成长)
-            zts:显示(self.x + 131, self.y + 284, bb.五行)
+            zts:显示(self.x + 131, self.y + 261, bb.growth)
+            zts:显示(self.x + 131, self.y + 284, bb.element)
         end
     elseif self.状态 == 2 then
         local jx = self.x + 20
         local jy = self.y + 309
         self.资源组[7]:显示(jx, jy)
-        local v1 = bb.内丹.内丹上限
+        local v1 = bb.maxExtend
         for i = 1, 6 do
             local jxx = jx + yx[i][1]
             local jxy = jy + yx[i][2]
@@ -472,49 +505,50 @@ function 场景类_召唤兽资质栏:显示(dt, x, y)
         if self.进阶[16]:是否选中(鼠标.x, 鼠标.y) then
             tp.提示:自定义(鼠标.x, 鼠标.y, '#W/使用#Y/易经丹#W/可以提升该召唤兽灵性,当灵性到达到50可以获得新的造型')
         end
-        if bb.灵性 > 0 and bb.灵性 < 0 then
-        elseif bb.灵性 > 0 and bb.灵性 <= 10 then
+        if bb.spirituality > 0 and bb.spirituality < 0 then
+        elseif bb.spirituality > 0 and bb.spirituality <= 10 then
             self.进阶[1]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 10 and bb.灵性 <= 20 then
+        elseif bb.spirituality > 10 and bb.spirituality <= 20 then
             self.进阶[2]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 20 and bb.灵性 <= 30 then
+        elseif bb.spirituality > 20 and bb.spirituality <= 30 then
             self.进阶[3]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 30 and bb.灵性 <= 40 then
+        elseif bb.spirituality > 30 and bb.spirituality <= 40 then
             self.进阶[4]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 40 and bb.灵性 <= 50 then
+        elseif bb.spirituality > 40 and bb.spirituality <= 50 then
             self.进阶[5]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 50 and bb.灵性 <= 60 then
+        elseif bb.spirituality > 50 and bb.spirituality <= 60 then
             self.进阶[6]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 60 and bb.灵性 <= 70 then
+        elseif bb.spirituality > 60 and bb.spirituality <= 70 then
             self.进阶[7]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 70 and bb.灵性 <= 80 then
+        elseif bb.spirituality > 70 and bb.spirituality <= 80 then
             self.进阶[8]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 80 and bb.灵性 <= 90 then
+        elseif bb.spirituality > 80 and bb.spirituality <= 90 then
             self.进阶[9]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 90 and bb.灵性 <= 91 then
+        elseif bb.spirituality > 90 and bb.spirituality <= 91 then
             self.进阶[10]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 91 and bb.灵性 <= 93 then
+        elseif bb.spirituality > 91 and bb.spirituality <= 93 then
             self.进阶[11]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 > 93 and bb.灵性 <= 97 then
+        elseif bb.spirituality > 93 and bb.spirituality <= 97 then
             self.进阶[12]:显示(jx + 39, jy + 6)
-        elseif bb.灵性 >= 98 then
+        elseif bb.spirituality >= 98 then
             self.进阶[13]:显示(jx + 39, jy + 6)
         end
-        if bb.灵性 > 80 and bb.特性 == '无' then
+        if bb.spirituality > 80 and bb.extSkill == '无' then
             self.进阶[14]:显示(jx + 51, jy + 30)
-        elseif bb.灵性 > 80 and bb.特性 ~= '无' then
+        elseif bb.spirituality > 80 and bb.extSkill ~= '无' then
             self.进阶[15]:显示(jx + 67, jy + 36)
         end
-        if bb.特性 ~= '无' then
+        if bb.extSkill ~= '无' then
             zts1:置颜色(0xFFFFFFA4)
-            zts1:显示(jx + 74, jy + 45, bb.特性)
+            zts1:显示(jx + 74, jy + 45, bb.extSkill)
             zts1:置颜色(0xFFFFFFFF)
         end
         if (self.进阶[14]:是否选中(鼠标.x, 鼠标.y) or self.进阶[15]:是否选中(鼠标.x, 鼠标.y)) and bb.特性几率 ~= 0 and bb.特性 ~= '无' then
-            tp.提示:特性(鼠标.x, 鼠标.y, bb.特性, bb.等级, bb.特性几率)
+            -- tp.提示:特性(鼠标.x, 鼠标.y, bb.extSkill, bb.lv, bb.特性几率)
+            tp.提示:特性(鼠标.x, 鼠标.y, bb.extSkill, bb.lv, 43)
         end
         zts1:置颜色(0xFFFFFFFF)
-        zts1:显示(jx + 65, jy + 115, '灵性:' .. bb.灵性)
+        zts1:显示(jx + 65, jy + 115, '灵性:' .. bb.spirituality)
     end
     for i = 1, 3 do
         self.物品[i]:置坐标(self.x + 37 + (i - 1) * 60, self.y + 31)
@@ -524,19 +558,276 @@ function 场景类_召唤兽资质栏:显示(dt, x, y)
         end
     end
     zts:置颜色(-16777216)
-    zts:显示(self.x + 131, self.y + 100, bb.攻击资质)
-    zts:显示(self.x + 131, self.y + 123, bb.防御资质)
-    zts:显示(self.x + 131, self.y + 146, bb.体力资质)
-    zts:显示(self.x + 131, self.y + 169, bb.法力资质)
-    zts:显示(self.x + 131, self.y + 192, bb.速度资质)
-    zts:显示(self.x + 131, self.y + 215, bb.躲闪资质)
-    if bb.种类 == '神兽' then
+    zts:显示(self.x + 131, self.y + 100, bb.intelligence[1])
+    zts:显示(self.x + 131, self.y + 123, bb.intelligence[2])
+    zts:显示(self.x + 131, self.y + 146, bb.intelligence[3])
+    zts:显示(self.x + 131, self.y + 169, bb.intelligence[4])
+    zts:显示(self.x + 131, self.y + 192, bb.intelligence[5])
+    zts:显示(self.x + 131, self.y + 215, bb.intelligence[6])
+    if bb.type == '神兽' then
         zts:显示(self.x + 131, self.y + 238, '★永生★')
     else
-        zts:显示(self.x + 131, self.y + 238, bb.寿命)
+        zts:显示(self.x + 131, self.y + 238, bb.age)
     end
-    zts:显示(self.x + 131, self.y + 261, bb.成长)
-    zts:显示(self.x + 131, self.y + 284, bb.五行)
+    zts:显示(self.x + 131, self.y + 261, bb.growth)
+    zts:显示(self.x + 131, self.y + 284, bb.element)
+end
+
+function 场景类_召唤兽资质栏:显示(dt, x, y)
+    if 开发调试 then
+        self:BP显示(dx, x, y)
+    else
+        self.焦点 = false
+        self.资源组[2]:更新(x, y)
+        self.资源组[3]:更新(x, y, self.状态 ~= 1)
+        self.资源组[4]:更新(x, y, self.状态 ~= 2)
+        self.资源组[5]:更新(x, y, self.状态 ~= 3)
+        self.资源组[15]:更新()
+        if self.资源组[2]:事件判断() then
+            self:打开()
+            return false
+        elseif self.资源组[3]:事件判断() then
+            self.状态 = 1
+        elseif self.资源组[4]:事件判断() then
+            self.状态 = 2
+        elseif self.资源组[5]:事件判断() then
+            self.状态 = 3
+        end
+        self.资源组[1]:显示(self.x, self.y)
+        self.资源组[14]:显示(self.x + 6, self.y + 3)
+        tp.窗口标题背景_:置区域(0, 0, 84, 16)
+        tp.窗口标题背景_:显示(self.x + 71, self.y + 3)
+        zts1:置字间距(1)
+        zts1:显示(self.x + 76, self.y + 3, '召唤兽资质')
+        zts1:置字间距(0)
+        --self.资源组[12]:显示(self.x+30,self.y+27)
+        for i = 1, 3 do
+            tp.宝宝装备背景[i]:显示(self.x + 35 + (i - 1) * 60, self.y + 31)
+        end
+        zts1:置字间距(10)
+        for i = 0, 5 do
+            zts1:显示(self.x + 23, self.y + 98 + i * 23, bds[i + 1])
+            self.资源组[13]:显示(self.x + 124, self.y + 96 + i * 23)
+        end
+        zts1:置字间距(58)
+        zts1:置颜色(-1404907)
+        for i = 0, 2 do
+            zts1:显示(self.x + 23, self.y + 236 + i * 23, bds1[i + 1])
+            self.资源组[13]:显示(self.x + 124, self.y + 234 + i * 23)
+        end
+        zts1:置颜色(4294967295)
+        zts1:置字间距(0)
+        self.资源组[2]:显示(self.x + 216, self.y + 5)
+        self.资源组[3]:显示(self.x + 208, self.y + 305, true, nil, nil, self.状态 == 1, 2)
+        self.资源组[4]:显示(self.x + 208, self.y + 351, true, nil, nil, self.状态 == 2, 2)
+        self.资源组[5]:显示(self.x + 208, self.y + 397, true, nil, nil, self.状态 == 3, 2)
+        local xx = 0
+        local yy = 0
+        if self.状态 == 1 then
+            for i = 1, 12 do
+                local jx = self.x + 20 + (xx * 41)
+                local jy = self.y + 309 + (yy * 41)
+                self.资源组[6]:显示(jx, jy)
+                xx = xx + 1
+                if xx > 3 then
+                    xx = 0
+                    yy = yy + 1
+                end
+            end
+            self.b = 0
+            if self.技能数量 > 12 or (bb.法术认证 ~= nil and self.技能数量 > 12) then
+                self.显示数量 = 12
+                if self.技能页数 == 1 then
+                    self.资源组[17]:更新(x, y)
+                    self.资源组[17]:显示(self.x + 192, self.y + 406)
+                    if self.资源组[17]:事件判断() then
+                        self.技能页数 = self.技能页数 + 1
+                    end
+                else
+                    self.资源组[16]:更新(x, y)
+                    self.资源组[16]:显示(self.x + 192, self.y + 326)
+                    if self.资源组[16]:事件判断() then
+                        self.技能页数 = self.技能页数 - 1
+                    end
+                end
+            else
+                self.显示数量 = self.技能数量
+            end
+            if bb.法术认证 ~= nil then
+                if #bb.技能 > 12 and self.技能页数 == 2 then
+                    local xx = 3
+                    local yy = 2
+                    local jx = self.x + 20 + (xx * 41)
+                    local jy = self.y + 309 + (yy * 41)
+                    self.资源组[6]:显示(jx, jy)
+                    self.认证格子:置坐标(jx + 3, jy + 2)
+                    self.认证格子:显示(x, y, self.鼠标)
+                    引擎.画线(jx + 3, jy + 2, jx + 3 + 40, jy + 2, 红色)
+                    引擎.画线(jx + 3, jy + 2 + 40, jx + 3 + 40, jy + 2 + 40, 红色)
+                    引擎.画线(jx + 3, jy + 2, jx + 3, jy + 2 + 40, 红色)
+                    引擎.画线(jx + 3 + 40, jy + 2, jx + 3 + 40, jy + 2 + 40, 红色)
+                    if self.认证格子.焦点 and self.认证格子.技能 ~= nil then
+                        tp.提示:技能(x, y, self.认证格子.技能)
+                    end
+                elseif #bb.技能 <= 12 and self.技能页数 == 1 then
+                    local xx = 3
+                    local yy = 2
+                    local jx = self.x + 20 + (xx * 41)
+                    local jy = self.y + 309 + (yy * 41)
+                    self.资源组[6]:显示(jx, jy)
+                    self.认证格子:置坐标(jx + 3, jy + 2)
+                    self.认证格子:显示(x, y, self.鼠标)
+                    引擎.画线(jx + 3, jy + 2, jx + 3 + 40, jy + 2, 红色)
+                    引擎.画线(jx + 3, jy + 2 + 40, jx + 3 + 40, jy + 2 + 40, 红色)
+                    引擎.画线(jx + 3, jy + 2, jx + 3, jy + 2 + 40, 红色)
+                    引擎.画线(jx + 3 + 40, jy + 2, jx + 3 + 40, jy + 2 + 40, 红色)
+                    if self.认证格子.焦点 and self.认证格子.技能 ~= nil then
+                        tp.提示:技能(x, y, self.认证格子.技能)
+                    end
+                end
+            end
+            for n = 1, self.显示数量 do
+                self.a = n / 4
+                if (self.a < 1) then
+                    self.a = 1
+                elseif (self.a > 1 and self.a < 2) then
+                    self.a = 2
+                elseif (self.a > 2 and self.a < 3) then
+                    self.a = 3
+                end
+                self.b = self.b + 1
+                if (self.b == 5) then
+                    self.b = 1
+                end
+                self.显示序列 = self.技能页数 * 12 - 12 + n
+                if self.显示序列 > self.技能数量 then
+                    return 0
+                end
+                local jx = self.x + 20 + (self.b * 41 - 41)
+                local jy = self.y + 309 + (self.a * 41 - 41)
+                self.技能[self.显示序列]:置坐标(jx + 3, jy + 2)
+                self.技能[self.显示序列]:显示(x, y, self.鼠标)
+                if self.技能[self.显示序列].焦点 and self.技能[self.显示序列].技能 ~= nil then
+                    tp.提示:技能(x, y, self.技能[self.显示序列].技能)
+                end
+                zts:置颜色(-16777216)
+                zts:显示(self.x + 131, self.y + 100, bb.攻击资质)
+                zts:显示(self.x + 131, self.y + 123, bb.防御资质)
+                zts:显示(self.x + 131, self.y + 146, bb.体力资质)
+                zts:显示(self.x + 131, self.y + 169, bb.法力资质)
+                zts:显示(self.x + 131, self.y + 192, bb.速度资质)
+                zts:显示(self.x + 131, self.y + 215, bb.躲闪资质)
+                if bb.种类 == '神兽' then
+                    zts:显示(self.x + 131, self.y + 238, '★永生★')
+                else
+                    zts:显示(self.x + 131, self.y + 238, bb.寿命)
+                end
+                zts:显示(self.x + 131, self.y + 261, bb.成长)
+                zts:显示(self.x + 131, self.y + 284, bb.五行)
+            end
+        elseif self.状态 == 2 then
+            local jx = self.x + 20
+            local jy = self.y + 309
+            self.资源组[7]:显示(jx, jy)
+            local v1 = bb.内丹.内丹上限
+            for i = 1, 6 do
+                local jxx = jx + yx[i][1]
+                local jxy = jy + yx[i][2]
+                if i <= v1 then
+                    self.资源组[9]:显示(jxx, jxy)
+                    if self.鼠标 and self.资源组[9]:是否选中(x, y) then
+                        tp.提示:内丹提示(x, y, self.资源组[9], {名称 = '可用的内丹技能格', 说明 = '可以学习的内丹技能'})
+                        self.焦点 = true
+                    end
+                else
+                    self.资源组[8]:显示(jxx, jxy)
+                    if self.鼠标 and self.资源组[8]:是否选中(x, y) then
+                        tp.提示:内丹提示(x, y, self.资源组[8], {名称 = '不可用内丹技能格', 说明 = '召唤兽可用内丹格数量与其参战等级相关'})
+                        self.焦点 = true
+                    end
+                end
+                if self.内丹[i] ~= nil then
+                    self.内丹[i].模型:显示(jxx, jxy)
+                    self.资源组[15]:显示(jxx, jxy)
+                    if self.内丹[i].模型:是否选中(鼠标.x, 鼠标.y) then
+                        tp.提示:内丹提示(鼠标.x, 鼠标.y, self.内丹[i].模型, self.内丹[i])
+                    end
+                end
+            end
+        elseif self.状态 == 3 then
+            local jx = self.x + 20
+            local jy = self.y + 309
+            self.资源组[11]:显示(jx, jy)
+            self.进阶[16]:显示(jx + 40, jy + 7)
+            if self.进阶[16]:是否选中(鼠标.x, 鼠标.y) then
+                tp.提示:自定义(鼠标.x, 鼠标.y, '#W/使用#Y/易经丹#W/可以提升该召唤兽灵性,当灵性到达到50可以获得新的造型')
+            end
+            if bb.灵性 > 0 and bb.灵性 < 0 then
+            elseif bb.灵性 > 0 and bb.灵性 <= 10 then
+                self.进阶[1]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 10 and bb.灵性 <= 20 then
+                self.进阶[2]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 20 and bb.灵性 <= 30 then
+                self.进阶[3]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 30 and bb.灵性 <= 40 then
+                self.进阶[4]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 40 and bb.灵性 <= 50 then
+                self.进阶[5]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 50 and bb.灵性 <= 60 then
+                self.进阶[6]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 60 and bb.灵性 <= 70 then
+                self.进阶[7]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 70 and bb.灵性 <= 80 then
+                self.进阶[8]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 80 and bb.灵性 <= 90 then
+                self.进阶[9]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 90 and bb.灵性 <= 91 then
+                self.进阶[10]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 91 and bb.灵性 <= 93 then
+                self.进阶[11]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 > 93 and bb.灵性 <= 97 then
+                self.进阶[12]:显示(jx + 39, jy + 6)
+            elseif bb.灵性 >= 98 then
+                self.进阶[13]:显示(jx + 39, jy + 6)
+            end
+            if bb.灵性 > 80 and bb.特性 == '无' then
+                self.进阶[14]:显示(jx + 51, jy + 30)
+            elseif bb.灵性 > 80 and bb.特性 ~= '无' then
+                self.进阶[15]:显示(jx + 67, jy + 36)
+            end
+            if bb.特性 ~= '无' then
+                zts1:置颜色(0xFFFFFFA4)
+                zts1:显示(jx + 74, jy + 45, bb.特性)
+                zts1:置颜色(0xFFFFFFFF)
+            end
+            if (self.进阶[14]:是否选中(鼠标.x, 鼠标.y) or self.进阶[15]:是否选中(鼠标.x, 鼠标.y)) and bb.特性几率 ~= 0 and bb.特性 ~= '无' then
+                tp.提示:特性(鼠标.x, 鼠标.y, bb.特性, bb.等级, bb.特性几率)
+            end
+            zts1:置颜色(0xFFFFFFFF)
+            zts1:显示(jx + 65, jy + 115, '灵性:' .. bb.灵性)
+        end
+        for i = 1, 3 do
+            self.物品[i]:置坐标(self.x + 37 + (i - 1) * 60, self.y + 31)
+            self.物品[i]:显示(dt, x, y, self.鼠标)
+            if self.物品[i].物品 ~= nil and self.物品[i].焦点 then
+                tp.提示:道具行囊(x, y, self.物品[i].物品)
+            end
+        end
+        zts:置颜色(-16777216)
+        zts:显示(self.x + 131, self.y + 100, bb.攻击资质)
+        zts:显示(self.x + 131, self.y + 123, bb.防御资质)
+        zts:显示(self.x + 131, self.y + 146, bb.体力资质)
+        zts:显示(self.x + 131, self.y + 169, bb.法力资质)
+        zts:显示(self.x + 131, self.y + 192, bb.速度资质)
+        zts:显示(self.x + 131, self.y + 215, bb.躲闪资质)
+        if bb.种类 == '神兽' then
+            zts:显示(self.x + 131, self.y + 238, '★永生★')
+        else
+            zts:显示(self.x + 131, self.y + 238, bb.寿命)
+        end
+        zts:显示(self.x + 131, self.y + 261, bb.成长)
+        zts:显示(self.x + 131, self.y + 284, bb.五行)
+    end
 end
 
 function 场景类_召唤兽资质栏:取内丹数据(wd, s)

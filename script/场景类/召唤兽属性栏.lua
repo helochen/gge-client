@@ -56,7 +56,7 @@ function 场景类_召唤兽属性栏:PB打开()
     if self.可视 then
         for i = 1, 7 do
             if tp.队伍[1] ~= nil and tp.队伍[1].宝宝列表[i] ~= nil then
-                tp.队伍[1].宝宝列表[i].potential =
+                tp.队伍[1].宝宝列表[i].potential = -- ????没看明白
                     tp.队伍[1].宝宝列表[i].potential +
                     (self.临时潜力[i].体质 + self.临时潜力[i].魔力 + self.临时潜力[i].力量 + self.临时潜力[i].耐力 + self.临时潜力[i].敏捷)
             end
@@ -114,65 +114,69 @@ function 场景类_召唤兽属性栏:PB打开()
     end
 end
 function 场景类_召唤兽属性栏:打开()
-    if self.可视 then
-        for i = 1, 7 do
-            if tp.队伍[1] ~= nil and tp.队伍[1].宝宝列表[i] ~= nil then
-                tp.队伍[1].宝宝列表[i].潜力 =
-                    tp.队伍[1].宝宝列表[i].潜力 +
-                    (self.临时潜力[i].体质 + self.临时潜力[i].魔力 + self.临时潜力[i].力量 + self.临时潜力[i].耐力 + self.临时潜力[i].敏捷)
-            end
-            self.临时潜力[i] = {体质 = 0, 魔力 = 0, 力量 = 0, 耐力 = 0, 敏捷 = 0}
-            self.预览属性[i] = {气血 = 0, 魔法 = 0, 伤害 = 0, 速度 = 0, 灵力 = 0, 防御 = 0}
-        end
-        self.加入 = 0
-        self.选中 = 0
-        self.拽拖计次 = 0
-        self.拽拖对象 = 0
-        self.拽拖事件 = 0
-        self.插入选区 = 0
-        self.头像组 = {}
-        self.窗口时间 = 0
-        self.名称输入框:置可视(false, false)
-        self.可视 = false
-        self:加载数据()
-        self.资源组[35]:置起始点(0)
-        if tp.窗口.召唤兽资质栏.可视 then
-            tp.窗口.召唤兽资质栏:打开()
-        end
-        self.资源组 = nil
-        self.头像组 = nil
-        return
+    if 开发调试 then
+        self:PB打开()
     else
-        insert(tp.窗口_, self)
-        self:加载数据()
-        for i = 1, #tp.队伍[1].宝宝列表 do
-            if tp.队伍[1].宝宝列表[i] ~= nil and tp.队伍[1].宝宝列表[i].参战信息 ~= nil then
-                if i > 4 then
-                    self.加入 = i - 4
-                --self.资源组[35]:置起始点(self.资源组[35]:取百分比转换(self.加入,4,#tp.队伍[1].宝宝列表))
+        if self.可视 then
+            for i = 1, 7 do
+                if tp.队伍[1] ~= nil and tp.队伍[1].宝宝列表[i] ~= nil then
+                    tp.队伍[1].宝宝列表[i].潜力 =
+                        tp.队伍[1].宝宝列表[i].潜力 +
+                        (self.临时潜力[i].体质 + self.临时潜力[i].魔力 + self.临时潜力[i].力量 + self.临时潜力[i].耐力 + self.临时潜力[i].敏捷)
                 end
-                self.选中 = i
-                self.名称输入框:置文本(tp.队伍[1].宝宝列表[self.选中].名称)
-                self.名称输入框:置可视(true, true)
-                if tp.窗口.召唤兽资质栏.可视 then
-                    tp.窗口.召唤兽资质栏:打开(tp.队伍[1].宝宝列表[self.选中])
-                end
-                self:置形象()
-                self.拽拖计次 = 0
-                break
+                self.临时潜力[i] = {体质 = 0, 魔力 = 0, 力量 = 0, 耐力 = 0, 敏捷 = 0}
+                self.预览属性[i] = {气血 = 0, 魔法 = 0, 伤害 = 0, 速度 = 0, 灵力 = 0, 防御 = 0}
             end
+            self.加入 = 0
+            self.选中 = 0
+            self.拽拖计次 = 0
+            self.拽拖对象 = 0
+            self.拽拖事件 = 0
+            self.插入选区 = 0
+            self.头像组 = {}
+            self.窗口时间 = 0
+            self.名称输入框:置可视(false, false)
+            self.可视 = false
+            self:加载数据()
+            self.资源组[35]:置起始点(0)
+            if tp.窗口.召唤兽资质栏.可视 then
+                tp.窗口.召唤兽资质栏:打开()
+            end
+            self.资源组 = nil
+            self.头像组 = nil
+            return
+        else
+            insert(tp.窗口_, self)
+            self:加载数据()
+            for i = 1, #tp.队伍[1].宝宝列表 do
+                if tp.队伍[1].宝宝列表[i] ~= nil and tp.队伍[1].宝宝列表[i].参战信息 ~= nil then
+                    if i > 4 then
+                        self.加入 = i - 4
+                    --self.资源组[35]:置起始点(self.资源组[35]:取百分比转换(self.加入,4,#tp.队伍[1].宝宝列表))
+                    end
+                    self.选中 = i
+                    self.名称输入框:置文本(tp.队伍[1].宝宝列表[self.选中].名称)
+                    self.名称输入框:置可视(true, true)
+                    if tp.窗口.召唤兽资质栏.可视 then
+                        tp.窗口.召唤兽资质栏:打开(tp.队伍[1].宝宝列表[self.选中])
+                    end
+                    self:置形象()
+                    self.拽拖计次 = 0
+                    break
+                end
+            end
+            self.加入 = 0
+            self.选中 = 0
+            self.拽拖计次 = 0
+            self.拽拖对象 = 0
+            self.拽拖事件 = 0
+            self.插入选区 = 0
+            self.操作 = nil
+            self.窗口时间 = 0
+            tp.运行时间 = tp.运行时间 + 1
+            self.窗口时间 = tp.运行时间
+            self.可视 = true
         end
-        self.加入 = 0
-        self.选中 = 0
-        self.拽拖计次 = 0
-        self.拽拖对象 = 0
-        self.拽拖事件 = 0
-        self.插入选区 = 0
-        self.操作 = nil
-        self.窗口时间 = 0
-        tp.运行时间 = tp.运行时间 + 1
-        self.窗口时间 = tp.运行时间
-        self.可视 = true
     end
 end
 
@@ -387,6 +391,36 @@ function 场景类_召唤兽属性栏:放生()
     end
 end
 
+function 场景类_召唤兽属性栏:PB刷新宝宝第三方属性(animals)
+    if animals ~= nil and #animals > 0 then
+        -- 计算各类属性统计值
+        for i = 1, #animals do
+            local eq = animals[i].equip
+            -- table.insert(animals[i], equipAttribute, {direct = {0, 0, 0, 0, 0, 0}, attribute = {0, 0, 0, 0, 0}})
+            animals[i].equipAttribute = {}
+            animals[i].equipAttribute.direct = {0, 0, 0, 0, 0, 0} -- 直接增加的属性
+            animals[i].equipAttribute.attribute = {0, 0, 0, 0, 0} -- 属性值
+
+            if eq ~= nil and #eq > 0 then
+                for n = 1, #eq do
+                    local e = eq[n]
+                    if e.direct ~= nil and #e.direct > 0 then
+                        for d = 1, #e.direct do
+                            animals[i].equipAttribute.direct[d] = animals[i].equipAttribute.direct[d] + e.direct[d]
+                        end
+                    end
+                    if e.attribute ~= nil and #e.attribute then
+                        for a = 1, #e.attribute do
+                            animals[i].equipAttribute.attribute[a] =
+                                animals[i].equipAttribute.attribute[a] + e.attribute[a]
+                        end
+                    end
+                end
+            end
+        end
+    end
+end
+
 function 场景类_召唤兽属性栏:PB显示(dt, x, y)
     -- 变量
     local bbs = tp.队伍[1].宝宝列表
@@ -573,7 +607,7 @@ function 场景类_召唤兽属性栏:PB显示(dt, x, y)
             end
             zts:显示(jx + 41, jy + 3, bbs[i + self.加入].name)
             zts:显示(jx + 41, jy + 21, bbs[i + self.加入].lv .. '级')
-            -- 取消助战
+        -- 取消助战
         -- if bbs[i + self.加入].manager ~= nil then
         --     zts2:显示(jx + 91, jy + 21, bbs[i + self.加入].manager .. '号助战')
         -- end
@@ -632,70 +666,73 @@ function 场景类_召唤兽属性栏:PB显示(dt, x, y)
         end
         self.资源组[34]:显示(self.x + 320, self.y + 35)
         zts:置颜色(-16777216)
-        zts:显示(self.x + 60, self.y + 247, format('%d/%d', bb.blood[1], bb.blood[2]))
-        -- if yl.气血 > 0 then
-        --     zts1:置颜色(-65536)
-        --     zts1:显示(self.x + 126, self.y + 248, '+' .. yl.气血)
-        -- end
-        zts:显示(self.x + 60, self.y + 271, format('%d/%d', bb.magic[1], bb.magic[2]))
-        -- if yl.魔法 > 0 then
-        --     zts1:置颜色(-65536)
-        --     zts1:显示(self.x + 126, self.y + 272, '+' .. yl.魔法)
-        -- end
-        -- zts:显示(self.x + 60, self.y + 295, bb.伤害)
-        -- if yl.伤害 > 0 then
-        --     zts1:置颜色(-65536)
-        --     zts1:显示(self.x + 126, self.y + 295, '+' .. yl.伤害)
-        -- end
-        -- zts:显示(self.x + 60, self.y + 319, bb.防御)
-        -- if yl.防御 > 0 then
-        --     zts1:置颜色(-65536)
-        --     zts1:显示(self.x + 126, self.y + 319, '+' .. yl.防御)
-        -- end
-        -- zts:显示(self.x + 60, self.y + 343, bb.速度)
-        -- if yl.速度 > 0 then
-        --     zts1:置颜色(-65536)
-        --     zts1:显示(self.x + 126, self.y + 343, '+' .. yl.速度)
-        -- end
-        -- zts:显示(self.x + 60, self.y + 367, bb.灵力)
-        -- if yl.灵力 > 0 then
-        --     zts1:置颜色(-65536)
-        --     zts1:显示(self.x + 126, self.y + 367, '+' .. yl.灵力)
-        -- end
+        zts:显示(
+            self.x + 60,
+            self.y + 247,
+            format('%d/%d', bb.blood[1] + bb.equipAttribute.direct[1], bb.blood[2] + bb.equipAttribute.direct[1])
+        )
+        if yl.气血 > 0 then
+            zts1:置颜色(-65536)
+            zts1:显示(self.x + 126, self.y + 248, '+' .. yl.气血)
+        end
+        zts:显示(
+            self.x + 60,
+            self.y + 271,
+            format('%d/%d', bb.magic[1] + bb.equipAttribute.direct[2], bb.magic[2] + bb.equipAttribute.direct[2])
+        )
+        if yl.魔法 > 0 then
+            zts1:置颜色(-65536)
+            zts1:显示(self.x + 126, self.y + 272, '+' .. yl.魔法)
+        end
+        zts:显示(self.x + 60, self.y + 295, bb.calculate[1] + bb.equipAttribute.direct[3])
+        if yl.伤害 > 0 then
+            zts1:置颜色(-65536)
+            zts1:显示(self.x + 126, self.y + 295, '+' .. yl.伤害)
+        end
+        zts:显示(self.x + 60, self.y + 319, bb.calculate[2] + bb.equipAttribute.direct[4])
+        if yl.防御 > 0 then
+            zts1:置颜色(-65536)
+            zts1:显示(self.x + 126, self.y + 319, '+' .. yl.防御)
+        end
+        zts:显示(self.x + 60, self.y + 343, bb.calculate[3] + bb.equipAttribute.direct[5])
+        if yl.速度 > 0 then
+            zts1:置颜色(-65536)
+            zts1:显示(self.x + 126, self.y + 343, '+' .. yl.速度)
+        end
+        zts:显示(self.x + 60, self.y + 367, bb.calculate[4] + bb.equipAttribute.direct[6])
+        if yl.灵力 > 0 then
+            zts1:置颜色(-65536)
+            zts1:显示(self.x + 126, self.y + 367, '+' .. yl.灵力)
+        end
         zts:显示(self.x + 60, self.y + 397, bb.loyal)
         -- ls
         local attributes = bb.attribute
         if attributes ~= nil and #attributes > 0 then
-            -- zts:显示(self.x + 204, self.y + 247, bb.attributes[1] + bb.装备属性.体质)
-            zts:显示(self.x + 204, self.y + 247, bb.attribute[1])
+            zts:显示(self.x + 204, self.y + 247, bb.attribute[1] + bb.equipAttribute.attribute[1])
             if ls.体质 > 0 then
                 zts:置颜色(-65536)
                 zts:显示(self.x + 224 + (#tostring(bb.attribute[1]) * 7) + 1, self.y + 247, '+' .. ls.体质)
                 zts:置颜色(-16777216)
             end
-            -- zts:显示(self.x + 204, self.y + 271, bb.attributes[2] + bb.装备属性.魔力)
-            zts:显示(self.x + 204, self.y + 271, bb.attribute[2])
+            zts:显示(self.x + 204, self.y + 271, bb.attribute[2] + bb.equipAttribute.attribute[2])
             if ls.魔力 > 0 then
                 zts:置颜色(-65536)
                 zts:显示(self.x + 224 + (#tostring(bb.attribute[2]) * 7) + 1, self.y + 271, '+' .. ls.魔力)
                 zts:置颜色(-16777216)
             end
-            -- zts:显示(self.x + 204, self.y + 296, bb.attributes[3] + bb.装备属性.力量)
-            zts:显示(self.x + 204, self.y + 296, bb.attribute[3])
+            zts:显示(self.x + 204, self.y + 296, bb.attribute[3] + bb.equipAttribute.attribute[3])
             if ls.力量 > 0 then
                 zts:置颜色(-65536)
                 zts:显示(self.x + 224 + (#tostring(bb.attribute[3]) * 7) + 1, self.y + 295, '+' .. ls.力量)
                 zts:置颜色(-16777216)
             end
-            -- zts:显示(self.x + 204, self.y + 320, bb.attributes[4] + bb.装备属性.耐力)
-            zts:显示(self.x + 204, self.y + 320, bb.attribute[4])
+            zts:显示(self.x + 204, self.y + 320, bb.attribute[4] + bb.equipAttribute.attribute[4])
             if ls.耐力 > 0 then
                 zts:置颜色(-65536)
                 zts:显示(self.x + 224 + (#tostring(bb.attribute[4]) * 7) + 1, self.y + 319, '+' .. ls.耐力)
                 zts:置颜色(-16777216)
             end
-            -- zts:显示(self.x + 204, self.y + 344, bb.attributes[5] + bb.装备属性.敏捷)
-            zts:显示(self.x + 204, self.y + 344, bb.attribute[5])
+            zts:显示(self.x + 204, self.y + 344, bb.attribute[5] + bb.equipAttribute.attribute[5])
             if ls.敏捷 > 0 then
                 zts:置颜色(-65536)
                 zts:显示(self.x + 224 + (#tostring(bb.attribute[5]) * 7) + 1, self.y + 343, '+' .. ls.敏捷)

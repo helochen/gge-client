@@ -105,16 +105,29 @@ function 内存类_队伍:初始化()
 end
 
 function 内存类_队伍:PB刷新宝宝技能(编号, 技能)
-    if 编号 ~= nil then
-    else
-        if self.宝宝列表 ~= nil and #self.宝宝列表 > 0 then
+    if self.宝宝列表 ~= nil and #self.宝宝列表 > 0 then
+        if 编号 ~= nil then
+            for n = 1, #self.宝宝列表 do
+                if 编号 == self.宝宝列表[n] then
+                    if 技能 ~= nil and #技能 > 0 then
+                        self.宝宝列表[n].skillObjects = {}
+                        for i = 1, #技能 do
+                            -- 技能对象
+                            local 临时技能 = 技能[i]
+                            self.宝宝列表[n].skillObjects[i] = tp._技能.创建()
+                            self.宝宝列表[n].skillObjects[i]:置对象(临时技能, 2)
+                        end
+                    end
+                end
+            end
+        else
             for n = 1, #self.宝宝列表 do
                 local skills = self.宝宝列表[n].skill
                 if skills ~= nil and #skills > 0 then
                     self.宝宝列表[n].skillObjects = {}
                     for i = 1, #skills do
                         -- 技能对象
-                        local 临时技能 =skills[i]
+                        local 临时技能 = skills[i]
                         self.宝宝列表[n].skillObjects[i] = tp._技能.创建()
                         self.宝宝列表[n].skillObjects[i]:置对象(临时技能, 2)
                     end
@@ -149,22 +162,20 @@ function 内存类_队伍:刷新宝宝技能(编号, 技能)
     end
 end
 
-
 -- TODO 法术认证逻辑
 function 内存类_队伍:PB刷新宝宝认证技能()
     local 临时技能 = ''
     for n = 1, #self.宝宝列表 do
-        if self.宝宝列表[n] ~= nil and self.宝宝列表[n].法术认证属性 ~= nil and #self.宝宝列表[n].法术认证属性 > 0 then ---增加属性两字就OK
-            for i = 1, #self.宝宝列表[n].法术认证属性 do
-                临时技能 = self.宝宝列表[n].法术认证[i]
-                self.宝宝列表[n].法术认证属性[i] = tp._技能.创建()
-                self.宝宝列表[n].法术认证属性[i]:置对象(临时技能, 2)
-            end
+        if self.宝宝列表[n].法术认证属性 == nil then
+            self.宝宝列表[n].法术认证属性 = {}
+        end
+        if self.宝宝列表[n] ~= nil and self.宝宝列表[n].authSkill ~= nil and gbk.len(self.宝宝列表[n].authSkill) > 0 then ---增加属性两字就OK
+            临时技能 = self.宝宝列表[n].authSkill
+            self.宝宝列表[n].法术认证属性[1] = tp._技能.创建()
+            self.宝宝列表[n].法术认证属性[1]:置对象(临时技能, 2)
         end
     end
 end
-
-
 
 function 内存类_队伍:刷新宝宝认证技能()
     local 临时技能 = ''
