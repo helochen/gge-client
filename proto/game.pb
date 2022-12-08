@@ -1,5 +1,5 @@
 
-Ö
+·
 
 game.proto	GGEGaming"Â
 ActorJoinResponse$
@@ -57,7 +57,7 @@ sectSkills"ë
 lv (Rlv
 ok (Rok"?
 RoleAnimalInfo-
-animal (2.GGEGaming.AnimalInfoRanimal"ô
+animal (2.GGEGaming.AnimalInfoRanimal"ä
 
 AnimalInfo
 no (	Rno
@@ -89,13 +89,24 @@ AnimalInfo
 join (Rjoin
 lv (Rlv
 manager (Rmanager
-exp (Rexp"K
+exp (Rexp6
+	innerBall (2.GGEGaming.InnerBallInfoR	innerBall
+element (	Relement
+	calculate  (R	calculate"K
 AnimalDress
 name (	Rname
 mana (Rmana
-color (Rcolor"'
+color (Rcolor"—
 AnimalEquipInfo
-model (	Rmodel"
+model (	Rmodel
+lv (Rlv
+type (Rtype
+direct (Rdirect
+	attribute (R	attribute
+skill (	Rskill"3
+InnerBallInfo
+name (	Rname
+lv (Rlv"
 	MountInfo"š
 
 MapNpcInfo
@@ -129,5 +140,7 @@ touchEvent(
 MapTransfer
 x (Rx
 y (Ry
-id (RidB!
+id (Rid"I
+MapTransferAutoPush2
+transfer (2.GGEGaming.MapTransferRtransferB!
 daisy.game.proto.gameBGameInfobproto3

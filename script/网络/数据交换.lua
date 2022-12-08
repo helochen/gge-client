@@ -870,6 +870,7 @@ function 回调:系统处理(序号, 内容, 数据)
         tp.队伍[1].宝宝列表[内容.序列].名称 = 内容.名称
     elseif 序号 == 20 then
         --print(#内容)
+        -- 修改属性
         for n = 1, #tp.队伍[1].宝宝列表 do
             if 内容.认证码 == tp.队伍[1].宝宝列表[n].认证码 then
                 tp.队伍[1].宝宝列表[n] = 内容
@@ -1451,11 +1452,18 @@ function 回调:系统处理PB(cmd, pb_entity)
         self:进入游戏PB逻辑(pb_entity)
     elseif cmd == 2005 then
         tp.场景:设置假人(pb_entity)
+    elseif cmd == 2006 then
+        tp.场景:设置传送(pb_entity.transfer)
     elseif cmd == 2100 then
         tp.队伍[1]:BP重置属性(pb_entity)
     elseif cmd == 2200 then
         -- 宠物信息
         self:宠物PB信息刷新(pb_entity)
+    elseif cmd == 2202 then
+        tp.窗口.召唤兽属性栏:放生(pb_entity)
+    elseif cmd == 3501 then
+        tp.场景:传送至(pb_entity.mapId, pb_entity.x, pb_entity.y, true)
+        tp.队伍[1].地图数据.编号 = pb_entity.mapId
     end
 end
 

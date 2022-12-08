@@ -190,7 +190,11 @@ function 场景类_地图:设置传送(内容)
     local c = 内容
     if #c > 0 then
         for n = 1, #c do
-            self.传送[n] = cs(c[n].x, c[n].y, n)
+            if 开发调试 then
+                self.传送[n] = cs(c[n].x, c[n].y, c.id)
+            else
+                self.传送[n] = cs(c[n].x, c[n].y, n)
+            end
             q = nil
         end
     end

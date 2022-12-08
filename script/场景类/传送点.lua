@@ -35,7 +35,15 @@ function 场景类_传送点:更新(dt, x, y, pys)
         end
         if kcs and 系统参数.时间 - self.传送延时 >= 3 then
             self.传送延时 = 系统参数.时间
-            发送数据(1003, {说明 = tp.当前地图, id = self.id})
+            if 开发调试 then
+                local pb_data = {
+                    from = tp.当前地图,
+                    to = self.id
+                }
+                客户端:发送PB数据(3500, pb_data)
+            else
+                发送数据(1003, {说明 = tp.当前地图, id = self.id})
+            end
         --tp.场景:传送至(a[1],a[2].x,a[2].y,true)
         end
         --end

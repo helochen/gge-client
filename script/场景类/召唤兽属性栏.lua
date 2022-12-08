@@ -352,7 +352,8 @@ function 场景类_召唤兽属性栏:置形象()
         end
     end
 end
-function 场景类_召唤兽属性栏:放生()
+
+function 场景类_召唤兽属性栏:放生(pb_entity)
     if self.可视 then
         self.临时潜力[self.选中] = {体质 = 0, 魔力 = 0, 力量 = 0, 耐力 = 0, 敏捷 = 0}
         self.预览属性[self.选中] = {气血 = 0, 魔法 = 0, 伤害 = 0, 速度 = 0, 灵力 = 0, 防御 = 0}
@@ -368,7 +369,19 @@ function 场景类_召唤兽属性栏:放生()
         if v == 19 then
             table.insert(tp.召唤兽仓库, bb)
         end
-        table.remove(tp.队伍[1].宝宝列表, self.选中)
+        if 开发调试 then
+            if pb_entity.no ~= nil and pb_entity.success then
+                for n = 1, #tp.队伍[1].宝宝列表 do
+                    if pb_entity.no == tp.队伍[1].宝宝列表[n].no then
+                        table.remove(tp.队伍[1].宝宝列表, n)
+                        tp.提示:写入('#Y/你的这只召唤兽从你的眼前消失了~~')
+                        break
+                    end
+                end
+            end
+        else
+            table.remove(tp.队伍[1].宝宝列表, self.选中)
+        end
         self.名称输入框:置可视(false, false)
         if tp.窗口.召唤兽资质栏.可视 then
             tp.窗口.召唤兽资质栏:打开()
@@ -818,17 +831,24 @@ function 场景类_召唤兽属性栏:PB显示(dt, x, y)
         self:打开()
         return false
     elseif self.资源组[3]:事件判断() then
-        if bb.被统御 ~= nil then
-            tp.提示:写入('#Y/该召唤兽已经被#R' .. bb.被统御 .. '#Y/号助战携带')
-            return
-        end
-        -- TODO 参展请求
-        发送数据(5002, {序列 = bb.认证码})
+        -- if bb.被统御 ~= nil then
+        --     tp.提示:写入('#Y/该召唤兽已经被#R' .. bb.被统御 .. '#Y/号助战携带')
+        --     return
+        -- end
+        -- 参战请求
+        local pb_data = {
+            no = bb.no
+        }
+        客户端:发送PB数据(2205, pb_data)
     elseif self.资源组[4]:事件判断() then
         tp.提示:写入('#Y/改名成功！')
         bb.名称 = self.名称输入框:取文本()
-        -- TODO 改名请求
-        发送数据(5003, {序列 = bb.认证码, 名称 = self.名称输入框:取文本()})
+        --  改名请求
+        local pb_data = {
+            no = bb.no,
+            name = gbk.toutf8(self.名称输入框:取文本())
+        }
+        客户端:发送PB数据(2210, pb_data)
     elseif self.资源组[15]:事件判断() then
         -- while true do
         --     if zt == 1 then
@@ -865,11 +885,15 @@ function 场景类_召唤兽属性栏:PB显示(dt, x, y)
     elseif self.资源组[17]:事件判断() then
         发送数据(5022)
     elseif self.资源组[18]:事件判断() then
-        local 事件 = function()
-            发送数据(5005, {序列 = bb.认证码})
+        local event = function()
+            local pb_data = {
+                no = bb.no
+            }
+            客户端:发送PB数据(2201, pb_data)
+            tp.窗口.文本栏:载入('真的要放生#Y/' .. bb.lv .. '级的#R/' .. bb.name .. '#W/吗?', nil, true, event)
         end
-        tp.窗口.文本栏:载入('真的要放生#Y/' .. bb.等级 .. '级的#R/' .. bb.名称 .. '#W/吗?', nil, true, 事件)
     elseif self.资源组[20]:事件判断() then
+        -- TODO 51
         发送数据(51, {序列 = bb.认证码})
     elseif self.资源组[19]:事件判断() then
         tp.窗口.召唤兽鉴定:打开(bb)
@@ -883,7 +907,12 @@ function 场景类_召唤兽属性栏:PB显示(dt, x, y)
         self.临时潜力[self.选中] = {体质 = 0, 魔力 = 0, 力量 = 0, 耐力 = 0, 敏捷 = 0}
         self.预览属性[self.选中] = {气血 = 0, 魔法 = 0, 伤害 = 0, 速度 = 0, 灵力 = 0, 防御 = 0}
         ls.序列 = bb.认证码
-        发送数据(5004, ls)
+        -- TODO 5004
+        local pb_data = {
+            no = bb.no,
+            plus = {ls.体质, ls.魔力, ls.力量, ls.耐力, ls.敏捷}
+        }
+        客户端:发送PB数据(2220, pb_data)
     elseif self.资源组[22]:事件判断() then
         tp.窗口.召唤兽资质栏:打开(bb)
         tp.窗口.召唤兽资质栏.x = self.x + 370
