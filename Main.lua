@@ -29,8 +29,12 @@ require('script/数据中心/梦战召唤兽模型')
 --============================================
 gbk = require('gbk')
 -- utf = require('lua-utf8')
-开发调试 = true
-devMode = 开发调试
+local tmp = f函数.读配置(程序目录 .. '配置.ini', 'mhxy', '开发调试') + 0
+if tmp == 0 then
+    开发调试 = false
+else
+    开发调试 = true
+end
 direct = true -- 不去加密数据
 if 开发调试 then
     全局端口 = 9090
