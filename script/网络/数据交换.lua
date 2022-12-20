@@ -1471,6 +1471,7 @@ function 回调:宠物PB信息刷新(pb_entity)
     local animals = pb_entity.animal
     if animals ~= nil and #animals > 0 then
         for i = 1, #animals do
+          
             local an = animals[i]
             an.name = gbk.fromutf8(an.name)
             an.model = gbk.fromutf8(an.model)

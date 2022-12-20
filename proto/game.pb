@@ -138,8 +138,8 @@ touchEvent(
 NpcInfoAutoPush'
 npc (2.GGEGaming.MapNpcInfoRnpc"9
 MapTransfer
-x (Rx
-y (Ry
+x (Rx
+y (Ry
 id (Rid"I
 MapTransferAutoPush2
 transfer (2.GGEGaming.MapTransferRtransferB!

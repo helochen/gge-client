@@ -96,71 +96,71 @@ function 场景类_假人:PB初始化(假人)
     self.名称偏移 = xys(tp.字体表.人物字体:取宽度(self.名称) / 2, -15)
     -- self.喊话 = require("script/显示类/喊话").创建(根)
     if gbk.len(假人.title) > 0 then
-        if 假人.称谓 == '狂暴之力' then
+        if 假人.title == '狂暴之力' then
             self.狂暴之力 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000074)
-        elseif 假人.称谓 == '至尊财神' then
+        elseif 假人.title == '至尊财神' then
             self.至尊财神 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000051)
-        elseif 假人.称谓 == '武林圣者' then
+        elseif 假人.title == '武林圣者' then
             self.武林圣者 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000076)
-        elseif 假人.称谓 == '超凡入圣' then
+        elseif 假人.title == '超凡入圣' then
             self.超凡入圣 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000087)
-        elseif 假人.称谓 == '洞察先机' then
+        elseif 假人.title == '洞察先机' then
             self.洞察先机 = pwd('39')
-        elseif 假人.称谓 == '独步青云' then
+        elseif 假人.title == '独步青云' then
             self.独步青云 = pwd('40')
-        elseif 假人.称谓 == '风华绝代' then
+        elseif 假人.title == '风华绝代' then
             self.风华绝代 = pwd('41')
-        elseif 假人.称谓 == '风云再起' then
+        elseif 假人.title == '风云再起' then
             self.风云再起 = pwd('42')
-        elseif 假人.称谓 == '盖世无双' then
+        elseif 假人.title == '盖世无双' then
             self.盖世无双 = pwd('43')
-        elseif 假人.称谓 == '盖世英豪' then
+        elseif 假人.title == '盖世英豪' then
             self.盖世英豪 = pwd('44')
-        elseif 假人.称谓 == '九五之尊' then
+        elseif 假人.title == '九五之尊' then
             self.九五之尊 = pwd('45')
-        elseif 假人.称谓 == '龙皇' then
+        elseif 假人.title == '龙皇' then
             self.龙皇 = pwd('46')
-        elseif 假人.称谓 == '神豪' then
+        elseif 假人.title == '神豪' then
             self.神豪 = pwd('47')
-        elseif 假人.称谓 == '战神' then
+        elseif 假人.title == '战神' then
             self.战神 = pwd('48')
-        elseif 假人.称谓 == '纵横三界王者风云' then
+        elseif 假人.title == '纵横三界王者风云' then
             self.纵横三界王者风云 = pwd('49')
-        elseif 假人.称谓 == '武神坛甲组冠军' then
+        elseif 假人.title == '武神坛甲组冠军' then
             self.甲组冠军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xC4A082C0)
-        elseif 假人.称谓 == '武神坛甲组亚军' then
+        elseif 假人.title == '武神坛甲组亚军' then
             self.甲组亚军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xE7706EE2)
-        elseif 假人.称谓 == '武神坛甲组季军' then
+        elseif 假人.title == '武神坛甲组季军' then
             self.甲组季军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x6336F8B3)
-        elseif 假人.称谓 == '武神坛明星冠军' then
+        elseif 假人.title == '武神坛明星冠军' then
             self.明星冠军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xEB07CCCD)
-        elseif 假人.称谓 == '武神坛明星亚军' then
+        elseif 假人.title == '武神坛明星亚军' then
             self.明星亚军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x550B771D)
-        elseif 假人.称谓 == '武神坛明星季军' then
+        elseif 假人.title == '武神坛明星季军' then
             self.明星季军 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x69E88E4D)
-        elseif 假人.称谓 == '九天揽月' then
+        elseif 假人.title == '九天揽月' then
             self.九天揽月 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xAAFEC211)
-        elseif 假人.称谓 == '剑指苍穹' then
+        elseif 假人.title == '剑指苍穹' then
             self.剑指苍穹 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xFFAE13EE)
-        elseif 假人.称谓 == '势不可挡' then
+        elseif 假人.title == '势不可挡' then
             self.势不可挡 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xBEBEAE78)
-        elseif 假人.称谓 == '王者风范' then
+        elseif 假人.title == '王者风范' then
             self.王者风范 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xCEAA7B7A)
-        elseif 假人.称谓 == '绝世豪侠' then
+        elseif 假人.title == '绝世豪侠' then
             self.绝世豪侠框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xF15069E9)
-        elseif 假人.称谓 == '江湖豪侠' then
+        elseif 假人.title == '江湖豪侠' then
             self.江湖豪侠框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xF15069E9)
-        elseif 假人.称谓 == '威震四方' then
+        elseif 假人.title == '威震四方' then
             self.梦幻大亨框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x0975DF49)
-        elseif 假人.称谓 == '只手遮天' then
+        elseif 假人.title == '只手遮天' then
             self.黄称谓边框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xD7EA9DC8)
-        elseif 假人.称谓 == '降龙伏虎' then
+        elseif 假人.title == '降龙伏虎' then
             self.黄称谓边框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0xD7EA9DC8)
-        elseif 假人.称谓 == '富可敌国' then
+        elseif 假人.title == '富可敌国' then
             self.富可敌国框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x21F08540)
-        elseif 假人.称谓 == '幕神梦幻' then
+        elseif 假人.title == '幕神梦幻' then
             self.幕神梦幻框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x21F08540)
-        elseif 假人.称谓 == '窈窕淑女' then
+        elseif 假人.title == '窈窕淑女' then
             self.窈窕淑女框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x800F661C)
         end
         self.称谓 = 假人.title

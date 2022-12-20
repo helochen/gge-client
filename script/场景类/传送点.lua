@@ -38,7 +38,7 @@ function 场景类_传送点:更新(dt, x, y, pys)
             if 开发调试 then
                 local pb_data = {
                     from = tp.当前地图,
-                    to = self.id
+                    to = self.id -- 传送点id
                 }
                 客户端:发送PB数据(3500, pb_data)
             else

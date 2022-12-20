@@ -1,5 +1,5 @@
 
-ç
+°
 login.proto	GGEGaming"X
 LoginRequest
 version (Rversion
@@ -34,11 +34,12 @@ WeaponDesc
 colorB (RcolorB
 colorF (RcolorF
 	childType (R	childType
-typeNo	 (RtypeNo"S
+typeNo	 (RtypeNo"g
 RegisterRequest
 actor (	Ractor
 name (	Rname
-colorG (RcolorG"b
+colorG (RcolorG
+race (	Rrace"b
 AccountRequest
 username (	Rusername
 password (	Rpassword

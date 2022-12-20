@@ -954,7 +954,8 @@ function 场景类_创建:显示(dt, x, y)
                             local pb_data = {
                                 actor = gbk.toutf8(self.角色图片组[self.选中人物].模型),
                                 name = gbk.toutf8(self.名称输入框:取文本()),
-                                colorG = self.染色ID
+                                colorG = self.染色ID,
+                                race = gbk.toutf8(self.角色图片组[self.选中人物].种族)
                             }
                             客户端:发送PB数据(1004, pb_data)
                         else
