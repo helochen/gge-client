@@ -4,6 +4,8 @@
 local 回调 = require('Script/网络/HPClient类')()
 封包加密 = require('Script/网络/封包加密')
 local protobuf = require('script/网络/Protobuf')()
+local npc_talking = require('script/全局/npctalking')
+
 --回调:置收发BUF(封包加密(1024*1024*10), 封包加密(1024*1024*10))
 local 数据记录 = ''
 

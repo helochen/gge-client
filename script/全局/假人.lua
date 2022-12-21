@@ -33,6 +33,7 @@ function 场景类_假人:PB初始化(假人)
     假人.no = gbk.fromutf8(假人.no)
     假人.event = gbk.fromutf8(假人.event)
     假人.special = gbk.fromutf8(假人.special)
+    self.serialNo = 假人.serialNo
 
     if tp == nil then
         tp = 引擎.场景
@@ -95,7 +96,7 @@ function 场景类_假人:PB初始化(假人)
     self.领取人id = {} -- 假人.targetIds
     self.名称偏移 = xys(tp.字体表.人物字体:取宽度(self.名称) / 2, -15)
     -- self.喊话 = require("script/显示类/喊话").创建(根)
-    if gbk.len(假人.title) > 0 then
+    if 假人.title ~= nil and gbk.len(假人.title) > 0 then
         if 假人.title == '狂暴之力' then
             self.狂暴之力 = tp.资源:载入('wzife.wd5', '网易假人动画', 0x01000074)
         elseif 假人.title == '至尊财神' then
@@ -164,7 +165,7 @@ function 场景类_假人:PB初始化(假人)
             self.窈窕淑女框 = tp.资源:载入('xzsc.wdf', '网易WDF动画', 0x800F661C)
         end
         self.称谓 = 假人.title
-        self.称谓偏移 = xys(tp.字体表.人物字体:取宽度(self.title) / 2, -15)
+        self.称谓偏移 = xys(tp.字体表.人物字体:取宽度(self.称谓) / 2, -15)
         self.名称偏移.y = -35
     end
     self.目标格子 = {}
@@ -488,6 +489,11 @@ end
 function 场景类_假人:事件开始()
     if 开发调试 then
         --  TODO 数据请求
+        local pb_data = {
+            id = self.id,
+            mapId = tp.当前地图
+        }
+        客户端:发送PB数据(,pb_data)
     else
         客户端:发送数据(1501, {地图 = tp.当前地图, 编号 = self.编号, 序列 = self.序列, 标识 = self.标识}, 1)
     end
