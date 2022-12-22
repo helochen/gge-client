@@ -53,7 +53,7 @@ function npc_talking:取对话内容(ID, 编号)
             return {'女人_染色师', '孙厨娘', wb[取随机数(1, #wb)], xx}
         elseif 编号 == 14 then
             wb[1] = '女大不中留，现在心思都不和我说了。'
-            return {'女人_翠花', '刘大审', wb[取随机数(1, #wb)], xx}
+            return {'女人_翠花', '刘大婶', wb[取随机数(1, #wb)], xx}
         elseif 编号 == 15 then
             wb[1] = '嘘，我们在玩捉迷藏呢。'
             return {'小毛头', '小绿', wb[取随机数(1, #wb)], xx}
@@ -150,10 +150,6 @@ function npc_talking:取对话内容(ID, 编号)
             wb[3] = '我就是英俊潇洒玉树临风嫉恶如仇斩妖除魔的方寸第一道士牛大胆！#51'
             wb[4] = '城里的渔夫出海打渔之前，都爱到我这里算上一卦。'
             wb[5] = '求神问卦，看人说话。这位你可要来让我瞧瞧？'
-            --if self.红尘试炼 ~= nil and self.红尘试炼[1] == "商人的鬼魂" and (self.红尘试炼[2] == 3 or self.红尘试炼[2] == 11) and 已经在任务中 == nil then
-            --	self:获取任务对话(self.红尘试炼[1],self.红尘试炼[2],编号)
-            --	return
-            --end
             return {'男人_道士', '牛大胆', wb[取随机数(1, #wb)], nil}
         elseif 编号 == 13 then
             wb[1] = '我收购一切装备，直接给我就可以估价了。'
@@ -205,19 +201,6 @@ function npc_talking:取对话内容(ID, 编号)
             wb[4] = '衙门里的简师爷平日深居简出，低调得很。'
             wb[5] = '您要点什么，下次我给您带来。'
             wb[6] = '衙天南地北的特产我这都有，就连地府的东西我也能搞到。'
-            --if self.红尘试炼 ~= nil and self.红尘试炼[1] == "枯萎的金莲" and (self.红尘试炼[2] == 7 or self.红尘试炼[2] == 8) and 已经在任务中 == nil then
-            --	self:获取任务对话(self.红尘试炼[1],self.红尘试炼[2],编号)
-            --	return
-            --end
-            --[[if self.红尘试炼 ~= nil and 已经在任务中 == nil then
-				if self.红尘试炼[1] == "枯萎的金莲" and (self.红尘试炼[2] == 7 or self.红尘试炼[2] == 8) then
-					self:获取任务对话(self.红尘试炼[1],self.红尘试炼[2],编号)
-					return
-				elseif self.红尘试炼[1] == "商人的鬼魂" and (self.红尘试炼[2] == 15) then
-					self:获取任务对话(self.红尘试炼[1],self.红尘试炼[2],编号)
-					return
-				end
-			end --]]
             return {'男人_武器店老板', '马全有', wb[取随机数(1, #wb)], xx}
         elseif 编号 == 23 then
             wb[1] = '善哉善哉，佛祖有云：“一人出家，全家光荣”，这位施主看似颇有慧根，应该及早皈依我佛门才是啊。'
@@ -232,10 +215,6 @@ function npc_talking:取对话内容(ID, 编号)
             wb[3] = '当个管家也不容易呀，每天忙里忙外，什么杂七杂八的事情都得打点。'
             wb[4] = '人说做一次善事容易，做一辈子善事就难咯，在这点上我是万分钦佩我家老爷的。'
             wb[5] = '建邺城啥时才能开个长安城那样的赌坊呢#80'
-            --if self.红尘试炼 ~= nil and self.红尘试炼[1] == "商人的鬼魂" and (self.红尘试炼[2] == 13 or self.红尘试炼[2] == 17) and 已经在任务中 == nil then
-            --	self:获取任务对话(self.红尘试炼[1],self.红尘试炼[2],编号)
-            --	return
-            --end
             return {'男人_店小二', '管家', wb[取随机数(1, #wb)], xx}
         elseif 编号 == 25 then
             wb[1] = '最近天气很好，海上没有大风浪。'
@@ -254,10 +233,6 @@ function npc_talking:取对话内容(ID, 编号)
             wb[3] = '城里什么都好，就是小伙伴太少。想去江南野外玩，妈妈又不让，说那里的怪物太凶，没一定的修为去了很危险。'
             wb[4] = '人之初，性本善，性相近，习相远。教书先生今天教的三字经，我一定得背熟。 '
             wb[5] = '建邺城里最好吃的就是马氏酸枣了#89'
-            --	if self.红尘试炼 ~= nil and self.红尘试炼[1] == "枯萎的金莲" and (self.红尘试炼[2] == 9 or self.红尘试炼[2] == 10 or self.红尘试炼[2] == 21) and 已经在任务中 == nil then
-            --		self:获取任务对话(self.红尘试炼[1],self.红尘试炼[2],编号)
-            --		return
-            --	end
             return {'小孩_雷黑子', '雷黑子', wb[取随机数(1, #wb)], xx}
         elseif 编号 == 28 then
             wb[1] = '我是城里的教书先生，如果你不清楚接下来做些什么，我可以给你一些建议。'
@@ -662,7 +637,7 @@ function npc_talking:取对话内容(ID, 编号)
         elseif 编号 == 34 then
             wb[1] = '来！来！来！瞧一瞧看一看了！'
             xx = {}
-           
+
             return {'男人_老财', '长安货商', wb[取随机数(1, #wb)], xx}
         elseif 编号 == 35 then
             wb[1] = '老夫潜心修炼，悟得一通天之术，可助少侠转换为其他角色、转投其他门派！少侠有兴趣否？'
@@ -2692,9 +2667,8 @@ function npc_talking:取对话内容(ID, 编号)
         end
     elseif ID == 6024 then
         if 编号 == 1 then
-            
-                wb[1] = '当前的建设度已满！！'
-            
+            wb[1] = '当前的建设度已满！！'
+
             return {'男人_方丈', '道场督僧', wb[1], xx}
         elseif 编号 == 2 then
             wb[1] = '前面就是繁华京城了，少侠是否需要过去呢？'
@@ -2780,7 +2754,5 @@ function npc_talking:取对话内容(ID, 编号)
     end
     return {}
 end
-function npc_talking:更新(dt)end
-function npc_talking:显示(x,y)end
 
-return npc_talking;
+return npc_talking

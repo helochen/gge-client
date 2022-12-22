@@ -38,6 +38,9 @@ function protobuf:初始化()
     -- 地图消息
     self._define[3500] = 'GGEGaming.ChangeMapRequest'
     self._define[3501] = 'GGEGaming.ChangeMapResponse'
+    -- npc交互数据
+    self._define[5000] = 'GGEGaming.NpcExchangeBaseRequest'
+    self._define[5001] = 'GGEGaming.NpcExchangeBaseResponse'
 end
 
 -- 查询返回的内容数据

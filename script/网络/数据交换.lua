@@ -4,7 +4,7 @@
 local 回调 = require('Script/网络/HPClient类')()
 封包加密 = require('Script/网络/封包加密')
 local protobuf = require('script/网络/Protobuf')()
-local npc_talking = require('script/全局/npctalking')
+local npc_talking = require('script/全局/npctalking')()
 
 --回调:置收发BUF(封包加密(1024*1024*10), 封包加密(1024*1024*10))
 local 数据记录 = ''
@@ -1445,7 +1445,7 @@ end
 
 -- protobuf 协议的服务处理
 function 回调:系统处理PB(cmd, pb_entity)
-    print(cmd .. '=============')
+    print(cmd, '=============', table.tostring(pb_entity))
     if cmd < 999 then
         self:基础系统逻辑处理(cmd, pb_entity)
     elseif cmd == 1001 then
@@ -1466,6 +1466,13 @@ function 回调:系统处理PB(cmd, pb_entity)
     elseif cmd == 3501 then
         tp.场景:传送至(pb_entity.mapId, pb_entity.x, pb_entity.y, true)
         tp.队伍[1].地图数据.编号 = pb_entity.mapId
+    elseif cmd == 5001 then
+        if pb_entity.status == 1 then
+            local talking = npc_talking:取对话内容(pb_entity.mapId, pb_entity.serialNo)
+            if talking ~= nil and #talking > 3 then
+                tp.窗口.对话栏:文本(talking[1], talking[2], talking[3], talking[4])
+            end
+        end
     end
 end
 
@@ -1473,7 +1480,6 @@ function 回调:宠物PB信息刷新(pb_entity)
     local animals = pb_entity.animal
     if animals ~= nil and #animals > 0 then
         for i = 1, #animals do
-          
             local an = animals[i]
             an.name = gbk.fromutf8(an.name)
             an.model = gbk.fromutf8(an.model)

@@ -33,7 +33,7 @@ function 场景类_假人:PB初始化(假人)
     假人.no = gbk.fromutf8(假人.no)
     假人.event = gbk.fromutf8(假人.event)
     假人.special = gbk.fromutf8(假人.special)
-    self.serialNo = 假人.serialNo
+    self.type = 假人.type
 
     if tp == nil then
         tp = 引擎.场景
@@ -65,7 +65,7 @@ function 场景类_假人:PB初始化(假人)
     self.序列 = 假人.idx
     self.坐标 = xys(floor(假人.x * 20), floor(假人.y * 20) + 0.1)
     self.真实坐标 = xys(floor(假人.x * 20), floor(假人.y * 20) + 0.1)
-    self.编号 = 假人.idx
+    self.编号 = 假人.serialNo
     self.行为 = '静立'
     self.类型 = '假人'
     self.需求 = {}
@@ -488,12 +488,14 @@ end
 
 function 场景类_假人:事件开始()
     if 开发调试 then
-        --  TODO 数据请求
+        -- 数据请求
         local pb_data = {
-            id = self.id,
-            mapId = tp.当前地图
+            id = self.标识,
+            mapId = tp.当前地图,
+            serialNo = self.编号,
+            type = self.type
         }
-        客户端:发送PB数据(,pb_data)
+        客户端:发送PB数据(5000, pb_data)
     else
         客户端:发送数据(1501, {地图 = tp.当前地图, 编号 = self.编号, 序列 = self.序列, 标识 = self.标识}, 1)
     end

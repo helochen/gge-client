@@ -1,5 +1,5 @@
 
-·
+ç
 
 game.proto	GGEGaming"Â
 ActorJoinResponse$
@@ -107,10 +107,10 @@ AnimalInfo
 InnerBallInfo
 name (	Rname
 lv (Rlv"
-	MountInfo"š
+	MountInfo"Ê
 
 MapNpcInfo
-id (Rid
+id (Rid
 name (	Rname
 model (	Rmodel
 x (Rx
@@ -134,7 +134,9 @@ MapNpcInfo
 
 touchEvent (R
 touchEvent(
-weaponChildType (RweaponChildType":
+weaponChildType (RweaponChildType
+serialNo (RserialNo
+type (Rtype":
 NpcInfoAutoPush'
 npc (2.GGEGaming.MapNpcInfoRnpc"9
 MapTransfer
