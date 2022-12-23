@@ -1445,7 +1445,7 @@ end
 
 -- protobuf 协议的服务处理
 function 回调:系统处理PB(cmd, pb_entity)
-    print(cmd, '=============', table.tostring(pb_entity))
+    print(cmd, '==', table.tostring(pb_entity))
     if cmd < 999 then
         self:基础系统逻辑处理(cmd, pb_entity)
     elseif cmd == 1001 then
