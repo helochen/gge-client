@@ -325,82 +325,85 @@ end
 function 内存类_队伍:BP人物属性(role)
     self.数字id = role.id
     local attr = role.attribute
-    self.等级 = attr.lv
-    self.名称 = gbk.fromutf8(attr.name)
-    self.性别 = attr.sex
-    self.模型 = gbk.fromutf8(attr.model)
-    self.种族 = gbk.fromutf8(attr.race)
-    self.称谓 = gbk.fromutf8(attr.title)
-    self.当前称谓 = gbk.fromutf8(attr.title)
-    self.帮派 = '无帮派'
-    if gbk.len(gbk.fromutf8(attr.org)) then
-        self.帮派 = gbk.fromutf8(attr.org)
+    -- 人物拉取信息部去改变人物属性
+    if attr ~= nil then
+        self.等级 = attr.lv
+        self.名称 = gbk.fromutf8(attr.name)
+        self.性别 = attr.sex
+        self.模型 = gbk.fromutf8(attr.model)
+        self.种族 = gbk.fromutf8(attr.race)
+        self.称谓 = gbk.fromutf8(attr.title)
+        self.当前称谓 = gbk.fromutf8(attr.title)
+        self.帮派 = '无帮派'
+        if gbk.len(gbk.fromutf8(attr.org)) > 0 then
+            self.帮派 = gbk.fromutf8(attr.org)
+        end
+        self.门派 = '无门派'
+        attr.sect = gbk.fromutf8(attr.sect)
+        if gbk.len(attr.sect) > 0 then
+            self.门派 = attr.sect
+        end
+        self.人气 = attr.popular
+        self.门贡 = attr.sectContribute
+        self.帮贡 = attr.orgContribute
+        self.气血 = attr.blood[1]
+        self.最大气血 = attr.blood[2]
+        self.魔法 = attr.magic[1]
+        self.最大魔法 = attr.magic[2]
+        self.愤怒 = attr.angry
+        self.活力 = attr.vitality[1]
+        self.体力 = attr.power[1]
+        self.命中 = attr.baseInfo[1]
+        self.伤害 = attr.baseInfo[2]
+        self.防御 = attr.baseInfo[3]
+        self.速度 = attr.baseInfo[4]
+        self.躲避 = attr.baseInfo[5]
+        self.灵力 = attr.baseInfo[6]
+        self.法伤 = attr.baseInfo[7]
+        self.法防 = attr.baseInfo[8]
+        self.体质 = attr.base[1]
+        self.魔力 = attr.base[2]
+        self.力量 = attr.base[3]
+        self.耐力 = attr.base[4]
+        self.敏捷 = attr.base[5]
+        self.潜力 = attr.potential
+        -- TOOD 后续完成
+        self.剧情点 = 0 -- 初始化值
+        -- 技能属性
+        self.技能属性 = {
+            气血 = 0,
+            魔法 = 0,
+            命中 = 0,
+            伤害 = 0,
+            防御 = 0,
+            速度 = 0,
+            躲避 = 0,
+            灵力 = 0,
+            体质 = 0,
+            魔力 = 0,
+            力量 = 0,
+            耐力 = 0,
+            敏捷 = 0,
+            月饼 = 0,
+            乾元丹 = 0,
+            附加乾元丹 = 0,
+            剩余乾元丹 = 0,
+            可换乾元丹 = 0
+        }
+        -- // 灵饰属性
+        self.剧情技能 = {}
+        -- // 辅助技能
+        self.辅助技能 = {}
+        self.修炼 = {
+            当前 = '攻击修炼',
+            防御修炼 = {[1] = 0, [2] = 0, [3] = 20},
+            抗法修炼 = {[1] = 0, [2] = 0, [3] = 20},
+            法术修炼 = {[1] = 0, [2] = 0, [3] = 20},
+            攻击修炼 = {[1] = 0, [2] = 0, [3] = 20},
+            猎术修炼 = {[1] = 0, [2] = 0, [3] = 20}
+        }
+        self.bb修炼 = {}
     end
-    self.门派 = '无门派'
-    attr.sect = gbk.fromutf8(attr.sect)
-    if gbk.len(attr.sect) then
-        self.门派 = attr.sect
-    end
-    self.人气 = attr.popular
-    self.门贡 = attr.sectContribute
-    self.帮贡 = attr.orgContribute
-    self.气血 = attr.blood[1]
-    self.最大气血 = attr.blood[2]
-    self.魔法 = attr.magic[1]
-    self.最大魔法 = attr.magic[2]
-    self.愤怒 = attr.angry
-    self.活力 = attr.vitality[1]
-    self.体力 = attr.power[1]
-    self.命中 = attr.baseInfo[1]
-    self.伤害 = attr.baseInfo[2]
-    self.防御 = attr.baseInfo[3]
-    self.速度 = attr.baseInfo[4]
-    self.躲避 = attr.baseInfo[5]
-    self.灵力 = attr.baseInfo[6]
-    self.法伤 = attr.baseInfo[7]
-    self.法防 = attr.baseInfo[8]
-    self.体质 = attr.base[1]
-    self.魔力 = attr.base[2]
-    self.力量 = attr.base[3]
-    self.耐力 = attr.base[4]
-    self.敏捷 = attr.base[5]
-    self.潜力 = attr.potential
-    -- TOOD 后续完成
-    self.剧情点 = 0 -- 初始化值
-    -- 技能属性
-    self.技能属性 = {
-        气血 = 0,
-        魔法 = 0,
-        命中 = 0,
-        伤害 = 0,
-        防御 = 0,
-        速度 = 0,
-        躲避 = 0,
-        灵力 = 0,
-        体质 = 0,
-        魔力 = 0,
-        力量 = 0,
-        耐力 = 0,
-        敏捷 = 0,
-        月饼 = 0,
-        乾元丹 = 0,
-        附加乾元丹 = 0,
-        剩余乾元丹 = 0,
-        可换乾元丹 = 0
-    }
-    -- // 灵饰属性
-    self.剧情技能 = {}
-    -- // 辅助技能
-    self.辅助技能 = {}
-    self.修炼 = {
-        当前 = '攻击修炼',
-        防御修炼 = {[1] = 0, [2] = 0, [3] = 20},
-        抗法修炼 = {[1] = 0, [2] = 0, [3] = 20},
-        法术修炼 = {[1] = 0, [2] = 0, [3] = 20},
-        攻击修炼 = {[1] = 0, [2] = 0, [3] = 20},
-        猎术修炼 = {[1] = 0, [2] = 0, [3] = 20}
-    }
-    self.bb修炼 = {}
 end
 
 function 内存类_队伍:BP设置地图信息(map)
@@ -412,7 +415,7 @@ function 内存类_队伍:BP设置地图信息(map)
 end
 
 function 内存类_队伍:BP重置属性(属性)
-    -- 赋值人物属性
+    -- BP人物属性
     self:BP人物属性(属性)
     -- 师门技能
     local 临时技能 = 0
@@ -425,15 +428,6 @@ function 内存类_队伍:BP重置属性(属性)
             临时技能.包含技能 = {}
             临时技能.学会 = sectSkills[n].ok
             临时技能.等级 = sectSkills[n].lv
-            -- 技能影响属性
-            -- local skillAttr = sectSkills[n].baseInfo
-            -- for sa = 1, #skillAttr do
-            --     if self.技能属性.命中 ~= nil then
-            --         self.技能属性.命中 = skillAttr[sa]
-            --     else
-            --         self.技能属性.命中 = skillAttr[sa]
-            --     end
-            -- end
             local w = sectSkills[n].children
             for s = 1, #w do
                 w[s].name = gbk.fromutf8(w[s].name)

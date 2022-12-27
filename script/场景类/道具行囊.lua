@@ -261,61 +261,6 @@ function 场景类_道具行囊:刷新坐骑饰品()
     end
 end
 function 场景类_道具行囊:人物状态(方向)
-    -- if self.选中编号2 ~= 0 then
-    --     if self.数据[self.子类][self.选中编号2].分类 == 15 and (self.资源组[23] == nil or self.资源组[23].名称 ~= self.数据[self.子类][self.选中编号2].名称) then
-    --     	local n
-    --     	if self.数据[self.子类][self.选中编号2].名称 == "夜影" or self.数据[self.子类][self.选中编号2].名称 == "夏日清凉" or self.数据[self.子类][self.选中编号2].名称 == "华风汉雅" or self.数据[self.子类][self.选中编号2].名称 == "萌萌小厨" then
-    -- 			临时资源包 = "shape0.npk"
-    -- 			if self.数据[self.子类][self.选中编号2].名称 == "华风汉雅" or self.数据[self.子类][self.选中编号2].名称 == "萌萌小厨" then
-    -- 				临时资源包 = "shape2.npk"
-    -- 			end
-    -- 			self.资源组[23] = tp.资源:载入(临时资源包,"网易锦衣动画",qzdjy(tp.队伍[1].模型.."_静立_"..self.数据[self.子类][self.选中编号2].名称))
-    -- 			self.资源组[23]:置方向(0)
-    -- 			if self.数据[self.子类][self.选中编号2].名称 == "夏日清凉" or self.数据[self.子类][self.选中编号2].名称 == "华风汉雅" or self.数据[self.子类][self.选中编号2].名称 == "萌萌小厨" then
-    -- 				self.资源组[32] = tp.资源:载入("shape0.npk","网易锦衣动画",qzdjys(tp.队伍[1].模型.."_静立_"..self.数据[self.子类][self.选中编号2].名称.."_头"))
-    -- 				self.资源组[32]:置方向(0)
-    -- 			else
-    -- 				self.资源组[32] = nil
-    -- 			end
-    --         else
-    --         	n = qmxs(self.数据[self.子类][self.选中编号2].名称.."_"..tp.队伍[1].模型)
-    -- 			self.资源组[23] = tp.资源:载入(n[3],"网易WDF动画",n[1])
-    -- 			self.资源组[23]:置方向(0)
-    -- 		end
-    -- 		self.显示锦衣 = self.数据[self.子类][self.选中编号2].名称
-    -- 		self.资源组[23].名称 = self.数据[self.子类][self.选中编号2].名称
-    -- 		self.资源组[30] = nil
-    -- 	elseif self.数据[self.子类][self.选中编号2].分类 == 16 and self.数据[self.子类][self.选中编号2].子类 == 2 and self.数据[self.子类][self.选中编号2].总类 ~= "祥瑞" and (self.资源组[29] == nil or self.资源组[29].名称 ~= self.数据[self.子类][self.选中编号2].名称)then
-    -- 		local n = 引擎.取光环(self.数据[self.子类][self.选中编号2].名称)
-    -- 		self.资源组[29]=tp.资源:载入(n[4],"网易WDF动画",n[1])
-    -- 		self.资源组[29]:置方向(0)
-    -- 		self.显示足印 = self.数据[self.子类][self.选中编号2].名称
-    -- 		self.资源组[29].名称 = self.数据[self.子类][self.选中编号2].名称
-    -- 	elseif self.数据[self.子类][self.选中编号2].分类 == 17 and self.数据[self.子类][self.选中编号2].子类 == 3 and self.数据[self.子类][self.选中编号2].总类 ~= "祥瑞" and (self.资源组[33] == nil or self.资源组[33].名称 ~= self.数据[self.子类][self.选中编号2].名称)then
-    -- 		local n = 引擎.取足迹(self.数据[self.子类][self.选中编号2].名称)
-    -- 		self.资源组[33]=tp.资源:载入(n[4],"网易WDF动画",n[1])
-    -- 		self.资源组[33]:置方向(0)
-    -- 		self.显示足印 = self.数据[self.子类][self.选中编号2].名称
-    -- 		self.资源组[33].名称 = self.数据[self.子类][self.选中编号2].名称
-    --     elseif self.数据[self.子类][self.选中编号2].总类 == "祥瑞" and (self.资源组[30] == nil or self.资源组[30].名称 ~= self.数据[self.子类][self.选中编号2].名称 ) then
-    --         local 坐骑资源 = {}
-    --         if 引擎.新增坐骑(tp.队伍[1].模型,self.数据[self.子类][self.选中编号2].名称,"奔跑") ~= "" then
-    -- 			坐骑资源.坐骑资源 = "xzsc.wdf"
-    -- 			坐骑资源.坐骑站立 = 引擎.新增坐骑(tp.队伍[1].模型,self.数据[self.子类][self.选中编号2].名称,"站立")
-    -- 		elseif 引擎.取站立坐骑(self.数据[self.子类][self.选中编号2].名称) ~= nil then
-    -- 			坐骑资源.坐骑资源 = "xzsc.wdf"
-    -- 			坐骑资源.坐骑站立 = 引擎.取站立坐骑(self.数据[self.子类][self.选中编号2].名称)[2]
-    --         else
-    --        	 	坐骑资源 = zqj(tp.队伍[1].模型,self.数据[self.子类][self.选中编号2].名称,self.数据[self.子类][self.选中编号2].饰品 or "空")
-    --        	end
-    -- 		self.资源组[30] = tp.资源:载入(坐骑资源.坐骑资源,"网易WDF动画",坐骑资源.坐骑站立)
-    -- 		self.资源组[23] = nil
-    -- 		self.资源组[32] = nil
-    -- 		self.坐骑显示 = self.数据[self.子类][self.选中编号2].名称
-    -- 		self.资源组[30].名称 = self.坐骑显示
-    --     end
-    -- end
-
     self.人物 = 1
     self.人物:置方向(方向)
 end
@@ -832,15 +777,15 @@ function 场景类_道具行囊:显示(dt, x, y)
             self.资源组[37 + s]:显示(self.x + 170, floor(self.y + s * 25.5), nil, true)
         end
         self.资源组[41]:显示(self.x + 170, floor(self.y + 4 * 25.5), nil, true, nil, tp.窗口.灵饰.可视, 2)
-         --灵饰
+        --灵饰
         self.资源组[60]:显示(self.x + 170, floor(self.y + 6 * 25.5), nil, true, nil, tp.窗口.显示开关.可视, 2)
-         --显示开关
+        --显示开关
         self.资源组[38]:显示(self.x + 170, floor(self.y + 1 * 25.5), nil, true, nil, self.人物装备窗口 == 1, 2)
-         --装备1
+        --装备1
         self.资源组[39]:显示(self.x + 170, floor(self.y + 2 * 25.5), nil, true, nil, self.人物装备窗口 == 2, 2)
-         --装备2
+        --装备2
         self.资源组[40]:显示(self.x + 170, floor(self.y + 3 * 25.5), nil, true, nil, self.人物装备窗口 == 3, 2)
-         --装备3
+        --装备3
         for i = 1, 6 do
             local 补差高度 = 3
             if i == 1 or i == 2 then
@@ -918,7 +863,7 @@ function 场景类_道具行囊:显示(dt, x, y)
         self.资源组[2]:显示(self.x + 40, self.y + 22)
         self.资源组3[3]:显示(self.x + 175, self.y + 22)
         tp.画线:置区域(0, 0, 15, 100)
-         --滑块虚线
+        --滑块虚线
         tp.画线:显示(self.x + 292, self.y + 34)
         self.资源组[9]:显示(self.x + 289, self.y + 23, true)
         self.资源组[10]:显示(self.x + 289, self.y + 115, true)
