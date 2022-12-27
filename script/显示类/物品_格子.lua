@@ -90,10 +90,8 @@ function 系统类_物品格子:置物品(物品)
             item:置对象(物品.名称)
             self.物品 = item
             for n, v in pairs(物品) do
-                print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&->', n,'***********->', v)
                 self.物品[n] = v
             end
-			print('---------------------------------------------')
             if 物品.名称 == '怪物卡片' then
                 self.物品.小模型id = 'item.wdf'
                 self.物品.资源 = 'item.wdf'
