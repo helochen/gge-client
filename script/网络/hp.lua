@@ -20,16 +20,10 @@ end
 
 function 发送数据(id, 内容)
     if 开发调试 then
-        print('pb send..............' .. id)
         客户端类:发送PB数据(cmd, data)
     else
         if 内容 == nil then
             内容 = {}
-        end
-        if type(内容) == 'table' then
-            print('send..............' .. id .. table.tostring(内容))
-        else
-            print('send..............' .. id .. 内容)
         end
         客户端:发送数据(id, 内容, 1)
     end
