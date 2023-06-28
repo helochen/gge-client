@@ -1462,6 +1462,12 @@ function 回调:系统处理PB(cmd, pb_entity)
         self:宠物PB信息刷新(pb_entity)
     elseif cmd == 2202 then
         tp.窗口.召唤兽属性栏:放生(pb_entity)
+    elseif cmd == 3100 then
+        for i=1 ,#pb_entity.players do
+            tp.场景:添加玩家(pb_entity.players[i])
+        end
+    else if cmd == 3601 then
+        tp.场景:更新行走(pb_entity, pb_entity.id)
     elseif cmd == 3501 then
         tp.场景:传送至(pb_entity.mapId, pb_entity.x, pb_entity.y, true)
         tp.队伍[1].地图数据.编号 = pb_entity.mapId
