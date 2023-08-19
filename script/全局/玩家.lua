@@ -36,11 +36,12 @@ function 场景类_玩家:初始化(玩家)
         rwzt = tp.字体表.人物字体
     end
     if 开发调试 then
+        print('进入玩家对象初始化....x:', 玩家.x," y: " ,玩家.y,"名称,", gbk.fromutf8(玩家.name))
         玩家.y = 玩家.y + (random(1, 12) / 100)
         self.玩家 = {}
         self.组队标志 = tp.资源:载入('addon.wdf', '网易假人动画', 0x2231EBB4)
         self.战斗动画 = tp.资源:载入('addon.wdf', '网易假人动画', 0x97C79EDB)
-        self.名称 = 玩家.name
+        self.名称 = gbk.fromutf8(玩家.name)
         self.坐标 = xys(floor(玩家.x), floor(玩家.y) + 0.1)
         self.真实坐标 = xys(floor(玩家.x), floor(玩家.y) + 0.1)
         self.编号 = 玩家.roleId
@@ -59,30 +60,41 @@ function 场景类_玩家:初始化(玩家)
 
         self.记忆方向 = self.方向
         self.真实编号 = 玩家.roleId
-        self.当前称谓 = gbk.fromutf8(玩家.name)
+        self.当前称谓 = nil--gbk.fromutf8(玩家.title)
         self.执行事件 = nil
         self.初始坐标 = xys(floor(玩家.x), floor(玩家.y) + 0.1)
         self.行走坐标 = xys(floor(玩家.x), floor(玩家.y) + 0.1)
-        if 玩家.weapon ~= nil then 
-            self.武器 = gbk.fromutf8(玩家.weapon)
+        self.武器 = gbk.fromutf8(玩家.weapon)
+        if gbk.len(self.武器) == 0 then
+            print('武器是空的...')
+            self.武器 = nil
         end
+
         self.模型 = gbk.fromutf8(玩家.model)
+        print('模型:' ,self.模型)
         self.行走开关 = false
         self.类型 = '玩家'
         self.所在地图 = nil
         self.组员数量 = 0
-        if 玩家.rider ~= nil then
-            self.坐骑 = gbk.fromutf8(玩家.rider)            
-        end
+        self.坐骑 = gbk.fromutf8(玩家.rider)    
+        if gbk.len(self.坐骑) == 0 then
+            print('坐骑是空的...')
+            self.坐骑 = nil
+        end  
     
-        self.染色组 = 玩家.{[1]=玩家.colorH,[2]=玩家.colorB,[3]=玩家.colorF}
+        local _colorg = {}
+        _colorg[1] = 玩家.colorH
+        _colorg[2] = 玩家.colorB
+        _colorg[3] = 玩家.colorF
+        self.染色组 = _colorg
         -- TODO 缺少的一些参数
         --self.装备 = 玩家.装备
         --self.灵饰 = 玩家.灵饰
-        if 玩家.dress ~= nil then 
+        if 玩家.dress ~= nil and gbk.len(gbk.fromutf8(玩家.dress)) > 0 then 
             self.锦衣 = gbk.fromutf8(玩家.dress)
+        else 
+            self.锦衣 = {}
         end
-        
         --self.法宝 = 玩家.法宝
         self.染色方案 = 玩家.colorG
         self.等级 = 玩家.lv
@@ -1160,6 +1172,7 @@ function 场景类_玩家:重新加载动画()
 end
 
 function 场景类_玩家:穿戴装备(武器, 数字)
+    print('场景类_玩家:穿戴装备：武器', 武器 , '数字：' , 数字)
     if not 玩家显示开关 and not 玩家加载开关 then
         return
     end
@@ -1237,7 +1250,6 @@ function 场景类_玩家:穿戴装备(武器, 数字)
             }
         end
     end
-
     local m = tp:取武器附加名称(武器.子类, 武器.级别限制, 武器.名称)
     local n = qmxs(m .. '_' .. self.模型)
     self.玩家['武器_静立'] = tp.资源:载入(n[3], '网易WDF动画', n[1])

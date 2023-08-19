@@ -134,7 +134,7 @@ function 资源类_加载:载入(文件,类型,文件号,音量,附加,fs,fs1)
 		if (文件==nil or (文件~=nil and 文件=="")) and 文件号~=nil then
 		    for i=1,#self.files do
 		    	if self.wdf[self.files[i]].List[到整数(文件号)]~=nil then
-		    		print("1自动寻找",self.files[i],string.upper(string.format("%#x",到整数(文件号))),到整数(文件号))
+		    		-- print("1自动寻找",self.files[i],string.upper(string.format("%#x",到整数(文件号))),到整数(文件号))
 		    		return bbbb(self.wdf[self.files[i]]:读数据(到整数(文件号))) -- break
 		    	end
 		    end
@@ -147,7 +147,7 @@ function 资源类_加载:载入(文件,类型,文件号,音量,附加,fs,fs1)
 		    print("1注意WDF载入没有[ NIL值 ]文件 函数:",文件,类型,文件号,音量,附加,fs,fs1,string.upper(string.format("%#x",文件号)),素材名称)
 		    for i=1,#self.files do
 		    	if self.wdf[self.files[i]].List[到整数(文件号)]~=nil then
-		    		print("自动寻找",self.files[i],string.upper(string.format("%#x",到整数(文件号))),到整数(文件号))
+		    		-- print("自动寻找",self.files[i],string.upper(string.format("%#x",到整数(文件号))),到整数(文件号))
 		    		return bbbb(self.wdf[self.files[i]]:读数据(到整数(文件号))) -- break
 		    	end
 		    end
@@ -165,7 +165,7 @@ function 资源类_加载:载入(文件,类型,文件号,音量,附加,fs,fs1)
 		elseif 文件~=nil and self.wdf[文件]~=nil and 文件号~=nil and self.wdf[文件]:读数据(文件号)==nil then
 		    for i=1,#self.files do
 		    	if self.wdf[self.files[i]].List[到整数(文件号)]~=nil then
-		    		print("2自动寻找",self.files[i],string.upper(string.format("%#x",到整数(文件号))),到整数(文件号))
+		    		-- print("2自动寻找",self.files[i],string.upper(string.format("%#x",到整数(文件号))),到整数(文件号))
 		    		return bbbb(self.wdf[self.files[i]]:读数据(到整数(文件号))) -- break
 		    	end
 		    end

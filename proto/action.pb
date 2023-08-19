@@ -1,10 +1,11 @@
 
-¦
-action.proto	GGEGaming"_
+¼
+action.proto	GGEGaming"u
 MovingRequest
 x (Rx
 y (Ry
 fx (Rfx
 fy (Rfy
-stop (RstopB"
+stop (Rstop
+mapId (RmapIdB"
 daisy.game.proto.gameB	GGEActionbproto3

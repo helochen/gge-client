@@ -202,7 +202,8 @@ function 场景类_人物:开始移动(pys)
                 y = tp.角色坐标.y,
                 fx = math.floor(tp.角色坐标.x),
                 fy = math.floor(tp.角色坐标.y),
-                stop = false
+                stop = false,
+                mapId = tp.当前地图
             }
             客户端:发送PB数据(3000, pb_data)
         else
@@ -220,7 +221,8 @@ function 场景类_人物:停止移动(原因)
                 y = tp.角色坐标.y,
                 fx = math.floor(tp.角色坐标.x),
                 fy = math.floor(tp.角色坐标.y),
-                stop = true
+                stop = true,
+                mapId = tp.当前地图
             }
             客户端:发送PB数据(3000, pb_data)
         else
@@ -461,7 +463,8 @@ function 场景类_人物:显示(dt, x, y, pys)
                                 local pb_data = {
                                     x = 格子.x,
                                     y = 格子.y,
-                                    stop = false
+                                    stop = false,
+                                    mapId = tp.当前地图
                                 }
                                 客户端:发送PB数据(3000, pb_data)
                             else
@@ -499,7 +502,8 @@ function 场景类_人物:显示(dt, x, y, pys)
                         local pb_data = {
                             x = 格子.x,
                             y = 格子.y,
-                            stop = false
+                            stop = false,
+                            mapId = tp.当前地图
                         }
                         客户端:发送PB数据(3000, pb_data)
                     else
@@ -531,7 +535,8 @@ function 场景类_人物:显示(dt, x, y, pys)
                         local pb_data = {
                             x = 格子.x,
                             y = 格子.y,
-                            stop = false
+                            stop = false,
+                            mapId = tp.当前地图
                         }
                         客户端:发送PB数据(3000, pb_data)
                     else

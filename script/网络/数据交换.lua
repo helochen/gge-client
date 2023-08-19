@@ -1444,7 +1444,7 @@ end
 
 -- protobuf 协议的服务处理
 function 回调:系统处理PB(cmd, pb_entity)
-    print(cmd, '==', table.tostring(pb_entity))
+    print('系统处理PB==' ,cmd)
     if cmd < 999 then
         self:基础系统逻辑处理(cmd, pb_entity)
     elseif cmd == 1001 then
@@ -1463,10 +1463,12 @@ function 回调:系统处理PB(cmd, pb_entity)
     elseif cmd == 2202 then
         tp.窗口.召唤兽属性栏:放生(pb_entity)
     elseif cmd == 3100 then
-        for i=1 ,#pb_entity.players do
+        for i= 1 ,#pb_entity.players do
             tp.场景:添加玩家(pb_entity.players[i])
         end
-    else if cmd == 3601 then
+    elseif cmd == 3101 then
+        tp.场景:删除玩家(pb_entity.roleId)
+    elseif cmd == 3601 then
         tp.场景:更新行走(pb_entity, pb_entity.id)
     elseif cmd == 3501 then
         tp.场景:传送至(pb_entity.mapId, pb_entity.x, pb_entity.y, true)
@@ -1478,6 +1480,8 @@ function 回调:系统处理PB(cmd, pb_entity)
                 tp.窗口.对话栏:文本(talking[1], talking[2], talking[3], talking[4])
             end
         end
+    else
+        print('缺失处理信息:' , cmd)
     end
 end
 

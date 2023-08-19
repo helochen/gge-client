@@ -1,5 +1,5 @@
 
-ç
+¡
 
 game.proto	GGEGaming"Â
 ActorJoinResponse$
@@ -144,5 +144,25 @@ touchEvent(
 y (Ry
 id (Rid"I
 MapTransferAutoPush2
-transfer (2.GGEGaming.MapTransferRtransferB!
+transfer (2.GGEGaming.MapTransferRtransfer"L
+MapPlayersInfoAutoPush2
+players (2.GGEGaming.MapPlayerInfoRplayers"·
+MapPlayerInfo
+x (Rx
+y (Ry
+roleId (RroleId
+title (	Rtitle
+colorH (RcolorH
+colorB (RcolorB
+colorF (RcolorF
+colorG (RcolorG
+dress	 (	Rdress
+model
+ (	Rmodel
+name (	Rname
+weapon (	Rweapon
+rider (	Rrider
+lv (Rlv"0
+MapPlayerLeaveAutoPush
+roleId (RroleIdB!
 daisy.game.proto.gameBGameInfobproto3

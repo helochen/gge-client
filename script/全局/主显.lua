@@ -50,6 +50,8 @@ function 场景类_地图:初始化(根)
     self.场景最低等级 = nil
     self.场景最高等级 = nil
     self.假人 = {}
+    self.玩家 = {}
+    self.传送 = {}
 end
 
 function 场景类_地图:转移(地图, X, Y, 内容, 传送点)
@@ -157,11 +159,17 @@ function 场景类_地图:转移(地图, X, Y, 内容, 传送点)
 end
 
 function 场景类_地图:添加玩家(sj)
-    self.玩家[sj.id] = wjtp(sj)
-    insert(self.场景人物, self.玩家[sj.id])
+    if 开发调试 then
+        self.玩家[sj.roleId] = wjtp(sj)
+        insert(self.场景人物, self.玩家[sj.roleId])
+    else
+        self.玩家[sj.id] = wjtp(sj)
+        insert(self.场景人物, self.玩家[sj.id])
+    end
 end
 
 function 场景类_地图:删除玩家(角色ID)
+    print('删除玩家对象', 角色ID)
     table.remove(self.玩家, 角色ID)
     for i = 1, #self.场景人物 do
         if self.场景人物[i] ~= nil and self.场景人物[i].类型 == '玩家' and self.场景人物[i].玩家ID ~= nil and self.场景人物[i].玩家ID == 角色ID then
@@ -181,17 +189,24 @@ end
 function 场景类_地图:更新行走(路径, 行走玩家ID)
     if self.玩家[行走玩家ID] ~= nil and self.玩家[行走玩家ID].玩家ID ~= nil and self.玩家[行走玩家ID].玩家ID == 行走玩家ID and self.地图.寻路 ~= nil then
         local a = xys(floor(self.玩家[行走玩家ID].坐标.x / 20), floor(self.玩家[行走玩家ID].坐标.y / 20))
+        print(table.tostring(a));
         if 开发调试 then 
+            --	do local ret={["x"]=50,["id"]=4000516,["y"]=39,["数字id"]="4000516",["序号"]=1001,["距离"]=0} return ret end
             local move= {};
             move.x = 路径.x;
             move.y = 路径.y;
             move.数字id = 路径.id;
-            move.距离 = 0
+            move.序号 = 1001;
+            move.距离 = 0;
+            print(table.tostring(路径),'模拟路径：' , table.tostring(move));
             self.玩家[行走玩家ID].目标格子 = self.地图.寻路:寻路(a, move)
         else
+            print(table.tostring(路径), '原始路径：',table.tostring(路径));
             self.玩家[行走玩家ID].目标格子 = self.地图.寻路:寻路(a, 路径)
         end
         self.玩家[行走玩家ID].行走开关 = true
+    else
+        print('玩家问题...', table.tostring(self.玩家[行走玩家ID]));
     end
 end
 
@@ -232,13 +247,21 @@ end
 
 function 场景类_地图:设置假人(内容)
     --table.sort(内容,排序)
-    self.玩家 = {}
-    self.传送 = {}
-    self.假人 = {}
+    if self.玩家 == nil then
+        self.玩家 = {}
+    end
+    if self.传送 == nil then 
+        self.传送 = {}
+    end
+    if self.假人 == nil then
+        self.假人 = {}
+    end
     collectgarbage('collect')
 
     if 开发调试 then
-        self.假人[tp.当前地图] = {}
+        if self.假人[tp.当前地图] == nil then
+            self.假人[tp.当前地图] = {}
+        end
         local v = 内容.npc
         if v ~= nil and #v > 0 then
             for i = 1, #v do
@@ -282,8 +305,12 @@ function 场景类_地图:设置假人(内容)
             -- end
         end
     end
-
-    self.场景人物 = {}
+    if self.场景人物 ~= nil then
+        print('场景人物:', table.tostring(self.场景人物) , #self.场景人物)
+    else
+        print('初始化场景人物')
+        self.场景人物 = {}
+    end
     insert(self.场景人物, self.人物)
     for i = 1, #self.假人[tp.当前地图] do
         insert(self.场景人物, self.假人[tp.当前地图][i])
