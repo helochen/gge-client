@@ -148,6 +148,7 @@ function 内存类_物品:置对象(名称, 打造, 总类, 根, 允许)
         end
     else
         道具 = wps(名称)
+        print('取道具通过名称：-->' , table.tostring(道具))
         self.介绍 = 道具[1]
         self.总类 = 道具[2]
         self.分类 = 道具[3]

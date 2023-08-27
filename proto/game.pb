@@ -65,7 +65,7 @@ AnimalInfo
 blood (Rblood
 magic (Rmagic
 loyal (Rloyal
-growth (Rgrowth
+growth (Rgrowth
 	potential (R	potential
 name (	Rname
 model	 (	Rmodel

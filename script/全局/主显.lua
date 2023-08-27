@@ -189,19 +189,15 @@ end
 function 场景类_地图:更新行走(路径, 行走玩家ID)
     if self.玩家[行走玩家ID] ~= nil and self.玩家[行走玩家ID].玩家ID ~= nil and self.玩家[行走玩家ID].玩家ID == 行走玩家ID and self.地图.寻路 ~= nil then
         local a = xys(floor(self.玩家[行走玩家ID].坐标.x / 20), floor(self.玩家[行走玩家ID].坐标.y / 20))
-        print(table.tostring(a));
         if 开发调试 then 
-            --	do local ret={["x"]=50,["id"]=4000516,["y"]=39,["数字id"]="4000516",["序号"]=1001,["距离"]=0} return ret end
             local move= {};
             move.x = 路径.x;
             move.y = 路径.y;
             move.数字id = 路径.id;
-            move.序号 = 1001;
+            move.序号 = 1001;-- ?
             move.距离 = 0;
-            print(table.tostring(路径),'模拟路径：' , table.tostring(move));
             self.玩家[行走玩家ID].目标格子 = self.地图.寻路:寻路(a, move)
         else
-            print(table.tostring(路径), '原始路径：',table.tostring(路径));
             self.玩家[行走玩家ID].目标格子 = self.地图.寻路:寻路(a, 路径)
         end
         self.玩家[行走玩家ID].行走开关 = true
