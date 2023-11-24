@@ -105,7 +105,15 @@ function 系统类_底图框:显示(dt, x, y)
             if tp.窗口.道具行囊.可视 then
                 tp.窗口.道具行囊:打开()
             else
-                发送数据(3699)
+                if 开发调试 then
+                    local pb_data = {
+                        packageType = 1,
+                        packageIdx = 1
+                    }
+                    客户端:发送PB数据(6000, pb_data)
+                else
+                    发送数据(3699)
+                end
             end
         elseif (keyaz(KEY.ALT) and keytq(KEY.W)) and not tp.消息栏焦点 then
             if tp.窗口.人物状态栏.可视 == false then

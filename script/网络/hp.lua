@@ -19,12 +19,13 @@ function 客户端类:更新(dt)
 end
 
 function 发送数据(id, 内容)
+    print('发送命令:' , id)
     if 开发调试 then
         客户端类:发送PB数据(cmd, data)
     else
         if 内容 == nil then
             内容 = {}
-        end
+        end  
         客户端:发送数据(id, 内容, 1)
     end
 end

@@ -256,13 +256,13 @@ function 场景类_假人:初始化(假人)
             假人.武器 = 假人.武器
         end
         假人.Y = 假人.Y + (random(1, 12) / 100)
-        print('>>>>>>>>>>>>>>>>>>>>>', 假人.Y, 假人.X)
+        -- print('>>>>>>>>>>>>>>>>>>>>>', 假人.Y, 假人.X)
         self.名称 = 假人.名称
         self.标识 = 假人.id
         self.序列 = 假人.编号
         self.坐标 = xys(floor(假人.X * 20), floor(假人.Y * 20) + 0.1)
         self.真实坐标 = xys(floor(假人.X * 20), floor(假人.Y * 20) + 0.1)
-        print('////////////////////' .. table.tostring(xys(floor(假人.X * 20), floor(假人.Y * 20) + 0.1)))
+        -- print('////////////////////' .. table.tostring(xys(floor(假人.X * 20), floor(假人.Y * 20) + 0.1)))
         self.编号 = 假人.编号
         self.行为 = '静立'
         self.类型 = '假人'

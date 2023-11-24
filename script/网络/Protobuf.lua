@@ -46,7 +46,13 @@ function protobuf:初始化()
     -- npc交互数据
     self._define[5000] = 'GGEGaming.NpcExchangeBaseRequest'
     self._define[5001] = 'GGEGaming.NpcExchangeBaseResponse'
-    
+    -- 人物物品交互
+    self._define[6000] = 'GGEGaming.PackageRequest'
+    self._define[6001] = 'GGEGaming.PackageResponse'
+    self._define[6002] = 'GGEGaming.PackageBaseResponse'
+    self._define[6006] = 'GGEGaming.PackageRoleEquipRequest'
+    self._define[6007] = 'GGEGaming.RemoveRoleEquipmentRequest'
+    self._define[6008] = 'GGEGaming.MovingRolePackageRequest'
 end
 
 -- 查询返回的内容数据

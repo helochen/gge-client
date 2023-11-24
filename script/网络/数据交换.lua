@@ -395,6 +395,8 @@ function 回调:道具处理(序号, 内容, 原内容)
         end
     elseif 序号 == 3513 then
         tp.道具列表 = 内容.道具
+    elseif 序号 == 3523 then
+        tp.窗口.道具仓库:打开(内容.道具.道具, 内容.总数)
     elseif 序号 == 3514 then
         tp.窗口.交易:打开(内容.名称, 内容.等级)
     elseif 序号 == 3515 then
@@ -417,8 +419,8 @@ function 回调:道具处理(序号, 内容, 原内容)
         tp.窗口.摊位购买:打开(内容.名称, 内容.摊主名称, 内容.id, 内容.物品, 内容.bb, 内容.制造)
     elseif 序号 == 3522 then
         tp.窗口.摊位购买:刷新(内容.名称, 内容.摊主名称, 内容.id, 内容.物品, 内容.bb, 内容.制造)
-    elseif 序号 == 3523 then
-        tp.窗口.道具仓库:打开(内容.道具.道具, 内容.总数)
+    -- elseif 序号 == 3523 then
+    --     tp.窗口.道具仓库:打开(内容.道具.道具, 内容.总数)
     elseif 序号 == 3524 then
         tp.窗口.道具仓库:刷新仓库(内容.道具.道具, 内容.页数)
     elseif 序号 == 3525 then
@@ -473,10 +475,22 @@ function 回调:道具处理(序号, 内容, 原内容)
             tp.场景.抓取物品 = nil
             tp.场景.抓取物品ID = nil
             tp.场景.抓取物品注释 = nil
+            
+            local pb_data = {packageIdx = 1}
             if tp.窗口.道具行囊.点击类型 == '道具' then
-                发送数据(3699)
+                if 开发调试 then
+                    pb_data["packageType"] = 1
+                    客户端:发送PB数据(6000, pb_data)
+                else
+                    发送数据(3699)
+                end
             elseif tp.窗口.道具行囊.点击类型 == '行囊' then
-                发送数据(3700)
+                if 开发调试 then
+                    pb_data["packageType"] = 2
+                    客户端:发送PB数据(6000, pb_data)
+                else
+                    发送数据(3700)
+                end
             elseif tp.窗口.道具行囊.点击类型 == '法宝' then
                 发送数据(3732)
             elseif tp.窗口.道具行囊.点击类型 == '锦衣' then
@@ -1480,8 +1494,79 @@ function 回调:系统处理PB(cmd, pb_entity)
                 tp.窗口.对话栏:文本(talking[1], talking[2], talking[3], talking[4])
             end
         end
+    elseif cmd == 6001 then
+        self:人物道具PB信息(pb_entity)
+    elseif cmd == 6002 then
+        tp.窗口.道具行囊:刷新PB基本信息(pb_entity)
     else
         print('缺失处理信息:' , cmd)
+    end
+end
+
+function 回调:人物道具PB信息(pb_entity)
+    -- 背包类型物品
+    local package = {}
+    local items = pb_entity.items
+    if items ~= nil and #items > 0 then
+        for i= 1, #items do
+            local item = items[i]
+            local p = {
+                ["名称"] = gbk.fromutf8(item.name),
+                ["总类"] = item.totalClass,
+                ["分类"] = item.subClass,
+                ["子类"] = item.category,
+                ["识别码"] = item.id
+            }
+            if item.repeated == 1 then
+                p["可叠加"] = true
+                p["数量"] = item.itemCount
+            else
+                p["可叠加"] = false
+            end
+            self:背包属性PB信息整理(item.attributes, p)
+            self:背包属性PB信息整理(item.skillProperties, p)
+            self:背包属性PB信息整理(item.extraProperties, p)
+            self:背包属性PB信息整理(item.dynamicProperties, p)
+            
+            print('处理后道具属性信息: ', table.tostring(p))
+            package[item.itemIdx] = p
+        end
+    end
+
+    if pb_entity.packageType  == 1 or pb_entity.packageType == 2 then
+        tp.道具列表 = package
+        if tp.窗口.道具行囊.可视 == false then
+            tp.窗口.道具行囊:打开()
+        else
+            tp.窗口.道具行囊:刷新道具资源()
+            if pb_entity.packageType == 1 then
+                tp.窗口.道具行囊.点击类型 = '道具'
+            elseif pb_entity.packageType == 2 then
+                tp.窗口.道具行囊.点击类型 = '行囊'
+            end
+            -- tp.窗口.道具行囊.点击类型 = '道具'
+            if tp.窗口.道具行囊.窗口 ~= '坐骑' and tp.窗口.道具行囊.窗口 ~= '召唤兽' then
+                tp.窗口.道具行囊.窗口 = '主人公'
+                local n = 引擎.取头像(tp.队伍[1].模型)
+                tp.窗口.道具行囊.资源组[4] = tp.资源:载入(n[7], '网易WDF动画', n[3])
+            end
+        end
+    elseif pb_entity.packageType  == 3 then
+        tp.窗口.道具仓库:打开(package, pb_entity.packageCount,pb_entity.packageIdx)
+    elseif pb_entity.packageType == 999 then
+        -- 装备信息
+        tp.窗口.道具行囊:刷新PB装备(package, pb_entity.packageIdx)
+    end
+end
+
+function 回调:背包属性PB信息整理(attributes, result)
+    if attributes~=nil and #attributes >0 then
+        for i=1 , #attributes do
+            local attribute = attributes[i]
+            local key = gbk.fromutf8(attribute.keyName)
+            local val = (attribute.valType == 2) and gbk.fromutf8(attribute.keyVal) or attribute.keyVal
+            result[key] = val
+        end
     end
 end
 
@@ -1666,7 +1751,11 @@ function 回调:基础系统逻辑处理(cmd, pb_entity)
             end
         end
         if gbk.len(pb_entity.msg) > 0 then
+            if pb_entity.action == 10 then
+                f函数.信息框(gbk.fromutf8(pb_entity.msg), '通知')
+            else
             tp.提示:写入(gbk.fromutf8(pb_entity.msg))
+            end
         end
     end
 end

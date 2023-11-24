@@ -54,30 +54,35 @@ function 场景类_道具仓库:初始化(根)
 	zts1 = tp.字体表.描边字体
 end
 
-function 场景类_道具仓库:打开(道具,总数)
+function 场景类_道具仓库:打开(道具,总数,页数)
 	if self.可视 then
-		self.仓库开始 = 1
-		self.仓库结束 = 20
-		self.选中仓库 = nil
-		self.选中物品 = nil
-		self.选中物品数量 = nil
-		self.选中仓库 = nil
-		self.选中仓库数量 = nil
-		for i=1,20 do
-			self.物品[i]:置物品(nil)
-			self.物品[i].确定 = false
+		if 开发调试 then
+			self.仓库总数=总数
+			self:刷新仓库(道具, 页数)
+		else
+			self.仓库开始 = 1
+			self.仓库结束 = 20
+			self.选中仓库 = nil
+			self.选中物品 = nil
+			self.选中物品数量 = nil
+			self.选中仓库 = nil
+			self.选中仓库数量 = nil
+			for i=1,20 do
+				self.物品[i]:置物品(nil)
+				self.物品[i].确定 = false
+			end
+			for i=self.仓库开始,self.仓库结束 do
+				self.仓库[i]:置物品(nil)
+				self.仓库[i].确定 = false
+			end
+			self.物品数量:置可视(false,false)
+			self.仓库数量:置可视(false,false)
+			self.可视 = false
+			self.资源组 = nil
+			self.仓库 = nil
+			self.物品 = nil
+			return
 		end
-		for i=self.仓库开始,self.仓库结束 do
-			self.仓库[i]:置物品(nil)
-			self.仓库[i].确定 = false
-		end
-		self.物品数量:置可视(false,false)
-		self.仓库数量:置可视(false,false)
-		self.可视 = false
-		self.资源组 = nil
-		self.仓库 = nil
-		self.物品 = nil
-		return
 	else
 		self.仓库页数 = 1
 		insert(tp.窗口_,self)
@@ -164,9 +169,29 @@ function 场景类_道具仓库:显示(dt,x,y)
   	 self:打开()
   	 return
 	elseif self.资源组[7]:事件判断() then
-		发送数据(3729,{序列=self.仓库页数 - 1})
+		if 开发调试 then
+			if self.仓库页数 > 1 then
+				local pb_data = {
+					packageType = 3,
+					packageIdx = self.仓库页数 - 1
+				}
+				客户端:发送PB数据(6000, pb_data)
+			end
+		else
+			发送数据(3729,{序列=self.仓库页数 - 1})
+		end
 	elseif self.资源组[8]:事件判断() then
-		发送数据(3729,{序列=self.仓库页数 + 1})
+		if 开发调试 then
+			if self.仓库总数 > self.仓库页数 then
+				local pb_data = {
+					packageType = 3,
+					packageIdx = self.仓库页数 + 1
+				}
+				客户端:发送PB数据(6000, pb_data)
+			end
+		else
+			发送数据(3729,{序列=self.仓库页数 + 1})
+		end
 	elseif self.资源组[9]:事件判断() then
 		发送数据(3742)
 	end

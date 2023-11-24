@@ -241,6 +241,7 @@ function 场景类_地图:设置传送(内容)
     -- end
 end
 
+
 function 场景类_地图:设置假人(内容)
     --table.sort(内容,排序)
     if self.玩家 == nil then
@@ -301,12 +302,8 @@ function 场景类_地图:设置假人(内容)
             -- end
         end
     end
-    if self.场景人物 ~= nil then
-        print('场景人物:', table.tostring(self.场景人物) , #self.场景人物)
-    else
-        print('初始化场景人物')
-        self.场景人物 = {}
-    end
+
+    self.场景人物 = {}
     insert(self.场景人物, self.人物)
     for i = 1, #self.假人[tp.当前地图] do
         insert(self.场景人物, self.假人[tp.当前地图][i])

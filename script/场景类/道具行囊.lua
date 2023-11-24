@@ -50,6 +50,10 @@ function 场景类_道具行囊:初始化(根)
     self.记录_ = 0
     tp._物品格子(0, 0, i, '兼容', 底图):置根(tp)
     zts = tp.字体表.普通字体
+    -- 多套装备的对象
+    self.multiEquipment = {[1]={},[2]={},[3]={}}
+    -- 金钱信息
+    self.moneyTypes = {[1]=0,[2]=0,[3]=0}
 end
 
 function 场景类_道具行囊:打开()
@@ -100,9 +104,7 @@ function 场景类_道具行囊:打开()
         end
         local n = qtxs(tp.队伍[1].模型)
         self.资源组[4] = tp.资源:载入(n[7], '网易WDF动画', n[3])
-        for i = 1, 6 do
-            self.人物装备[i]:置物品(tp.队伍[1].装备[i])
-        end
+        self:刷新装备()
         tp.运行时间 = tp.运行时间 + 1
         self.窗口时间 = tp.运行时间
         self.可视 = true
@@ -111,6 +113,18 @@ function 场景类_道具行囊:打开()
         self.法宝选中 = 0
         self.锦衣选中 = 0
     end
+end
+
+function 场景类_道具行囊:刷新PB基本信息(pb_data)
+    self.moneyTypes[1] = pb_data.money
+    self.moneyTypes[2] = pb_data.reserve
+    self.moneyTypes[3] = pb_data.bankMoney
+    self.人物装备窗口 = pb_data.activeEquipmentIdx
+end
+
+function 场景类_道具行囊:刷新PB装备(pb_data, idx)
+    self.multiEquipment[idx] = pb_data
+    self:刷新装备()
 end
 
 function 场景类_道具行囊:加载资源()
@@ -246,10 +260,122 @@ function 场景类_道具行囊:加载资源()
     self.方向 = 4
     self.字体 = tp.字体表.普通字体
 end
+
+function 场景类_道具行囊:显示装备效果(i,x,y)
+    if self.人物装备窗口 == 2 then
+        if self.人物装备2[i].物品 ~= nil and self.人物装备2[i].焦点 then
+            tp.提示:道具行囊(x, y, self.人物装备2[i].物品)
+        end
+    elseif self.人物装备窗口 == 3 then
+        if self.人物装备3[i].物品 ~= nil and self.人物装备3[i].焦点 then
+            tp.提示:道具行囊(x, y, self.人物装备3[i].物品)
+        end
+    else
+        if self.人物装备[i].物品 ~= nil and self.人物装备[i].焦点 then
+            tp.提示:道具行囊(x, y, self.人物装备[i].物品)
+        end
+    end
+end
+
+function 场景类_道具行囊:消息焦点事件(i)
+    local activeEquipment =  self.人物装备[i]
+    if self.人物装备窗口 == 2 then
+        activeEquipment = self.人物装备2[i]
+    elseif self.人物装备窗口 == 3 then
+        activeEquipment = self.人物装备3[i]
+    else
+        activeEquipment =  self.人物装备[i]
+    end
+
+    if tp.场景.抓取物品 == nil and activeEquipment.物品 ~= nil and activeEquipment.焦点 then
+        if mousea(1) then
+            if 开发调试 then
+                -- 解除装备
+                local pb_data = {
+                    itemIdx = i,
+                    packageType = 999,
+                    packageIdx = self.人物装备窗口,
+                    targetPackageType = 1,
+                    targetPackageIdx= 1
+                }
+                客户端:发送PB数据(6007, pb_data)
+            else
+                发送数据(3704, {类型 = self.点击类型, 角色 = '主角', 道具 = i})
+            end
+        end
+    end
+end
+
+
+function 场景类_道具行囊:人物穿戴装备事件(i)
+    local activeEquipment =  self.人物装备[i]
+    if self.人物装备窗口 == 2 then
+        activeEquipment = self.人物装备2[i]
+    elseif self.人物装备窗口 == 3 then
+        activeEquipment = self.人物装备3[i]
+    else
+        activeEquipment =  self.人物装备[i]
+    end
+    if activeEquipment.事件 then
+        if tp.场景.抓取物品 ~= nil and activeEquipment.焦点 then --and self.人物装备[i].物品 == nil
+            if 开发调试 then
+                -- 穿戴装备
+                local pb_data = {
+                    itemIdx = tp.场景.抓取物品ID,
+                    packageType = 1,
+                    packageIdx = 1,
+                    targetPackageIdx= self.人物装备窗口
+                }
+                客户端:发送PB数据(6006, pb_data)
+            else
+                发送数据(3703, {类型 = self.点击类型, 角色 = '主角', 道具 = tp.场景.抓取物品ID})
+            end
+            tp.场景.抓取物品 = nil
+            tp.场景.抓取物品ID = nil
+            tp.场景.抓取物品注释 = nil
+        elseif activeEquipment.焦点 and tp.场景.抓取物品 == nil and activeEquipment.物品 ~= nil then
+            if 开发调试 then
+                -- 穿戴装备
+                local pb_data = {
+                    itemIdx = i,
+                    packageType = 999,
+                    packageIdx = self.人物装备窗口,
+                    targetPackageType = 1,
+                    targetPackageIdx= 1
+                }
+                客户端:发送PB数据(6007, pb_data)
+            else
+                发送数据(3704, {类型 = self.点击类型, 角色 = '主角', 道具 = i})
+            end
+        end
+    end
+end
+
 function 场景类_道具行囊:刷新装备()
-    for i = 1, 6 do
-        self.人物装备[i]:置物品(nil)
-        self.人物装备[i]:置物品(tp.队伍[1].装备[i])
+    if 开发调试 then
+        for m=1, #self.multiEquipment do
+            local tmpEquip = self.multiEquipment[m]
+            print('刷新装备' , m , table.tostring(tmpEquip))
+            for n = 1, 6 do
+                if m == 1 then
+                    self.人物装备[n]:置物品(nil)
+                    self.人物装备[n]:置物品(tmpEquip[n])
+                elseif m == 2 then
+                    self.人物装备2[n]:置物品(nil)
+                    self.人物装备2[n]:置物品(tmpEquip[n])
+                elseif m== 3 then
+                    self.人物装备3[n]:置物品(nil)
+                    self.人物装备3[n]:置物品(tmpEquip[n])
+                else
+                    print('错误' , m)
+                end
+            end
+        end
+    else
+        for n = 1, 6 do
+            self.人物装备[n]:置物品(nil)
+            self.人物装备[n]:置物品(tp.队伍[1].装备[n])
+        end
     end
 end
 
@@ -445,7 +571,15 @@ function 场景类_道具行囊:显示(dt, x, y)
             if tp.场景.抓取物品ID == nil then
                 self.开始 = 1
                 self.结束 = 20
-                发送数据(3699)
+                if 开发调试 then
+                    local pb_data = {
+                        packageType = 1,
+                        packageIdx = 1
+                    }
+                    客户端:发送PB数据(6000, pb_data)
+                else
+                    发送数据(3699)
+                end
                 self.点击类型 = '道具'
                 if self.窗口 == '法宝' then
                     self.窗口 = '主人公'
@@ -453,7 +587,22 @@ function 场景类_道具行囊:显示(dt, x, y)
                     self.窗口 = '主人公'
                 end
             else
-                发送数据(3701.1, {抓取id = tp.场景.抓取物品ID, 放置类型 = '道具', 抓取类型 = self.抓取类型})
+                print('转移物品:',table.tostring({抓取id = tp.场景.抓取物品ID, 放置类型 = '道具', 抓取类型 = self.抓取类型}))
+                if 开发调试 then
+                    -- 转移物品
+                    print('转移物品:',table.tostring({抓取id = tp.场景.抓取物品ID, 放置类型 = '道具', 抓取类型 = self.抓取类型}))
+                    local pb_data = {
+                        itemIdx = tp.场景.抓取物品ID,
+                        packageType = 2,
+                        packageIdx = 1,
+                        targetPackageType = 1,
+                        targetPackageIdx = 1,
+                        targetItemIdx = -1
+                    }
+                    客户端:发送PB数据(6008, pb_data)
+                else
+                    发送数据(3701.1, {抓取id = tp.场景.抓取物品ID, 放置类型 = '道具', 抓取类型 = self.抓取类型})
+                end
                 if tp.场景.抓取物品注释 == '道具行囊_物品' then
                     self.物品[tp.场景.抓取物品ID].确定 = false
                 elseif tp.场景.抓取物品注释 == '道具行囊_灵饰' then
@@ -468,7 +617,13 @@ function 场景类_道具行囊:显示(dt, x, y)
                 self.开始 = 21
                 self.结束 = 40
                 tp.法宝列表 = {}
-                发送数据(3700)
+                local pb_data = {packageIdx = 1}
+                if 开发调试 then
+                    pb_data["packageType"] = 2
+                    客户端:发送PB数据(6000, pb_data)
+                else
+                    发送数据(3700)
+                end
                 self.点击类型 = '行囊'
                 if self.窗口 == '法宝' then
                     self.窗口 = '主人公'
@@ -476,7 +631,20 @@ function 场景类_道具行囊:显示(dt, x, y)
                     self.窗口 = '主人公'
                 end
             else
-                发送数据(3701.1, {抓取id = tp.场景.抓取物品ID, 放置类型 = '行囊', 抓取类型 = self.抓取类型})
+                if 开发调试 then
+                    -- 转移物品
+                    local pb_data = {
+                        itemIdx = tp.场景.抓取物品ID,
+                        packageType = 1,
+                        packageIdx = 1,
+                        targetPackageType = 2,
+                        targetPackageIdx = 1,
+                        targetItemIdx = -1
+                    }
+                    客户端:发送PB数据(6008, pb_data)
+                else
+                    发送数据(3701.1, {抓取id = tp.场景.抓取物品ID, 放置类型 = '行囊', 抓取类型 = self.抓取类型})
+                end
                 if tp.场景.抓取物品注释 == '道具行囊_物品' then
                     self.物品[tp.场景.抓取物品ID].确定 = false
                 elseif tp.场景.抓取物品注释 == '道具行囊_灵饰' then
@@ -545,14 +713,43 @@ function 场景类_道具行囊:显示(dt, x, y)
                 if self.窗口 == '法宝' then
                     self.窗口 = '主人公'
                     self.点击类型 = '道具'
-                    发送数据(3699)
+                    if 开发调试 then
+                        local pb_data = {
+                            packageType = 1,
+                            packageIdx = 1
+                        }
+                        客户端:发送PB数据(6000, pb_data)
+                    else
+                        发送数据(3699)
+                    end
                 else
                     self.窗口 = '法宝'
                     self.点击类型 = '法宝'
-                    发送数据(3732)
+                    if 开发调试 then
+                        local pb_data = {
+                            packageType = 4,
+                            packageIdx = 1
+                        }
+                        客户端:发送PB数据(6000, pb_data)
+                    else
+                        发送数据(3732)
+                    end
                 end
             else
-                发送数据(3701.1, {抓取id = tp.场景.抓取物品ID, 放置类型 = '法宝', 抓取类型 = self.抓取类型})
+                if 开发调试 then 
+                    local pt = (self.抓取类型 == '行囊') and 2 or 1
+                    local pb_data = {
+                        itemIdx = tp.场景.抓取物品ID,
+                        packageType = pt,
+                        packageIdx = 1,
+                        targetPackageType = 4,
+                        targetPackageIdx = 1,
+                        targetItemIdx = -1
+                    }
+                    客户端:发送PB数据(6008, pb_data)
+                else
+                    发送数据(3701.1, {抓取id = tp.场景.抓取物品ID, 放置类型 = '法宝', 抓取类型 = self.抓取类型})
+                end
                 if tp.场景.抓取物品注释 == '道具行囊_物品' then
                     self.物品[tp.场景.抓取物品ID].确定 = false
                 elseif tp.场景.抓取物品注释 == '道具行囊_灵饰' then
@@ -567,14 +764,44 @@ function 场景类_道具行囊:显示(dt, x, y)
                 if self.窗口 == '锦衣' then
                     self.窗口 = '主人公'
                     self.点击类型 = '道具'
-                    发送数据(3699)
+                    if 开发调试 then
+                        local pb_data = {
+                            packageType = 1,
+                            packageIdx = 1
+                        }
+                        客户端:发送PB数据(6000, pb_data)
+                    else
+                        发送数据(3699)
+                    end
                 else
                     self.窗口 = '锦衣'
                     self.点击类型 = '锦衣'
-                    发送数据(3800)
+                    if 开发调试 then
+                        local pb_data = {
+                            packageType = 5,
+                            packageIdx = 1
+                        }
+                        客户端:发送PB数据(6000, pb_data)
+                    else
+                        发送数据(3800)
+                    end
                 end
             else
-                发送数据(3701.1, {抓取id = tp.场景.抓取物品ID, 放置类型 = '锦衣', 抓取类型 = self.抓取类型})
+                if 开发调试 then
+                    -- 转移物品
+                    local pt = (self.抓取类型 == '行囊') and 2 or 1
+                    local pb_data = {
+                        itemIdx = tp.场景.抓取物品ID,
+                        packageType = pt,
+                        packageIdx = 1,
+                        targetPackageType = 5,
+                        targetPackageIdx = 1,
+                        targetItemIdx = -1
+                    }
+                    客户端:发送PB数据(6008, pb_data)
+                else
+                    发送数据(3701.1, {抓取id = tp.场景.抓取物品ID, 放置类型 = '锦衣', 抓取类型 = self.抓取类型})
+                end
                 if tp.场景.抓取物品注释 == '道具行囊_物品' then
                     self.物品[tp.场景.抓取物品ID].确定 = false
                 elseif tp.场景.抓取物品注释 == '道具行囊_灵饰' then
@@ -606,7 +833,15 @@ function 场景类_道具行囊:显示(dt, x, y)
             -- 发送数据(26.2)
             tp.窗口.超级传送:打开()
         elseif self.资源组[55]:事件判断() then
-            发送数据(3756)
+            if 开发调试 then
+                local pb_data = {
+                    packageType = 3,
+                    packageIdx = 1
+                }
+                客户端:发送PB数据(6000, pb_data)
+            else
+                发送数据(3756)
+            end
         end
     end
     self.资源组[1]:显示(self.x, self.y)
@@ -804,37 +1039,23 @@ function 场景类_道具行囊:显示(dt, x, y)
                 self.人物装备[i]:置坐标(self.x + self.装备坐标.x[i] + 2, self.y + self.装备坐标.y[i] - 补差高度, nil, nil, 4, -1)
                 self.人物装备[i]:显示(dt, x, y, self.鼠标, nil, 1)
             end
-            if self.人物装备[i].物品 ~= nil and self.人物装备[i].焦点 then
-                tp.提示:道具行囊(x, y, self.人物装备[i].物品)
-            end
-            if self.人物装备[i].焦点 then
+            self:显示装备效果(i,x,y)
+
+            if self.人物装备[i].焦点 or self.人物装备2[i].焦点 or self.人物装备3[i].焦点 then
                 self.焦点 = true
             end
             if not tp.消息栏焦点 then
-                if tp.场景.抓取物品 == nil and self.人物装备[i].物品 ~= nil and self.人物装备[i].焦点 then
-                    if mousea(1) then
-                        发送数据(3704, {类型 = self.点击类型, 角色 = '主角', 道具 = i})
-                    end
-                end
+                self:消息焦点事件(i)
                 -- 事件开始
-                if self.人物装备[i].事件 then
-                    if tp.场景.抓取物品 ~= nil and self.人物装备[i].焦点 then --and self.人物装备[i].物品 == nil
-                        发送数据(3703, {类型 = self.点击类型, 角色 = '主角', 道具 = tp.场景.抓取物品ID})
-                        tp.场景.抓取物品 = nil
-                        tp.场景.抓取物品ID = nil
-                        tp.场景.抓取物品注释 = nil
-                    elseif self.人物装备[i].焦点 and tp.场景.抓取物品 == nil and self.人物装备[i].物品 ~= nil then
-                        发送数据(3704, {类型 = self.点击类型, 角色 = '主角', 道具 = i})
-                    end
-                end
-            -- 事件结束
+                self:人物穿戴装备事件(i)
+                -- 事件结束
             end
         end
         local jq
         if self.当前银行 == '现金' then
-            jq = tp.金钱
+            jq = 开发调试 and self.moneyTypes[1] or tp.金钱
         elseif self.当前银行 == '储备' then
-            jq = tp.储备
+            jq = 开发调试 and self.moneyTypes[2] or tp.储备
         elseif self.当前银行 == '积分' then
             jq = tp.积分
         end
@@ -1039,9 +1260,7 @@ function 场景类_道具行囊:显示(dt, x, y)
             for s = 1, 3 do
                 self.召唤兽装备[s]:置物品(nil)
             end
-            for n = 1, 6 do
-                self.人物装备[n]:置物品(tp.队伍[1].装备[n])
-            end
+            self:刷新装备()
             self.当前银行 = '现金'
             self.窗口 = '主人公'
             self.选中召唤兽 = 0
@@ -1121,7 +1340,19 @@ function 场景类_道具行囊:显示(dt, x, y)
                                         tp.提示:写入('#Y/该装备未开孔')
                                     end
                                 else
-                                    发送数据(3703, {类型 = self.点击类型, 角色 = '主角', 道具 = o})
+                                    print('穿戴装备22222', o , '序列化:' , table.tostring(self.物品[o].物品))
+                                    if 开发调试 then
+                                        -- 穿戴装备
+                                        local pb_data = {
+                                            itemIdx = o,
+                                            packageType = 1,
+                                            packageIdx = 1,
+                                            targetPackageIdx= self.人物装备窗口
+                                        }
+                                        客户端:发送PB数据(6006, pb_data)
+                                    else
+                                        发送数据(3703, {类型 = self.点击类型, 角色 = '主角', 道具 = o})
+                                    end
                                 end
                             elseif self.窗口 == '召唤兽' and self.选中召唤兽 ~= 0 then
                                 发送数据(3708, {类型 = self.点击类型, 角色 = 'bb', 道具 = o, 编号 = self.选中召唤兽})
@@ -1130,9 +1361,31 @@ function 场景类_道具行囊:显示(dt, x, y)
                                 if tp.窗口.灵饰.可视 ~= true then
                                     tp.窗口.灵饰:打开(self.x + 312, self.y + 1)
                                 end
-                                发送数据(3703, {类型 = self.点击类型, 角色 = '主角', 道具 = o})
+                                if 开发调试 then
+                                    -- 穿戴装备
+                                    local pb_data = {
+                                        itemIdx = o,
+                                        packageType = 1,
+                                        packageIdx = 1,
+                                        targetPackageIdx= self.人物装备窗口
+                                    }
+                                    客户端:发送PB数据(6006, pb_data)
+                                else
+                                    发送数据(3703, {类型 = self.点击类型, 角色 = '主角', 道具 = o})
+                                end
                             elseif self.物品[o].物品 ~= nil and self.物品[o].物品.分类 == 14 then
-                                发送数据(3703, {类型 = '道具', 角色 = '主角', 道具 = o, 不打开 = 1})
+                                if 开发调试 then
+                                    -- 穿戴装备
+                                    local pb_data = {
+                                        itemIdx = o,
+                                        packageType = 1,
+                                        packageIdx = 1,
+                                        targetPackageIdx= self.人物装备窗口
+                                    }
+                                    客户端:发送PB数据(6006, pb_data)
+                                else
+                                    发送数据(3703, {类型 = '道具', 角色 = '主角', 道具 = o, 不打开 = 1})
+                                end
                             elseif
                                 self.物品[o].物品 ~= nil and self.物品[o].物品.总类 == 102 and self.物品[o].物品.分类 >= 15 and
                                     self.物品[o].物品.分类 ~= 18
@@ -1206,12 +1459,26 @@ function 场景类_道具行囊:显示(dt, x, y)
                         self.物品[tp.场景.抓取物品ID].确定 = true
                         self.物品[o]:置物品(nil)
                         self.抓取类型 = self.点击类型
+                        print('抓取物品:',table.tostring(self.物品[o]),'物品ID',o, '物品注释:',self.物品[o].注释)
                     end
                 elseif
                     tp.场景.抓取物品 ~= nil and self.物品[o].物品 == nil and
                         (tp.场景.抓取物品注释 == '道具行囊_物品' or tp.场景.抓取物品注释 == '道具行囊_灵饰' or tp.场景.抓取物品注释 == '道具行囊_锦衣')
                  then
-                    发送数据(3701, {抓取id = tp.场景.抓取物品ID, 放置id = o, 放置类型 = self.点击类型, 抓取类型 = self.抓取类型})
+                    if 开发调试 then
+                        local pt = (self.抓取类型 == '行囊') and 2 or 1
+                        local pb_data = {
+                            itemIdx = tp.场景.抓取物品ID,
+                            packageType = pt,
+                            packageIdx = 1,
+                            targetPackageType = pt,
+                            targetPackageIdx = 1,
+                            targetItemIdx = o
+                        }
+                        客户端:发送PB数据(6008, pb_data)
+                    else
+                        发送数据(3701, {抓取id = tp.场景.抓取物品ID, 放置id = o, 放置类型 = self.点击类型, 抓取类型 = self.抓取类型})
+                    end
                     if tp.场景.抓取物品注释 == '道具行囊_物品' then
                         self.物品[tp.场景.抓取物品ID].确定 = false
                     elseif tp.场景.抓取物品注释 == '道具行囊_灵饰' then
@@ -1224,7 +1491,20 @@ function 场景类_道具行囊:显示(dt, x, y)
                     local jy = self.物品[o].物品
                     local jy1 = tp.场景.抓取物品
                     local jy2 = tp.场景.抓取物品ID
-                    发送数据(3701, {抓取id = tp.场景.抓取物品ID, 放置id = o, 放置类型 = self.点击类型, 抓取类型 = self.抓取类型})
+                    if 开发调试 then 
+                        local pt = (self.抓取类型 == '行囊') and 2 or 1
+                        local pb_data = {
+                            itemIdx = tp.场景.抓取物品ID,
+                            packageType = pt,
+                            packageIdx = 1,
+                            targetPackageType = pt,
+                            targetPackageIdx = 1,
+                            targetItemIdx = o
+                        }
+                        客户端:发送PB数据(6008, pb_data)
+                    else
+                        发送数据(3701, {抓取id = tp.场景.抓取物品ID, 放置id = o, 放置类型 = self.点击类型, 抓取类型 = self.抓取类型})
+                    end
                     self.物品[tp.场景.抓取物品ID].确定 = false
                     tp.场景.抓取物品 = nil
                     tp.场景.抓取物品ID = nil
@@ -1259,9 +1539,7 @@ function 场景类_道具行囊:刷新()
     if self.窗口 == '主人公' then
         local n = qtxs(tp.队伍[1].模型)
         self.资源组[4] = tp.资源:载入(n[7], '网易WDF动画', n[3])
-        for n = 1, 6 do
-            self.人物装备[n]:置物品(tp.队伍[1].装备[n])
-        end
+        self:刷新装备()
     elseif self.窗口 == '召唤兽' then
         self.选中召唤兽 = 0
         self.加入 = 0
