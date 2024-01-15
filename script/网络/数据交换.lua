@@ -30,7 +30,7 @@ function 回调:发送数据(序号, 内容, 数组转换)
     if 数组转换 ~= nil then
         内容 = table.tostring(内容)
     end
-    print('-====send :=========', 序号, 内容, '===========')
+    log:debug('-====send :=========', 序号, 内容, '===========')
     self.组合数据 = 序号 .. fgf .. 内容
     self:发送(jm(self.组合数据))
 end
@@ -45,7 +45,7 @@ function 回调:数据到达(内容)
         end
     else
         -- 内容=jm1(内容)
-        print('receive:----------------------', 内容, '--------------------')
+        log:debug('receive:----------------------', 内容, '--------------------')
         if 内容 == nil or 内容 == '' then
             return
         end
@@ -58,13 +58,13 @@ function 回调:数据到达(内容)
                 if type(v) == 'table' then
                     for m, n in pairs(v) do
                         if type(n) == 'table' then
-                            print(k, ':', m, ':', table.tostring(n))
+                            log:debug(k, ':', m, ':', table.tostring(n))
                         else
-                            print(k, ':', m, ':', n)
+                            log:debug(k, ':', m, ':', n)
                         end
                     end
                 else
-                    print(k, ':', v)
+                    log:debug(k, ':', v)
                 end
             end
         end
@@ -635,7 +635,7 @@ function 回调:地图处理(序号, 内容)
         tp.场景.玩家[内容.id].强p开关 = 内容.开关
     elseif 序号 == 1026 then
         tp.房屋数据 = 内容[1]
-        print(tp.房屋数据)
+        log:debug(tp.房屋数据)
     elseif 序号 == 1027 then
         tp.场景.地图:房屋特效(内容[1])
     elseif 序号 == 1028 then
@@ -1266,7 +1266,7 @@ function 回调:系统处理(序号, 内容, 数据)
         tp.窗口.指定系统:打开(内容)
     elseif 序号 == 110.1 then ---改
         tp.窗口.武魂界面:刷新(内容)
-        print(内容)
+        log:debug(内容)
     elseif 序号 == 111 then
         tp.房屋数据 = 内容
     elseif 序号 == 112 then
@@ -1436,7 +1436,7 @@ function 回调:更新(dt)
 end
 
 function 回调:断开连接(连接)
-    print('与服务器连接被断开1')
+    log:error('与服务器连接被断开1')
 end
 
 -- function 回调:连接断开(连接)
@@ -1452,13 +1452,13 @@ end
 -- end
 
 function 回调:数据到达2(序号, 内容, 时间)
-    print('---------回调:数据到达2---------')
+    log:debug('---------回调:数据到达2---------')
     客户端:数据到达(序号)
 end
 
 -- protobuf 协议的服务处理
 function 回调:系统处理PB(cmd, pb_entity)
-    print('系统处理PB==' ,cmd)
+    log:debug('== 回调:系统处理P ==' ,cmd , pb_entity)
     if cmd < 999 then
         self:基础系统逻辑处理(cmd, pb_entity)
     elseif cmd == 1001 then
@@ -1499,7 +1499,7 @@ function 回调:系统处理PB(cmd, pb_entity)
     elseif cmd == 6002 then
         tp.窗口.道具行囊:刷新PB基本信息(pb_entity)
     else
-        print('缺失处理信息:' , cmd)
+        log:error('缺失处理信息:' , cmd)
     end
 end
 
@@ -1528,7 +1528,7 @@ function 回调:人物道具PB信息(pb_entity)
             self:背包属性PB信息整理(item.extraProperties, p)
             self:背包属性PB信息整理(item.dynamicProperties, p)
             
-            print('处理后道具属性信息: ', table.tostring(p))
+            log:debug('处理后道具属性信息: ', table.tostring(p))
             package[item.itemIdx] = p
         end
     end

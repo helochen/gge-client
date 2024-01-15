@@ -255,7 +255,7 @@ function 场景类_好友列表:好友显示(x,y)
       end
       self.名称盒子[计次]:置坐标(self.x+32,初始y)
       if self.名称盒子[计次]:检查点(x,y) then
-        --print(n,self.数据[self.当前类型][n].id)
+        --log:debug(n,self.数据[self.当前类型][n].id)
         if 引擎.鼠标弹起(左键) then
           tp.窗口.好友消息:打开(self.数据[self.当前类型][n].名称,self.数据[self.当前类型][n].id,self.数据[self.当前类型][n].好友度,self.数据[self.当前类型][n].等级,self.数据[self.当前类型][n].模型,1)
         elseif 引擎.鼠标弹起(右键) then

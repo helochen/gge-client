@@ -374,7 +374,7 @@ function 场景类_打造:显示(dt,x,y)
 								self.材料[2]:置物品(self.物品[is].物品)
 								self.材料[2].道具序列=is
 								if zl ~= nil then
-															print(zl)
+									log:debug(zl)
 									self.总价 = self:打造金钱公式(zl)
 									self.消耗体力=self:取消耗体力()
 								end

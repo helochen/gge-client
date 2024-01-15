@@ -4792,7 +4792,7 @@ function 战斗处理类:执行计算()
 
                end
               end
-            print(气血)
+              log:debug(气血)
             self.战斗流程[#self.战斗流程+1]={流程=102,攻击方=n,气血=0,挨打方={}}
             self.战斗流程[#self.战斗流程].死亡=self:减少气血(n,气血)
             self.战斗流程[#self.战斗流程].气血=气血
@@ -5882,11 +5882,11 @@ function 战斗处理类:召唤计算(编号)
   end
 
   if 玩家数据[玩家id] == nil then
-    print("玩家数据玩家ID为NIL,玩家ID为"..玩家id)
+    log:debug("玩家数据玩家ID为NIL,玩家ID为"..玩家id)
   elseif 玩家数据[玩家id].召唤兽.数据[目标] == nil then
-    print("召唤兽为NIL,目标为"..目标)
+    log:debug("召唤兽为NIL,目标为"..目标)
   elseif 玩家数据[玩家id].召唤兽.数据[目标].等级 == nil then
-    print("召唤时等级为NIL,召唤目标为"..目标)
+    log:debug("召唤时等级为NIL,召唤目标为"..目标)
   end
   if id~=nil and self.参战单位[id].法术状态.复活~=nil then
     self:添加提示(self.参战单位[编号].玩家id,编号,"#Y/你有召唤兽尚在复活中，暂时无法召唤新的召唤兽")
@@ -5977,11 +5977,11 @@ function 战斗处理类:召唤孩子计算(编号)
   local 玩家id=self.参战单位[编号].玩家id
   local 目标=self.参战单位[编号].指令.目标-#玩家数据[玩家id].召唤兽.数据
   if 玩家数据[玩家id] == nil then
-    print("玩家数据玩家ID为NIL,玩家ID为"..玩家id)
+    log:debug("玩家数据玩家ID为NIL,玩家ID为"..玩家id)
   elseif 玩家数据[玩家id].孩子.数据[目标] == nil then
-    print("孩子为NIL,目标为"..目标)
+    log:debug("孩子为NIL,目标为"..目标)
   elseif 玩家数据[玩家id].孩子.数据[目标].等级 == nil then
-    print("召唤时等级为NIL,召唤目标为"..目标)
+    log:debug("召唤时等级为NIL,召唤目标为"..目标)
   end
   if id~=nil and self.参战单位[id].法术状态.复活~=nil then
     self:添加提示(self.参战单位[编号].玩家id,编号,"#Y/你有召唤兽尚在复活中，暂时无法召唤新的召唤兽")

@@ -36,7 +36,7 @@ function 场景类_玩家:初始化(玩家)
         rwzt = tp.字体表.人物字体
     end
     if 开发调试 then
-        print('进入玩家对象初始化....x:', 玩家.x," y: " ,玩家.y,"名称,", gbk.fromutf8(玩家.name))
+        log:debug('进入玩家对象初始化....x:', 玩家.x," y: " ,玩家.y,"名称,", gbk.fromutf8(玩家.name))
         玩家.y = 玩家.y + (random(1, 12) / 100)
         self.玩家 = {}
         self.组队标志 = tp.资源:载入('addon.wdf', '网易假人动画', 0x2231EBB4)
@@ -66,19 +66,19 @@ function 场景类_玩家:初始化(玩家)
         self.行走坐标 = xys(floor(玩家.x), floor(玩家.y) + 0.1)
         self.武器 = gbk.fromutf8(玩家.weapon)
         if gbk.len(self.武器) == 0 then
-            print('武器是空的...')
+            log:debug('武器是空的...')
             self.武器 = nil
         end
 
         self.模型 = gbk.fromutf8(玩家.model)
-        print('模型:' ,self.模型)
+        log:debug('模型:' ,self.模型)
         self.行走开关 = false
         self.类型 = '玩家'
         self.所在地图 = nil
         self.组员数量 = 0
         self.坐骑 = gbk.fromutf8(玩家.rider)    
         if gbk.len(self.坐骑) == 0 then
-            print('坐骑是空的...')
+            log:debug('坐骑是空的...')
             self.坐骑 = nil
         end  
     
@@ -1172,7 +1172,7 @@ function 场景类_玩家:重新加载动画()
 end
 
 function 场景类_玩家:穿戴装备(武器, 数字)
-    print('场景类_玩家:穿戴装备：武器', 武器 , '数字：' , 数字)
+    log:debug('场景类_玩家:穿戴装备：武器', 武器 , '数字：' , 数字)
     if not 玩家显示开关 and not 玩家加载开关 then
         return
     end

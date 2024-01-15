@@ -592,9 +592,9 @@ function 内存类_队伍:重置属性(属性)
                 self[n] = table.loadstring(table.tostring(v))
             else
                 if type(v) == 'table' then
-                    print("重置属性装备", n , "->内容table：" ,table.tostring(v))
+                    -- print("重置属性装备", n , "->内容table：" ,table.tostring(v))
                 else
-                    print("重置属性装备", n , "->内容：" ,v)
+                    -- print("重置属性装备", n , "->内容：" ,v)
                 end
                 self[n] = v
             end

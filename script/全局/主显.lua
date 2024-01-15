@@ -169,7 +169,7 @@ function 场景类_地图:添加玩家(sj)
 end
 
 function 场景类_地图:删除玩家(角色ID)
-    print('删除玩家对象', 角色ID)
+    log:debug('删除玩家对象', 角色ID)
     table.remove(self.玩家, 角色ID)
     for i = 1, #self.场景人物 do
         if self.场景人物[i] ~= nil and self.场景人物[i].类型 == '玩家' and self.场景人物[i].玩家ID ~= nil and self.场景人物[i].玩家ID == 角色ID then
@@ -202,7 +202,7 @@ function 场景类_地图:更新行走(路径, 行走玩家ID)
         end
         self.玩家[行走玩家ID].行走开关 = true
     else
-        print('玩家问题...', table.tostring(self.玩家[行走玩家ID]));
+        log:debug('玩家问题...', table.tostring(self.玩家[行走玩家ID]));
     end
 end
 

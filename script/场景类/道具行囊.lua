@@ -355,7 +355,7 @@ function 场景类_道具行囊:刷新装备()
     if 开发调试 then
         for m=1, #self.multiEquipment do
             local tmpEquip = self.multiEquipment[m]
-            print('刷新装备' , m , table.tostring(tmpEquip))
+            log:debug('刷新装备' , m , table.tostring(tmpEquip))
             for n = 1, 6 do
                 if m == 1 then
                     self.人物装备[n]:置物品(nil)
@@ -367,7 +367,7 @@ function 场景类_道具行囊:刷新装备()
                     self.人物装备3[n]:置物品(nil)
                     self.人物装备3[n]:置物品(tmpEquip[n])
                 else
-                    print('错误' , m)
+                    log:error('错误' , m)
                 end
             end
         end
@@ -587,10 +587,10 @@ function 场景类_道具行囊:显示(dt, x, y)
                     self.窗口 = '主人公'
                 end
             else
-                print('转移物品:',table.tostring({抓取id = tp.场景.抓取物品ID, 放置类型 = '道具', 抓取类型 = self.抓取类型}))
+                log:debug('转移物品:',table.tostring({抓取id = tp.场景.抓取物品ID, 放置类型 = '道具', 抓取类型 = self.抓取类型}))
                 if 开发调试 then
                     -- 转移物品
-                    print('转移物品:',table.tostring({抓取id = tp.场景.抓取物品ID, 放置类型 = '道具', 抓取类型 = self.抓取类型}))
+                    log:debug('转移物品:',table.tostring({抓取id = tp.场景.抓取物品ID, 放置类型 = '道具', 抓取类型 = self.抓取类型}))
                     local pb_data = {
                         itemIdx = tp.场景.抓取物品ID,
                         packageType = 2,
@@ -1340,7 +1340,7 @@ function 场景类_道具行囊:显示(dt, x, y)
                                         tp.提示:写入('#Y/该装备未开孔')
                                     end
                                 else
-                                    print('穿戴装备22222', o , '序列化:' , table.tostring(self.物品[o].物品))
+                                    log:debug('穿戴装备22222', o , '序列化:' , table.tostring(self.物品[o].物品))
                                     if 开发调试 then
                                         -- 穿戴装备
                                         local pb_data = {
@@ -1459,7 +1459,7 @@ function 场景类_道具行囊:显示(dt, x, y)
                         self.物品[tp.场景.抓取物品ID].确定 = true
                         self.物品[o]:置物品(nil)
                         self.抓取类型 = self.点击类型
-                        print('抓取物品:',table.tostring(self.物品[o]),'物品ID',o, '物品注释:',self.物品[o].注释)
+                        log:debug('抓取物品:',table.tostring(self.物品[o]),'物品ID',o, '物品注释:',self.物品[o].注释)
                     end
                 elseif
                     tp.场景.抓取物品 ~= nil and self.物品[o].物品 == nil and

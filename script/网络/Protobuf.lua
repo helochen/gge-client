@@ -35,6 +35,7 @@ function protobuf:初始化()
     self._define[2200] = 'GGEGaming.RoleAnimalInfo'
     self._define[2201] = 'GGEGaming.DropAnimalRequest'
     self._define[2202] = 'GGEGaming.DropAnimalResponse'
+    self._define[2109] = 'GGEGaming.RoleLevelUpRequest'
     -- 场景地图消息
     self._define[3100] = 'GGEGaming.MapPlayersInfoAutoPush'
     self._define[3101] = 'GGEGaming.MapPlayerLeaveAutoPush'
@@ -62,7 +63,7 @@ end
 
 -- 转换二进制数据
 function protobuf:encode(cmd, content)
-    print('数据发送：' , cmd ,'->', self:q(cmd))
+    log:info('数据发送：' , cmd ,'->', self:q(cmd))
     local b_data = pb.encode(self:q(cmd), content)
     if b_data then
         local b = buffer.new()
@@ -81,7 +82,7 @@ function protobuf:decode(b_data)
         if cmd == nil then
             return -1 , {}
         else
-            print('数据查询：' , cmd ,'->', self:q(cmd))
+            log:info('数据查询：' , cmd ,'->', self:q(cmd))
             local pb_entity = pb.decode(self:q(cmd), s:result())
             s:delete()
             return cmd, pb_entity

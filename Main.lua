@@ -28,6 +28,7 @@ require('script/数据中心/染色')
 require('script/数据中心/梦战召唤兽模型')
 --============================================
 gbk = require('gbk')
+log = require('script/日志系统/Log')()
 -- utf = require('lua-utf8')
 local tmp = f函数.读配置(程序目录 .. '配置.ini', 'mhxy', '开发调试') + 0
 if tmp == 0 then
@@ -39,7 +40,7 @@ direct = true -- 不去加密数据
 if 开发调试 then
     全局端口 = 9090
 end
-print('global port:' .. 全局端口)
+log:info('global port:' .. 全局端口)
 
 -- 加载类
 yq = 引擎

@@ -412,7 +412,16 @@ function 场景类_人物状态栏:显示(dt, x, y)
                 耐力 = 0,
                 敏捷 = 0
             }
-            发送数据(9)
+            -- TODO 人物升级得按钮
+            if 开发调试 then
+                 -- pb数据转换
+                 local pb_data = {
+                    targetLv = 1
+                }
+                客户端:发送PB数据(2109, pb_data)
+            else
+                发送数据(9)
+            end
         elseif self.资源组[23]:事件判断() then
             -- 力耐加点
             local zt = 1

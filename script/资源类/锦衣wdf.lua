@@ -249,10 +249,10 @@ function wdf:置注释(path)
                 if not self.List[value] then
                     self.List[value] = self.List[tonumber(param, 16)]
                     if not self.List[value] then
-                        print("ID不存在", value, param, tonumber(param, 16))
+                        log:error("ID不存在", value, param, tonumber(param, 16))
                     end
                 else
-                    print("路径重复", self.路径, value)
+                    log:error("路径重复", self.路径, value)
                 end
             end
         end

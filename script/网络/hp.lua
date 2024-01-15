@@ -19,7 +19,7 @@ function 客户端类:更新(dt)
 end
 
 function 发送数据(id, 内容)
-    print('发送命令:' , id)
+    log:debug('发送命令:' , id)
     if 开发调试 then
         客户端类:发送PB数据(cmd, data)
     else

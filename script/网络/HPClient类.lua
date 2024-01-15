@@ -93,7 +93,7 @@ function hpclient:OnReceivePull(iLength)
     return 0
 end
 function hpclient:OnReceivePack(Data)
-    print('PACK:', #Data)
+    log:debug('PACK:', #Data)
 end
 function hpclient:OnClose(...)
     if self.连接断开 then

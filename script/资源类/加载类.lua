@@ -141,10 +141,10 @@ function 资源类_加载:载入(文件,类型,文件号,音量,附加,fs,fs1)
 		    return bbbb(self.wdf["wzife.wdf"]:读数据(0X34EA0DBE))
 		end
 		if 文件~=nil and 文件号==nil then
-		    print("0注意WDF载入[ "..文件.." ]文件 函数:",文件,类型,文件号,音量,附加,fs,fs1,素材名称)
+		    log:debug("0注意WDF载入[ "..文件.." ]文件 函数:",文件,类型,文件号,音量,附加,fs,fs1,素材名称)
 		    return bbbb(self.wdf["wzife.wdf"]:读数据(0X34EA0DBE))
 		elseif 文件==nil and 文件号~=nil then
-		    print("1注意WDF载入没有[ NIL值 ]文件 函数:",文件,类型,文件号,音量,附加,fs,fs1,string.upper(string.format("%#x",文件号)),素材名称)
+		    log:debug("1注意WDF载入没有[ NIL值 ]文件 函数:",文件,类型,文件号,音量,附加,fs,fs1,string.upper(string.format("%#x",文件号)),素材名称)
 		    for i=1,#self.files do
 		    	if self.wdf[self.files[i]].List[到整数(文件号)]~=nil then
 		    		-- print("自动寻找",self.files[i],string.upper(string.format("%#x",到整数(文件号))),到整数(文件号))
@@ -153,7 +153,7 @@ function 资源类_加载:载入(文件,类型,文件号,音量,附加,fs,fs1)
 		    end
 		    return bbbb(self.wdf["wzife.wdf"]:读数据(0X34EA0DBE))
 		elseif 文件==nil and 文件号==nil then
-		    print("2注意WDF载入没有[ NIL值 ]WDF文件 没有[ NIL值 ]WAS文件 函数:",文件,类型,文件号,音量,附加,fs,fs1,素材名称)
+		    log:debug("2注意WDF载入没有[ NIL值 ]WDF文件 没有[ NIL值 ]WAS文件 函数:",文件,类型,文件号,音量,附加,fs,fs1,素材名称)
 		    return bbbb(self.wdf["wzife.wdf"]:读数据(0X34EA0DBE))
 		elseif 文件~=nil and 文件=="ZHS.FT" and self.wdf[文件]~=nil and self.wdf[文件]:读数据(文件号)==nil then--ZHS.FT文件修复到shape.wdf里面
 			-- print(123,66666666)
