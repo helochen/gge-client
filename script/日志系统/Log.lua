@@ -35,6 +35,8 @@ function Log:table2String(t , indent)
         else
             if type(v) == 'boolean' then
                 str = str.. indentStr .. keystr .. (v and 'true' or 'false') .. ';\n' 
+            elseif type(v) == 'number' then
+                str = str.. indentStr .. keystr .. tostring(v) .. ';\n'
             else
                 str = str.. indentStr .. keystr .. gbk.fromutf8(v) .. ';\n'
             end
