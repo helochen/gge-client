@@ -31,6 +31,8 @@ function protobuf:初始化()
     self._define[2006] = 'GGEGaming.MapTransferAutoPush'
     -- 角色信息请求
     self._define[2100] = 'GGEGaming.MapRoleInfo'
+    -- 角色修改属性点
+    self._define[2120] = 'GGEGaming.RoleAttributeModifyRequest'
     -- 宠物信息
     self._define[2200] = 'GGEGaming.RoleAnimalInfo'
     self._define[2201] = 'GGEGaming.DropAnimalRequest'

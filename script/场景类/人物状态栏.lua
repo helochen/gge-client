@@ -393,7 +393,19 @@ function 场景类_人物状态栏:显示(dt, x, y)
                 耐力 = 0,
                 敏捷 = 0
             }
-            发送数据(8, ls)
+            -- 获取临时属性加点方案
+            if 开发调试 then
+                local pb_data = {
+                    constitution = ls['体质'],
+                    magic = ls['魔力'],
+                    strength = ls['力量'],
+                    endurance = ls['耐力'],
+                    agility = ls['敏捷']
+                }
+                客户端:发送PB数据(2120, pb_data)
+            else
+                发送数据(8, ls)
+            end
         elseif self.资源组[25]:事件判断() then
             self.临时潜力 = {体质 = 0, 魔力 = 0, 力量 = 0, 耐力 = 0, 敏捷 = 0}
             self.预览属性 = {气血 = 0, 魔法 = 0, 命中 = 0, 伤害 = 0, 速度 = 0, 灵力 = 0, 防御 = 0, 法伤 = 0, 躲避 = 0}
@@ -412,11 +424,11 @@ function 场景类_人物状态栏:显示(dt, x, y)
                 耐力 = 0,
                 敏捷 = 0
             }
-            -- TODO 人物升级得按钮
+            -- 人物升级得按钮
             if 开发调试 then
                  -- pb数据转换
                  local pb_data = {
-                    targetLv = 1
+                    targetLv = rw.等级 + 1
                 }
                 客户端:发送PB数据(2109, pb_data)
             else

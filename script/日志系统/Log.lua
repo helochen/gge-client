@@ -25,6 +25,7 @@ function Log:error(...)
     print(formattedMessage)  -- 打印消息  
 end
 
+-- 打印lua的table对象到字符串功能
 function Log:table2String(t , indent)
     local str = ''
     for k,v in pairs(t) do
