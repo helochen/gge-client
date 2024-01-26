@@ -16,6 +16,8 @@ function protobuf:初始化()
     --系统相关
     self._define[100] = 'GGESystem.SystemRequest'
     self._define[101] = 'GGESystem.SystemResponse'
+    -- 动画系统
+    self._define[201] = 'GGESystem.SystemAnimationNotice'
     -- 登陆
     self._define[1000] = 'GGEGaming.LoginRequest'
     self._define[1001] = 'GGEGaming.LoginResponse'

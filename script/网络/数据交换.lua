@@ -1759,6 +1759,9 @@ function 回调:基础系统逻辑处理(cmd, pb_entity)
             tp.提示:写入(gbk.fromutf8(pb_entity.msg))
             end
         end
+    elseif cmd == 201 and pb_entity ~=nil then
+        log:debug('任务动画->' , pb_entity.roleId , gbk.fromutf8(pb_entity.animation))
+        tp.场景.玩家[pb_entity.roleId]:设置动画(gbk.fromutf8(pb_entity.animation))
     end
 end
 
