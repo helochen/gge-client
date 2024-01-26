@@ -1760,8 +1760,12 @@ function 回调:基础系统逻辑处理(cmd, pb_entity)
             end
         end
     elseif cmd == 201 and pb_entity ~=nil then
-        log:debug('任务动画->' , pb_entity.roleId , gbk.fromutf8(pb_entity.animation))
-        tp.场景.玩家[pb_entity.roleId]:设置动画(gbk.fromutf8(pb_entity.animation))
+        log:debug('任务动画->' , pb_entity.roleId , tp.队伍[1].数字id , gbk.fromutf8(pb_entity.animation))
+        if pb_entity.roleId == tp.队伍[1].数字id then
+            tp.场景.人物:加入动画('升级')
+        else
+            tp.场景.玩家[pb_entity.roleId]:设置动画(gbk.fromutf8(pb_entity.animation))
+        end
     end
 end
 

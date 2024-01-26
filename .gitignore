@@ -1,0 +1,10 @@
+save/**
+wdf/**
+pic/**
+logs/**
+.vscode/**
+compile/**
+*.dll
+*.exe
+*.log
+*.ico

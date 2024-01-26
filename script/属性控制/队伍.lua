@@ -589,13 +589,10 @@ function 内存类_队伍:重置属性(属性)
     for n, v in pairs(属性) do
         if type(n) ~= 'function' and type(n) ~= '运行父函数' and n ~= '存档数据' and n ~= '宝宝列表' then
             if type(n) == 'table' then ----------
+                --log:debug('内存类_队伍:重置属性' , n, 'table')
                 self[n] = table.loadstring(table.tostring(v))
             else
-                if type(v) == 'table' then
-                    -- print("重置属性装备", n , "->内容table：" ,table.tostring(v))
-                else
-                    -- print("重置属性装备", n , "->内容：" ,v)
-                end
+                --log:debug('内存类_队伍:重置属性 else' , n, v)
                 self[n] = v
             end
         end
