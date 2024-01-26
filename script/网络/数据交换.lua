@@ -45,7 +45,7 @@ function 回调:数据到达(内容)
         end
     else
         -- 内容=jm1(内容)
-        log:debug('receive:----------------------', 内容, '--------------------')
+        
         if 内容 == nil or 内容 == '' then
             return
         end
@@ -53,7 +53,8 @@ function 回调:数据到达(内容)
         if 数据 == nil or 数据.序号 == nil then
             return
         end
-        if type(数据) == 'table' then
+        log:debug('####receive:#######',数据.序号)
+        --[[ if type(数据) == 'table' then
             for k, v in pairs(数据) do
                 if type(v) == 'table' then
                     for m, n in pairs(v) do
@@ -67,7 +68,7 @@ function 回调:数据到达(内容)
                     log:debug(k, ':', v)
                 end
             end
-        end
+        end ]]
 
         数据.序号 = 数据.序号 + 0
         if 数据.序号 ~= 99 then
@@ -665,6 +666,7 @@ function 回调:地图处理(序号, 内容)
     end
 end
 function 回调:系统处理(序号, 内容, 数据)
+    log:debug("系统处理---------->",序号)
     if 序号 == 1 and 内容.用户 == nil then
         self:发送数据(1, 版本 .. fgc .. 系统参数.账号 .. fgc .. 系统参数.密码 .. fgc .. f函数.取硬盘序列号())
     elseif 序号 == 2 then --选择角色

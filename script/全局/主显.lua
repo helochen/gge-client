@@ -202,7 +202,7 @@ function 场景类_地图:更新行走(路径, 行走玩家ID)
         end
         self.玩家[行走玩家ID].行走开关 = true
     else
-        log:debug('玩家问题...', table.tostring(self.玩家[行走玩家ID]));
+        log:debug('玩家问题...', #self.玩家);
     end
 end
 
@@ -302,9 +302,9 @@ function 场景类_地图:设置假人(内容)
             -- end
         end
     end
-
-    self.场景人物 = {}
-    insert(self.场景人物, self.人物)
+    log:debug("场景人物数量--->" ,#self.场景人物)
+    --[[ self.场景人物 = {}
+    insert(self.场景人物, self.人物) ]]
     for i = 1, #self.假人[tp.当前地图] do
         insert(self.场景人物, self.假人[tp.当前地图][i])
     end

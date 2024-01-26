@@ -53,6 +53,10 @@ function Log:tostring(...)
     for i, v in ipairs(args) do
         if type(v) == 'table' then
             result =  result .. self:table2String(v , 4)
+        elseif type(v) == 'boolean' then
+            result = result .. (v and 'true' or 'false')
+        elseif type(v) == 'number' then
+            result = result .. tostring(v)
         else
             result = result .. v
         end
