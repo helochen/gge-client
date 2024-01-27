@@ -170,7 +170,15 @@ function 场景类_系统设置:显示(dt,x,y)
 		-- 系统退出=true
 		-- 客户端:断开()
 	elseif self.资源组[20]:事件判断() then--退出
-		发送数据(5)
+		if 开发调试 then
+			local pb_data = {
+				version = 版本,
+				action = -1
+			}
+			客户端:发送PB数据(100, pb_data)
+		else
+			发送数据(5)
+		end
 		引擎关闭开始()
 	elseif self.资源组[21]:事件判断() then--到主界面
 		tp.提示:写入("#Y该功能暂停使用！")
