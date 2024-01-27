@@ -294,7 +294,7 @@ function 场景类_道具仓库:显示(dt,x,y)
 		end
 	end
 	if self.选择仓库 ~= nil then
-		--[[local xz = tonumbe(self.仓库数量:取文本())
+		local xz = tonumbe(self.仓库数量:取文本())
 		local v = tonumbe(self.仓库[self.选择仓库].物品.数量)
 		if xz == nil or xz <= 0 then
 			xz = 1

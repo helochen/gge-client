@@ -19,15 +19,16 @@ function 客户端类:更新(dt)
 end
 
 function 发送数据(id, 内容)
-    log:debug('发送命令:' , id)
-    if 开发调试 then
-        客户端类:发送PB数据(cmd, data)
-    else
-        if 内容 == nil then
-            内容 = {}
-        end  
-        客户端:发送数据(id, 内容, 1)
+    log:debug('发送命令:', id)
+    if 内容 == nil then
+        内容 = {}
     end
+    客户端:发送数据(id, 内容, 1)
+    --[[ if 开发调试 then
+        客户端类:发送PB数据(id, 内容)
+    else
+        客户端:发送数据(id, 内容, 1)
+    end ]]
 end
 
 -- 发送protobuf数据格式
@@ -44,7 +45,7 @@ function 客户端类:连接处理(ip, 端口, 账号, 密码)
     if self.连接结果 == false then
         f函数.信息框('连接服务器失败，请确认服务器是否在维护中或本机网络出现故障', '通知')
         os.exit()
-    --tp.提示:写入("#R/连接服务器失败，请确认服务器是否在维护中或本机网络出现故障")
+        --tp.提示:写入("#R/连接服务器失败，请确认服务器是否在维护中或本机网络出现故障")
     end
     self.连接结果 = false
 end
