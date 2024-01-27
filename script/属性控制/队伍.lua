@@ -367,6 +367,8 @@ function 内存类_队伍:BP人物属性(role)
         self.耐力 = attr.base[4]
         self.敏捷 = attr.base[5]
         self.潜力 = attr.potential
+        self.当前经验 = attr.exp[1]
+        self.最大经验 = attr.exp[2] -- 升级所需的经验，不是最大经验
         -- TOOD 后续完成
         self.剧情点 = 0 -- 初始化值
         -- 技能属性
